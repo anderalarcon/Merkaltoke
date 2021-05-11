@@ -36,9 +36,7 @@
       persistent
       max-width="600px"
     >
-      <template v-slot:activator="{ on, attrs }">
    
-      </template>
       <v-card>
         <v-card-title>
           <span class="headline">User Profile</span>
