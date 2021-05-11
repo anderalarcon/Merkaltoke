@@ -44,7 +44,9 @@
           <v-card-title> {{ proveedor.nombre_proveedor }} </v-card-title>
 
           <v-card-actions>
-            <v-btn color="blue" small dark>Ver</v-btn>
+          <a v-bind:href="'/Productos-Proveedor/' + proveedor.id_proveedor"
+              >Ver</a
+              >
           </v-card-actions>
         </v-card>
       </v-row>
@@ -90,4 +92,8 @@ export default {
     }
   },
 };
+
+
+
 </script>
+
