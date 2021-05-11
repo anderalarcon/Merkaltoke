@@ -43,11 +43,28 @@ router.route("/get").get(async (req, res) => {
   }
 });
 
+
+
+
 //GetId
 router.route("/get/:id_proveedor").get(async (req, res) => {
   try {
     const { id_proveedor } = req.params;
-    const proveedores = await pool.query("SELECT * FROM tbl_proveedor WHERE id_proveedor=$1", [id_proveedor]);
+    const proveedores = await pool.query("SELECT * FROM proveedor WHERE id_proveedor=$1", [id_proveedor]);
+    res.status(200).json({
+      status: "success",
+      data: { proveedores: proveedores.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//GetProveedoresdelProductoAseleccionar
+router.route("/getP/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const proveedores = await pool.query("SELECT id_proveedor,nombre_proveedor,email_proveedor FROM proveedor WHERE id_proveedor=$1", [id_proveedor]);
     res.status(200).json({
       status: "success",
       data: { proveedores: proveedores.rows[0] },

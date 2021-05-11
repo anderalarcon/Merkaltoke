@@ -16,9 +16,12 @@ app.use(fileUpload({useTempFiles:true}))
 
 
 app.use('/',require('./routes/auth' ))
-
 app.use("/productos", require('./routes/productos'));
 app.use("/proveedores", require('./routes/proveedor'));
+app.use("/categorias", require('./routes/categorias'));
+
+
+
 app.use(history())
 app.use(express.static(path.join(__dirname,'public')));
 app.set('port',process.env.PORT||4000);
