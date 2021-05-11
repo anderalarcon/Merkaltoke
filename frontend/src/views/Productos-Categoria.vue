@@ -15,12 +15,16 @@
           >
           </v-img>
           <v-card-title>Producto : {{ producto.nombre }} </v-card-title>
-          <v-card-subtitle>Proveedor : {{ producto.nombre_proveedor }} </v-card-subtitle>
+          <v-card-subtitle
+            >Proveedor : {{ producto.nombre_proveedor }}
+          </v-card-subtitle>
           <v-card-subtitle>Precio : {{ producto.precio }} </v-card-subtitle>
           <v-card-subtitle>Stock : {{ producto.stock }} </v-card-subtitle>
           <v-card-subtitle>Detalle : {{ producto.detalle }} </v-card-subtitle>
-            <v-card-actions>
-            <v-btn color="blue" small dark>Seleccionar</v-btn>
+          <v-card-actions>
+            <v-btn color="blue" small dark @click="addToCarrito()"
+              >Seleccionar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-row>
@@ -40,7 +44,15 @@ export default {
   data: () => ({
     productos: [],
   }),
-
+  methods: {
+    async addToCarrito() {
+      const id = this.$route.params.id;
+      
+      console.log("apretando");
+      const index = this.productos.findIndex((c) => c.id_producto == 6);//poner el id del producto 
+      this.productos.splice(index, 1); //Desaparecer al instante  asyncrono
+    },
+  },
   created: async function () {
     try {
       const id = this.$route.params.id;
