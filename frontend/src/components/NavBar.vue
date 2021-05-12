@@ -9,9 +9,9 @@
 
     <v-toolbar color="orange">
       <v-toolbar-title>Merkaltoke</v-toolbar-title>
-       <v-btn text to="/Profile"> Mi Perfil </v-btn>
+       <v-btn text to="/Profile"> Perfil </v-btn>
       <v-btn text to="/Landing"> Categorías y Proveedores </v-btn>
-      <v-btn text to="/Carrito"> Mi Carrito </v-btn>
+      <v-btn text to="/Carrito"> Carrito </v-btn>
       <v-btn text to="/Pedidos"> Pedidos </v-btn>
 
     </v-toolbar>

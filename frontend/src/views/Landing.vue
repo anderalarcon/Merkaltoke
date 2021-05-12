@@ -2,7 +2,7 @@
   <div>
     <NavBar></NavBar>
     <v-container>
-      <h1>Categorias</h1>
+      <h1>Categorías</h1>
       <v-row justify="center">
         <v-card
           class="ma-3"

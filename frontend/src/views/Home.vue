@@ -1,8 +1,11 @@
 <template>
   <div>
     <v-toolbar
-      dark
-      src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
+      
+     src="https://picsum.photos/1920/1080?random"
+          dark
+      shrink-on-scroll
+      prominent
     >
       <v-toolbar-title>Merkaltoke</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -16,20 +19,20 @@
     <v-container>
       <v-row justfify="center">
         <v-col class="text-center">
-          <v-btn class="primary" @click="suForm = true"> Sign Up</v-btn>
+          <v-btn class="primary" @click="suForm = true"> Registrarse</v-btn>
         </v-col>
         <v-col class="text-center">
-          <v-btn class="success" @click="suForm = false"> Sign In</v-btn>
+          <v-btn class="success" @click="suForm = false"> Ingresar</v-btn>
         </v-col>
       </v-row>
       <v-row justify="center">
         <v-col md="5">
           <v-card v-if="suForm">
-            <v-card-title>Sign Up</v-card-title>
+            <v-card-title>Registro</v-card-title>
             <v-card-text>
               <v-form class="ma-3" @submit.prevent="signUp()" ref="signupForm">
                 <v-text-field
-                  label="Name"
+                  label="Nombre"
                   :rules="nameRules"
                   v-model="user.nombre"
                   prepend-icon="mdi-account"
@@ -57,12 +60,12 @@
                   <v-radio label="Cliente" value="cliente"></v-radio>
                   <v-radio label="Proveedor" value="proveedor"></v-radio>
                 </v-radio-group>
-                <v-btn block class="primary mt-3" type="submit">Sign Up </v-btn>
+                <v-btn block class="primary mt-3" type="submit">Registrarse </v-btn>
               </v-form>
             </v-card-text>
           </v-card>
           <v-card v-else>
-            <v-card-title>Sign In</v-card-title>
+            <v-card-title>Inicio de Sesión</v-card-title>
             <v-card-text>
               <v-form class="ma-3" @submit.prevent="signIn()" ref="signinForm">
                 <v-text-field
@@ -88,7 +91,7 @@
                   <v-radio label="Cliente" value="cliente"></v-radio>
                   <v-radio label="Proveedor" value="proveedor"></v-radio>
                 </v-radio-group>
-                <v-btn block class="success mt-3" type="submit">Sign In </v-btn>
+                <v-btn block class="success mt-3" type="submit">Ingresar </v-btn>
               </v-form>
             </v-card-text>
           </v-card>
