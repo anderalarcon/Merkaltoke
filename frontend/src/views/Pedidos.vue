@@ -14,13 +14,11 @@
     ></v-img>
 
     <v-card-title>
-      Pedido #
-      <!-- {{pedido.id_pedido}} -->
+      Pedido: {{pedido.id_pedido}}
     </v-card-title>
 
     <v-card-subtitle> 
-      1,000 miles of wonder
-      <!-- {{pedido.fecha}} -->
+      Fecha: {{pedido.fecha}}
     </v-card-subtitle>
 
     <v-card-actions>
@@ -46,10 +44,10 @@
         <v-divider></v-divider>
 
         <v-card-text>
-          Estado: <!-- {{pedido.estado}} -->
+          Estado: {{pedido.estado}}
         </v-card-text>
         <v-card-text>
-          Precio total: <!-- {{pedido.total}} -->
+          Precio total: {{pedido.total}}
         </v-card-text>
       </div>
     </v-expand-transition>
@@ -70,10 +68,9 @@ export default {
   },
   data: () => ({
     pedidos: [],
+    show: false,
   }),
-  data: () => ({
-      show: false,
-    }),
+  
   
   /* methos: {
   
@@ -84,7 +81,9 @@ export default {
     try {
       //redireccionar al inicio si no esta logueado
       const res = await Pedidos.get("/get");
-      this.pedidos = res.data.data.categorias;
+      this.pedidos = res.data.data.pedidos;
+
+      console.log (this.pedidos)
 
       this.user = JSON.parse(sessionStorage.getItem("session"));
       if (this.user == null) {

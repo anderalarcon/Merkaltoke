@@ -20,6 +20,7 @@ app.use("/productos", require('./routes/productos'));
 app.use("/proveedores", require('./routes/proveedor'));
 app.use("/categorias", require('./routes/categorias'));
 app.use("/carrito", require('./routes/carrito'));
+app.use("/pedidos", require('./routes/pedidos'));
 
 
 app.use(history())
