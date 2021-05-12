@@ -2,158 +2,89 @@
   <div>
     <NavBar></NavBar>
 
-    <v-container>
-      <h1>Pedidos</h1>
-      <v-row justify="center">
-        <v-card class="ma-3" max-width="344">
-          <v-img
-            height="250"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-          >
-          </v-img>
-          <v-card-title> Pedido 1 </v-card-title>
+    <v-card
+    class="mx-auto"
+    max-width="344"
+    v-for="pedido in pedidos"
+    :key="pedido.id_pedido"
+  >
+    <v-img
+      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+      height="200px"
+    ></v-img>
 
-          <v-card-actions>
-            <v-btn
-              color="orange"
-              x-small
-              small
-              dark
-              fab
-              class=""
-              @click="dialog = true"
-            >
-              <v-icon small> mdi-pencil </v-icon></v-btn
-            >
-            <span> Ver Detalle</span>
-          </v-card-actions>
-        </v-card>
-      </v-row>
-    </v-container>
+    <v-card-title>
+      Pedido: {{pedido.id_pedido}}
+    </v-card-title>
 
-    <v-dialog
-      v-model="dialog"
-      persistent
-      max-width="600px"
-    >
-   
-      <v-card>
-        <v-card-title>
-          <span class="headline">User Profile</span>
-        </v-card-title>
+    <v-card-subtitle> 
+      Fecha: {{pedido.fecha}}
+    </v-card-subtitle>
+
+    <v-card-actions>
+      <v-btn
+        color="orange lighten-2"
+        text
+      >
+        Comprobante
+      </v-btn>
+
+      <v-spacer></v-spacer>
+
+      <v-btn
+        icon
+        @click="show = !show"
+      >
+        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+      </v-btn>
+    </v-card-actions>
+
+    <v-expand-transition>
+      <div v-show="show">
+        <v-divider></v-divider>
+
         <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-text-field
-                  label="Legal first name*"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-text-field
-                  label="Legal middle name"
-                  hint="example of helper text only on focus"
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-text-field
-                  label="Legal last name*"
-                  hint="example of persistent helper text"
-                  persistent-hint
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Email*"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Password*"
-                  type="password"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Age*"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <v-autocomplete
-                  :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                  label="Interests"
-                  multiple
-                ></v-autocomplete>
-              </v-col>
-            </v-row>
-          </v-container>
-          <small>*indicates required field</small>
+          Estado: {{pedido.estado}}
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
-          >
-            Close
-          </v-btn>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
-          >
-            Save
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+        <v-card-text>
+          Precio total: {{pedido.total}}
+        </v-card-text>
+      </div>
+    </v-expand-transition>
+  </v-card>
+
+    
   </div>
 </template>
 
 <script>
 import NavBar from "../components/NavBar";
+import Pedidos from "../apis/Pedidos"
 
 export default {
   name: "Pedidos",
-  data: () => ({
-    dialog: false,
-  }),
-
   components: {
     NavBar,
   },
-  methos: {
+  data: () => ({
+    pedidos: [],
+    show: false,
+  }),
   
-  },
+  
+  /* methos: {
+  
+  }, */
+
   created: async function () {
     //al cargar la pagina
     try {
       //redireccionar al inicio si no esta logueado
+      const res = await Pedidos.get("/get");
+      this.pedidos = res.data.data.pedidos;
+
+      console.log (this.pedidos)
+
       this.user = JSON.parse(sessionStorage.getItem("session"));
       if (this.user == null) {
         this.$router.push("/");
