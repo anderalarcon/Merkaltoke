@@ -2,25 +2,26 @@
   <div>
     <NavBar></NavBar>
     <v-container>
-      <h1>Productos</h1>
+      <h1>Categorias</h1>
       <v-row justify="center">
         <v-card
           class="ma-3"
           max-width="344"
-          v-for="producto in productos"
-          :key="producto.id"
+          v-for="categoria in categorias"
+          :key="categoria.id_categoria"
         >
           <v-img
             height="250"
             src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
           >
           </v-img>
-          <v-card-title> {{ producto.nombre }} </v-card-title>
-          <v-card-subtitle> {{ producto.precio }} </v-card-subtitle>
-          <v-card-subtitle> {{ producto.detalle }} </v-card-subtitle>
-
+          <v-card-title>
+            <h3>{{ categoria.categoria }}</h3>
+          </v-card-title>
           <v-card-actions>
-            <v-btn color="blue" small dark>Ver</v-btn>
+            <a v-bind:href="'/Productos-Categoria/' + categoria.id_categoria"
+              >Ver</a
+            >
           </v-card-actions>
         </v-card>
       </v-row>
@@ -43,7 +44,9 @@
           <v-card-title> {{ proveedor.nombre_proveedor }} </v-card-title>
 
           <v-card-actions>
-            <v-btn color="blue" small dark>Ver</v-btn>
+          <a v-bind:href="'/Productos-Proveedor/' + proveedor.id_proveedor"
+              >Ver</a
+              >
           </v-card-actions>
         </v-card>
       </v-row>
@@ -54,7 +57,7 @@
 
 <script>
 import NavBar from "../components/NavBar";
-import Productos from "../apis/Productos";
+import Categorias from "../apis/Categorias";
 import Proveedor from "../apis/Proveedor";
 
 export default {
@@ -63,15 +66,16 @@ export default {
     NavBar,
   },
   data: () => ({
-    productos: [],
+    categorias: [],
     proveedores: [],
   }),
 
   created: async function () {
     //al cargar la pagina
     try {
-      const res = await Productos.get("/get");
-      this.productos = res.data.data.productos;
+      //obtenemos categorias
+      const res = await Categorias.get("/get");
+      this.categorias = res.data.data.categorias;
 
       //proveedores
 
@@ -88,4 +92,8 @@ export default {
     }
   },
 };
+
+
+
 </script>
+
