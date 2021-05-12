@@ -43,11 +43,28 @@ router.route("/get").get(async (req, res) => {
   }
 });
 
+
+
+
 //GetId
 router.route("/get/:id_proveedor").get(async (req, res) => {
   try {
     const { id_proveedor } = req.params;
-    const proveedores = await pool.query("SELECT * FROM tbl_proveedor WHERE id_proveedor=$1", [id_proveedor]);
+    const proveedores = await pool.query("SELECT * FROM proveedor WHERE id_proveedor=$1", [id_proveedor]);
+    res.status(200).json({
+      status: "success",
+      data: { proveedores: proveedores.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//GetProveedoresdelProductoAseleccionar
+router.route("/getP/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const proveedores = await pool.query("SELECT id_proveedor,nombre_proveedor,email_proveedor FROM proveedor WHERE id_proveedor=$1", [id_proveedor]);
     res.status(200).json({
       status: "success",
       data: { proveedores: proveedores.rows[0] },
@@ -95,6 +112,33 @@ router.route("/delete/:id_proveedor").delete(async (req, res) => {
     }
 });
 
+
+//GetId
+router.route("/get/:id").get(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID=$1", [id]);
+    res.status(200).json({
+      status: "success",
+      data: { producto: producto.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+router.route("/getProductos-Proveedor/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const proveedor = await pool.query("select pro.nombre_proveedor ,cat.categoria, p.id_producto,p.nombre,p.precio,p.stock,p.detalle,p.id_proveedor,p.id_categoria from tbl_producto p ,tbl_categoria cat,proveedor pro  where p.id_categoria=cat.id_categoria and pro.id_proveedor=p.id_proveedor and  p.id_proveedor=$1", [id_proveedor]);
+    res.status(200).json({
+      status: "success",
+      data: { productos: proveedor.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 
 
