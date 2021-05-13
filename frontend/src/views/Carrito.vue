@@ -46,7 +46,7 @@
                 <tr>
             
                   <td>Arroz</td>
-                  <td>30</td>
+                  <td><span id="precio">30</span></td>
                   <td>
                     <v-btn
                       class="mx-2"
@@ -54,25 +54,27 @@
                       dark
                       small
                       color="primary"
+                      id="disminuir_cant"
                     >
-                      <v-icon dark>
+                      <v-icon dark  @click="disminuir_cantidad()">
                         mdi-minus
                       </v-icon>
                     </v-btn>
-                    <a id="cantidad">1</a>
+                    <span id="cantidad_producto">1</span>
                     <v-btn
                       class="mx-2"
                       fab
                       dark
                       small
                       color="primary"
+                      id="aumentar_cant"
                     >
-                      <v-icon dark>
+                      <v-icon dark @click="aumentar_cantidad()">
                         mdi-plus
                       </v-icon>
                     </v-btn>
                   </td>
-                  <td>500000</td>
+                  <td><span id="total">500000</span></td>
                   <td>   
                     <v-btn
                       class="mx-2"
@@ -216,7 +218,7 @@
                       </v-icon>
                     </v-btn>
                   </td>
-                  <td>500000</td>
+                  <td><span >500000</span></td>
                   <td>   
                     <v-btn
                       class="mx-2"
@@ -341,5 +343,44 @@ export default {
       console.log(error);
     }
   },
+
+  methods:{
+    aumentar_cantidad : function(){
+    ///console.log("gola");
+    var mas= document.getElementById("cantidad_producto").innerHTML;
+    mas++;
+    document.getElementById("cantidad_producto").innerHTML=mas;
+    var precio=document.getElementById("precio").innerHTML;
+    var total = precio * document.getElementById("cantidad_producto").innerHTML;
+    document.getElementById("total").innerHTML=(total.toFixed(2));
+    
+    },
+
+        disminuir_cantidad : function(){
+    var menos= document.getElementById("cantidad_producto").innerHTML;
+    if(menos>1){
+        menos--;
+        document.getElementById("cantidad_producto").innerHTML=menos;
+    }
+    var precio=document.getElementById("precio").innerHTML;
+    var total = precio * document.getElementById("cantidad_producto").innerHTML;
+    document.getElementById("total").innerHTML=(total.toFixed(2));
+  
+    },
+
+
+
+  }
+
+ 
+
+
+
 };
+
+
+
+
+
+
 </script>
