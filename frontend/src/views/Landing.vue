@@ -51,6 +51,7 @@
         </v-card>
       </v-row>
     </v-container>
+  <Footer></Footer>
   </div>
 </template>
 
@@ -59,11 +60,12 @@
 import NavBar from "../components/NavBar";
 import Categorias from "../apis/Categorias";
 import Proveedor from "../apis/Proveedor";
+import Footer from "../components/Footer";
 
 export default {
   name: "Landing",
   components: {
-    NavBar,
+    NavBar,Footer
   },
   data: () => ({
     categorias: [],
