@@ -316,17 +316,18 @@
       </v-col>
     </v-row>
   </v-container>
-
+  <Footer></Footer>
   </div>
 </template>
 
 <script>
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 export default {
   name: "Carrito",
   components: {
-    NavBar,
+    NavBar,Footer
   },
     created: async function () {
     //al cargar la pagina
