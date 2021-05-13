@@ -31,17 +31,19 @@
          <v-card-subtitle>test: {{ this.user.id }} </v-card-subtitle>
       </v-row>
     </v-container>
+  <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Categorias from "../apis/Categorias";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 export default {
   name: "Provductos-Categoria",
   components: {
-    NavBar,
+    NavBar,Footer
   },
   data: () => ({
     productos: [],

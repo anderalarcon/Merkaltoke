@@ -25,17 +25,19 @@
         </v-card>
       </v-row>
     </v-container>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Proveedor from "../apis/Proveedor";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 export default {
   name: "Provductos-Proveedor",
   components: {
-    NavBar,
+    NavBar,Footer
   },
   data: () => ({
     productos: [],
