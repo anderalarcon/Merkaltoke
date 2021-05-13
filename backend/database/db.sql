@@ -51,10 +51,15 @@ CREATE TABLE tbl_producto(
 
 CREATE TABLE tbl_carrito(
 	id_carrito serial primary key NOT NULL,
-	cantidad INT,
-	suma DECIMAL(10, 4),
-	id_cliente BIGINT REFERENCES cliente(id_cliente) NOT NULL,
-	id_producto BIGINT REFERENCES tbl_producto(id_producto) NOT NULL
+	id_cliente BIGINT REFERENCES cliente(id_cliente) NOT NULL
+
+);
+
+CREATE TABLE carrito_producto(
+		id serial primary KEY NOT NULL,
+		carrito_id  BIGINT REFERENCES tbl_carrito(id_carrito) NOT NULL,
+		producto_id   BIGINT REFERENCES tbl_producto(id_producto) NOT NULL,
+		cantidad_id  INTEGER
 );
 
 CREATE TABLE tbl_pedido(

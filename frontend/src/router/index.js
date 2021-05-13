@@ -31,12 +31,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Carrito')
   },
   {
-    path: '/Comprobante',
-    name: 'Comprobante',
-  
-    component: () => import(/* webpackChunkName: "about" */ '../views/Comprobante')
-  },
-  {
     path: '/Pedidos',
     name: 'Pedidos',
   

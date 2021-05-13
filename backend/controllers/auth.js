@@ -2,7 +2,7 @@ import pool from "../database/keys";
 
 const aunthentication = {};
 aunthentication.signUp = async (req, res) => {
-  const { nombre, email, password, role } = req.body;
+  const { nombre, email, password, role, last_id_ } = req.body;
 
   if (role == "cliente") {
     try {
@@ -10,6 +10,10 @@ aunthentication.signUp = async (req, res) => {
         "INSERT INTO cliente (nombre_cliente,email_cliente,password_cliente)values($1,$2,$3)",
         [nombre, email, password]
       );
+      await pool.query(
+        "INSERT INTO tbl_carrito(id_cliente) ((SELECT MAX(ID_CLIENTE)FROM CLIENTE))"
+      );
+
       res.status(200).json({
         message: "succesfull registred client",
         client: { nombre, email, password },
@@ -17,17 +21,17 @@ aunthentication.signUp = async (req, res) => {
     } catch (error) {
       if (error.constraint == "cliente_email_cliente_key") {
         res.status(500).json({
-          message: "some1 is already using that email",
+          message: "Alguien ya está usando ese correo electrónico",
           error,
         });
       } else {
         res.status(500).json({
-          message: " An error has acurred",
+          message: " Ha ocurrido un error",
           error,
         });
       }
       res.status(500).json({
-        message: " An error has acurred",
+        message: " Ha ocurrido un error",
         error,
       });
     }
