@@ -26,17 +26,17 @@
                   </tr>
                   <tr>
                     <td>Arroz</td>
-                    <td>30</td>
+                    <td><span id="precio">30</span></td>
                     <td>
                       <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark> mdi-minus </v-icon>
+                        <v-icon dark @click="disminuir_cantidad()"> mdi-minus </v-icon>
                       </v-btn>
-                      <a id="cantidad">1</a>
+                      <a id="cantidad_producto">1</a>
                       <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark> mdi-plus </v-icon>
+                        <v-icon dark @click="aumentar_cantidad()"> mdi-plus </v-icon>
                       </v-btn>
                     </td>
-                    <td>500000</td>
+                    <td><span id="total">500000</span></td>
                     <td>
                       <v-btn class="mx-2" fab dark small color="pink">
                         <v-icon small @click="deleteItem(item)">
