@@ -1,9 +1,8 @@
 <template>
   <div>
     <v-toolbar
-      
-     src="https://picsum.photos/1920/1080?random"
-          dark
+      src="https://picsum.photos/1920/1080?random"
+      dark
       shrink-on-scroll
       prominent
     >
@@ -60,7 +59,9 @@
                   <v-radio label="Cliente" value="cliente"></v-radio>
                   <v-radio label="Proveedor" value="proveedor"></v-radio>
                 </v-radio-group>
-                <v-btn block class="primary mt-3" type="submit">Registrarse </v-btn>
+                <v-btn block class="primary mt-3" type="submit"
+                  >Registrarse
+                </v-btn>
               </v-form>
             </v-card-text>
           </v-card>
@@ -91,12 +92,25 @@
                   <v-radio label="Cliente" value="cliente"></v-radio>
                   <v-radio label="Proveedor" value="proveedor"></v-radio>
                 </v-radio-group>
-                <v-btn block class="success mt-3" type="submit">Ingresar </v-btn>
+                <v-btn block class="success mt-3" type="submit"
+                  >Ingresar
+                </v-btn>
               </v-form>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
+
+      <div class="text-center">
+        <v-img
+          i
+          class="mt-5 carrito"
+          src="https://svgsilh.com/svg/294547.svg"
+          height="200px"
+          width="200px"
+          style="margin: auto"
+        ></v-img>
+      </div>
     </v-container>
   </div>
 </template>
@@ -116,10 +130,9 @@ export default {
     user: { nombre: "", email: "", password: "", role: "" }, //mismo que backend
     suForm: true,
   }),
-     created: async function () {
+  created: async function () {
     //al cargar la pagina
     try {
-     
       //redireccionar al profile si ya esta logueado
       this.user_test = JSON.parse(sessionStorage.getItem("session"));
       if (this.user_test != null) {
@@ -143,7 +156,6 @@ export default {
             type: "success",
             message: res.data.message,
           };
-  
         } catch (error) {
           this.alert = {
             show: true,
@@ -169,8 +181,8 @@ export default {
             };
           } else {
             sessionStorage.setItem("session", JSON.stringify(res.data));
-      
-            this.$router.push("/Profile"); 
+
+            this.$router.push("/Profile");
           }
         } catch (error) {
           this.alert = {
@@ -184,3 +196,20 @@ export default {
   },
 };
 </script>
+
+<style>
+.carrito {
+  max-width: 1000px;
+  animation: animate 10s linear infinite;
+}
+
+@keyframes animate {
+  0% {
+    transform: translateX(-1100px);
+  }
+
+  100% {
+    transform: translateX(1100px);
+  }
+}
+</style>

@@ -41,6 +41,21 @@ router.route("/get").get(async (req, res) => {
   }
 });
 
+//Get carrito id del cliente en sesion
+router.route("/getCarritoId/:id_cliente").get(async (req, res) => {
+  try {
+    const { id_cliente } = req.params;
+    const cliente = await pool.query("SELECT cl.nombre_cliente,car.id_carrito FROM tbl_carrito car,cliente cl WHERE car.id_cliente=cl.id_cliente and cl.id_cliente=$1;", [id_cliente]);
+    res.status(200).json({
+      status: "success",
+      data: { cliente: cliente.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
 
 module.exports = router;
 
