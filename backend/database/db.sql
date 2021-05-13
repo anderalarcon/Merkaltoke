@@ -78,3 +78,7 @@ CREATE TABLE tbl_pedido_detalle(
 	id_pedido BIGINT REFERENCES tbl_pedido(id_pedido) NOT NULL,
 	id_producto BIGINT REFERENCES tbl_producto(id_producto) NOT NULL
 );
+
+
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;

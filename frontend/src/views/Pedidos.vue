@@ -49,9 +49,9 @@
                       ></v-img>
                     </v-flex>
                     <v-flex class="border ml-2" md3>
-                      <P> Ruc : 00010120</P>
-                      <P>Empresa: Merkaltoke</P>
-                      <P>Ubicación: San Isidro</P>
+                      <p> Ruc : 00010120</p>
+                      <p>Empresa: Merkaltoke</p>
+                      <p>Ubicación: San Isidro</p>
                     </v-flex>
                   </v-layout>
                   <v-layout>
@@ -65,7 +65,6 @@
                     </v-flex>
                     <v-flex md-3>
                       <p>Fecha : 05-12-2021</p>
-                    
                     </v-flex>
                   </v-layout>
 
@@ -74,7 +73,6 @@
                       <template v-slot:default>
                         <thead>
                           <tr>
-                          
                             <th class="text-left">Producto</th>
                             <th class="text-left">Detalle</th>
                             <th class="text-left">Unidades</th>
@@ -84,7 +82,6 @@
                         </thead>
                         <tbody>
                           <tr>
-                  
                             <td>Gaseosa Inca Cola</td>
                             <td>5 und</td>
                             <td>100</td>
@@ -92,7 +89,6 @@
                             <td>5000</td>
                           </tr>
                           <tr>
-                     
                             <td>Gaseosa Coca Cola</td>
                             <td>5 und</td>
                             <td>120</td>
@@ -102,9 +98,7 @@
                         </tbody>
                       </template>
                     </v-simple-table>
-                        <v-btn @click="dialog=false">Ok</v-btn>
-                       
-           
+                    <v-btn @click="dialog = false">Ok</v-btn>
                   </template>
                 </v-container>
               </v-card>
@@ -141,7 +135,8 @@ import Footer from "../components/Footer";
 export default {
   name: "Pedidos",
   components: {
-    NavBar,Footer
+    NavBar,
+    Footer,
   },
   data: () => ({
     pedidos: [],

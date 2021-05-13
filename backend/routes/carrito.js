@@ -55,6 +55,29 @@ router.route("/getCarritoId/:id_cliente").get(async (req, res) => {
   }
 });
 
+//insertar tabla intermedia carrito_producto
+router.route("/insertMid/:carrito_id/:producto_id").post(async (req, res) => {
+  try {
+    const {carrito_id } = req.params;
+    const { producto_id } = req.params;
+
+   
+ 
+    const carrito_producto = await pool.query(
+      "INSERT INTO carrito_producto(carrito_id,producto_id,cantidad_id) VALUES($1,$2,$3) RETURNING *",
+      [carrito_id,producto_id,1]
+    );
+    res.status(200).json({
+      status: "succes",
+      data: {
+        carrito_producto: carrito_producto.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 
 
 module.exports = router;

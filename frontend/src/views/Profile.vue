@@ -4,7 +4,7 @@
     <v-container>
       <v-row justify="center">
         <v-col>
-          <v-card>
+          <v-card class="mt-5" max-width="450" style="margin:auto" >
             <v-card-title class="text-uppercase"> CUENTA DEL {{ user.role }}</v-card-title>
             <v-card-text>
               <h2>! Bienvenido !</h2>
