@@ -130,13 +130,14 @@
         </v-card></v-row
       >
     </v-container>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import NavBar from "../components/NavBar";
 import Pedidos from "../apis/Pedidos";
-
+import Footer from "../components/Footer";
 export default {
   name: "Pedidos",
   components: {

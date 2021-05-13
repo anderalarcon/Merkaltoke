@@ -148,6 +148,7 @@
         </v-col>
       </v-row>
     </v-container>
+    <Footer></Footer>
   </div>
 </template>
 
