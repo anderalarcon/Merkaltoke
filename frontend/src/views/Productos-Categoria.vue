@@ -62,7 +62,9 @@ export default {
 
       const insertarMid = await Carrito.post(`/insertMid/${id_carrito}/${id}`);
 
-      const index = this.productos.findIndex((c) => c.id_producto == 6);
+      const index = this.productos.findIndex((c) => c.id_producto == id);
+      console.log(id)
+      console.log(index)
       this.productos.splice(index, 1); //Desaparecer al instante  asyncrono
     },
   },
