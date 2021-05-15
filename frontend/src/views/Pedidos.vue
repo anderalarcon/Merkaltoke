@@ -155,8 +155,7 @@ export default {
     //al cargar la pagina
     try {
       //redireccionar al inicio si no esta logueado
-      const res = await Pedidos.get("/get");
-      this.pedidos = res.data.data.pedidos;
+      
 
       console.log(this.pedidos);
 
@@ -164,6 +163,15 @@ export default {
       if (this.user == null) {
         this.$router.push("/");
       }
+
+
+      const res = await Pedidos.get(`/get_pedidos_cliente/${this.user.id}`);
+      this.pedidos = res.data.data.pedido;
+      
+      console.log(this.res)
+
+      
+
     } catch (error) {
       console.log(error);
     }
