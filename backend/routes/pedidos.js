@@ -57,6 +57,21 @@ router.route("/get/:id").get(async (req, res) => {
   }
 });
 
+//GetId_cliente
+router.route("/get_pedidos_cliente/:id_cliente").get(async (req, res) => {
+  try {
+    const { id_cliente } = req.params;
+    const pedido = await pool.query("SELECT * FROM tbl_pedido WHERE id_cliente=$1 ", [id_cliente]);
+    res.status(200).json({
+      status: "success",
+      data: { pedido: pedido.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
 //Update
 
 /* router.route("/update/:id").put(async (req, res) => {
