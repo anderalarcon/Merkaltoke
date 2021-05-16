@@ -5,7 +5,7 @@
       <h1>Pedidos</h1>
       <v-row justify="center">
         <v-card
-          class="mx-3"
+          class="mx-3 mt-5 mb-5"
           max-width="344"
           v-for="pedido in pedidos"
           :key="pedido.id_pedido"
@@ -143,22 +143,12 @@ export default {
     show: false,
     dialog: false,
   }),
-  /*     watch: {
-      dialog (val) {
-        if (!val) return
-
-        setTimeout(() => (this.dialog = false), 3000)
-      },
-    }, */
 
   created: async function () {
     //al cargar la pagina
     try {
       //redireccionar al inicio si no esta logueado
       
-
-      console.log(this.pedidos);
-
       this.user = JSON.parse(sessionStorage.getItem("session"));
       if (this.user == null) {
         this.$router.push("/");
@@ -168,7 +158,7 @@ export default {
       const res = await Pedidos.get(`/get_pedidos_cliente/${this.user.id}`);
       this.pedidos = res.data.data.pedido;
       
-      console.log(this.res)
+     
 
       
 

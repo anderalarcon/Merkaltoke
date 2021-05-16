@@ -70,28 +70,20 @@
           <v-card class="pa-2" outlined tile>
             <div>
               <v-row>
-                <v-col cols="12" md="8" sm="6"> Subtotal </v-col>
-                <v-col cols="6" md="4"> 1000000 S/. </v-col>
-              </v-row>
-            </div>
-
-            <div>
-              <v-row>
-                <v-col cols="12" md="8" sm="6"> Descuento </v-col>
-                <v-col cols="6" md="4"> -10000 S/. </v-col>
-              </v-row>
-            </div>
-            <v-divider class="mt-3 mb-3"></v-divider>
-
-            <div>
-              <v-row>
                 <v-col cols="12" md="8" sm="6"> Total </v-col>
-                <v-col cols="6" md="4"> 40000 S/. </v-col>
+                <v-col  cols="6" md="4"><v-text-field id="TOTAL"  disabled  ></v-text-field>  </v-col>
               </v-row>
             </div>
 
             <div>
-              <v-btn color="warning" dark> Realizar compra </v-btn>
+              <v-btn
+                @click="insertar_tblpedido()"
+                class="mt-5"
+                color="warning"
+                dark
+              >
+                Realizar compra
+              </v-btn>
             </div>
           </v-card>
         </v-col>
@@ -104,6 +96,7 @@
 <script>
 import NavBar from "../components/NavBar";
 import Carrito from "../apis/Carrito";
+import Pedido from "../apis/Pedidos"
 import Footer from "../components/Footer";
 
 export default {
@@ -116,6 +109,7 @@ export default {
   data: () => ({
     carrito: [],
     user: { role: "", nombre: "", email: "", id: "" },
+    pedido:{}
   }),
 
   created: async function () {
@@ -127,11 +121,12 @@ export default {
       const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
       const aux = idCarrito.data.data.cliente.id_carrito;
       const idCarritoProductos = await Carrito.get(`/getCarrito_tabla/${aux}`);
-      console.log(aux);
+
       this.carrito = idCarritoProductos.data.data.cliente;
 
       //redireccionar al inicio si no esta logueado
 
+      this.getTotalofCarShop();
       if (this.user == null) {
         this.$router.push("/");
       }
@@ -141,6 +136,18 @@ export default {
   },
 
   methods: {
+    obtenertotal() {
+      var productos=this.carrito;
+      var acu=0;
+  
+      for (var i = 0; i < productos.length; i++) {
+       acu =acu+ parseFloat (document.getElementById("total"+productos[i].producto_id).innerHTML)
+       
+      }
+      
+      document.getElementById("TOTAL").value = acu;
+
+    },
     aumentar_cantidad: function (id_producto) {
       document.getElementById("cantidad" + id_producto).innerHTML =
         parseInt(document.getElementById("cantidad" + id_producto).innerHTML) +
@@ -152,6 +159,8 @@ export default {
         parseFloat(document.getElementById("precio" + id_producto).innerHTML) *
         parseInt(document.getElementById("cantidad" + id_producto).innerHTML)
       ).toFixed(1);
+
+      this.obtenertotal();
     },
 
     disminuir_cantidad: function (id_producto) {
@@ -164,7 +173,31 @@ export default {
         parseFloat(document.getElementById("precio" + id_producto).innerHTML) *
         parseInt(document.getElementById("cantidad" + id_producto).innerHTML)
       ).toFixed(1);
+         this.obtenertotal();
+
     },
+    async insertar_tblpedido() {
+      this.pedido.id_cliente=this.user.id;
+      this.pedido.total=document.getElementById("TOTAL").value;
+      const nuevo_pedido=await Pedido.post('/create/',this.pedido); 
+     
+      this.deleteAfterBuy();
+    },
+    async deleteAfterBuy(){
+      const id = this.user.id;
+      const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
+      const aux = idCarrito.data.data.cliente.id_carrito;
+      const eliminar=await Carrito.delete(`/deleteMid/${aux}`); 
+      this.carrito=[]
+      document.getElementById("TOTAL").value=""
+    },
+    async getTotalofCarShop(){
+      const id = this.user.id;
+      const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
+      const aux = idCarrito.data.data.cliente.id_carrito;
+      const monto=await Carrito.get(`/getTotal/${aux}`); 
+      document.getElementById("TOTAL").value=monto.data.data.carrito.sum;
+    }
   },
 };
 </script>

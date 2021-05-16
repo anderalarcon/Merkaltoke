@@ -115,6 +115,37 @@ router.route("/insertMid/:carrito_id/:producto_id").post(async (req, res) => {
 });
 
 
+//Delete after buy
+
+router.route("/deleteMid/:carrito_id").delete(async (req, res) => {
+  try {
+    const { carrito_id } = req.params;
+    const productosAeliminar = await pool.query("DElETE FROM carrito_producto WHERE carrito_id=$1", [
+      carrito_id,
+    ]);
+    res.status(200).json("Productos eliminados");
+  } catch (err) {
+    console.error(err.message);
+  }
+}); 
+
+//obtener suma del carrito
+
+
+router.route("/getTotal/:carrito_id").get(async (req, res) => {
+  try {
+    const { carrito_id } = req.params;
+    const carrito = await pool.query("select sum(p.precio * c.cantidad_id)  from carrito_producto c, tbl_producto p where c.carrito_id=$1 and c.producto_id=p.id_producto", [carrito_id]);
+    res.status(200).json({
+      status: "success",
+      data: { carrito: carrito.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
 
 module.exports = router;
 
