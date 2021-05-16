@@ -25,6 +25,28 @@ router.route("/create").post(async (req, res) => {
   }
 });
 
+//aumentar cantidad - rosher
+router.route("/aumentar_cant_carrito/:carrito_id/:producto_id").put(async (req, res) => {
+  try {
+    
+    const { carrito_id } = req.body;
+    const { producto_id } = req.body;
+ 
+    const newProducto = await pool.query(
+      "update carrito_producto set cantidad_id=cantidad_id+1 where carrito_id=$1 and producto_id=$2;",
+      [carrito_id,producto_id]
+    );
+    res.status(200).json({
+      status: "succes",
+      data: {
+        producto: newProducto.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //Mostrar todos los productos que tiene el carrito en vista carrito
 router.route("/get").get(async (req, res) => {
   try {
@@ -49,6 +71,20 @@ router.route("/getCarritoId/:id_cliente").get(async (req, res) => {
     res.status(200).json({
       status: "success",
       data: { cliente: cliente.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//tabla carro
+router.route("/getCarrito_tabla/:id_carrito").get(async (req, res) => {
+  try {
+    const { id_carrito } = req.params;
+    const cliente = await pool.query("select distinct(c.producto_id), c.carrito_id ,c.cantidad_id ,p.precio, p.nombre from carrito_producto c, tbl_producto p where c.carrito_id=$1 and c.producto_id=p.id_producto order by c.producto_id;", [id_carrito]);
+    res.status(200).json({
+      status: "success",
+      data: { cliente: cliente.rows },
     });
   } catch (err) {
     console.error(err.message);
