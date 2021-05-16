@@ -19,24 +19,19 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="item in desserts" :key="item.name">
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.calories }}</td>
-                    <td>hola</td>
-                  </tr>
-                  <tr>
-                    <td>Arroz</td>
-                    <td><span id="precio">30</span></td>
+                  <tr v-for="carro in carrito" :key="carro.id">
+                    <td>{{ carro.nombre}}</td>
+                    <td><span id="precio">{{ carro.precio}}</span></td>
                     <td>
                       <v-btn class="mx-2" fab dark small color="primary">
                         <v-icon dark @click="disminuir_cantidad()"> mdi-minus </v-icon>
                       </v-btn>
-                      <a id="cantidad_producto">1</a>
+                      <span id="cantidad_producto">{{carro.cantidad_id}}</span>
                       <v-btn class="mx-2" fab dark small color="primary">
                         <v-icon dark @click="aumentar_cantidad()"> mdi-plus </v-icon>
                       </v-btn>
                     </td>
-                    <td><span id="total">500000</span></td>
+                    <td><span >{{carro.precio * carro.cantidad_id}}</span></td>
                     <td>
                       <v-btn class="mx-2" fab dark small color="pink">
                         <v-icon small @click="deleteItem(item)">
@@ -46,71 +41,9 @@
                     </td>
                   </tr>
 
-                  <tr>
-                    <td>Arroz</td>
-                    <td>30</td>
-                    <td>
-                      <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark> mdi-minus </v-icon>
-                      </v-btn>
-                      <a id="cantidad">1</a>
-                      <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark> mdi-plus </v-icon>
-                      </v-btn>
-                    </td>
-                    <td>500000</td>
-                    <td>
-                      <v-btn class="mx-2" fab dark small color="pink">
-                        <v-icon small @click="deleteItem(item)">
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
+ 
 
-                  <tr>
-                    <td>Arroz</td>
-                    <td>30</td>
-                    <td>
-                      <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark> mdi-minus </v-icon>
-                      </v-btn>
-                      <a id="cantidad">1</a>
-                      <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark> mdi-plus </v-icon>
-                      </v-btn>
-                    </td>
-                    <td>500000</td>
-                    <td>
-                      <v-btn class="mx-2" fab dark small color="pink">
-                        <v-icon small @click="deleteItem(item)">
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>Arroz</td>
-                    <td>30</td>
-                    <td>
-                      <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark> mdi-minus </v-icon>
-                      </v-btn>
-                      <a id="cantidad">1</a>
-                      <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark> mdi-plus </v-icon>
-                      </v-btn>
-                    </td>
-                    <td>500000</td>
-                    <td>
-                      <v-btn class="mx-2" fab dark small color="pink">
-                        <v-icon small @click="deleteItem(item)">
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
+                  
                 </tbody>
               </template>
             </v-simple-table>
@@ -154,6 +87,7 @@
 
 <script>
 import NavBar from "../components/NavBar";
+import Carrito from "../apis/Carrito";
 import Footer from "../components/Footer";
 
 export default {
@@ -161,11 +95,26 @@ export default {
   components: {
     NavBar,Footer
   },
+
+   data: () => ({
+    carrito: [],
+    user: { role: "", nombre: "", email: "", id: "" },
+  }),
+
   created: async function () {
     //al cargar la pagina
     try {
-      //redireccionar al inicio si no esta logueado
+      //carrito
       this.user = JSON.parse(sessionStorage.getItem("session"));
+      const id = this.user.id;
+      const idCarrito = await Carrito.get(`/getCarritoId/${id}`);    
+      const aux = idCarrito.data.data.cliente.id_carrito;
+       const idCarritoProductos = await Carrito.get(`/getCarrito_tabla/${aux}`);
+      console.log(aux);
+      this.carrito = idCarritoProductos.data.data.cliente;
+
+      //redireccionar al inicio si no esta logueado
+     
       if (this.user == null) {
         this.$router.push("/");
       }
@@ -176,31 +125,41 @@ export default {
 
   methods:{
     aumentar_cantidad : function(){
+
+      
     ///console.log("gola");
-    var mas= document.getElementById("cantidad_producto").innerHTML;
+    /*var mas= document.getElementById("cantidad_producto").innerHTML;
     mas++;
     document.getElementById("cantidad_producto").innerHTML=mas;
+
     var precio=document.getElementById("precio").innerHTML;
+    console.log(precio);
     var total = precio * document.getElementById("cantidad_producto").innerHTML;
-    document.getElementById("total").innerHTML=(total.toFixed(2));
+    document.getElementById("total").innerHTML=(total.toFixed(2));*/
     
     },
 
-        disminuir_cantidad : function(){
-    var menos= document.getElementById("cantidad_producto").innerHTML;
+    disminuir_cantidad : function(){
+    /*var menos= document.getElementById("cantidad_producto").innerHTML;
     if(menos>1){
         menos--;
         document.getElementById("cantidad_producto").innerHTML=menos;
     }
     var precio=document.getElementById("precio").innerHTML;
     var total = precio * document.getElementById("cantidad_producto").innerHTML;
-    document.getElementById("total").innerHTML=(total.toFixed(2));
-  
+    document.getElementById("total").innerHTML=(total.toFixed(2));*/
+ 
     },
 
+    /*calcular_total : function(){
+    var precio=document.getElementById("precio").innerHTML;
+    var total = precio * document.getElementById("cantidad_producto").innerHTML;
+    document.getElementById("total").innerHTML=(total.toFixed(2));
+    }*/
 
+  },
 
-  }
+  
 
  
 
