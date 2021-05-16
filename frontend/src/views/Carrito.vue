@@ -19,19 +19,39 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="carro in carrito" :key="carro.id">
-                    <td>{{ carro.nombre}}</td>
-                    <td><span id="precio">{{ carro.precio}}</span></td>
+                  <tr v-for="carro in carrito" :key="carro.producto_id">
+                    <td>{{ carro.nombre }}</td>
+                    <td>
+                      <span :id="`precio${carro.producto_id}`">{{
+                        carro.precio
+                      }}</span>
+                    </td>
                     <td>
                       <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark @click="disminuir_cantidad()"> mdi-minus </v-icon>
+                        <v-icon
+                          dark
+                          @click="disminuir_cantidad(carro.producto_id)"
+                        >
+                          mdi-minus
+                        </v-icon>
                       </v-btn>
-                      <span id="cantidad_producto">{{carro.cantidad_id}}</span>
+                      <span :id="`cantidad${carro.producto_id}`">{{
+                        carro.cantidad_id
+                      }}</span>
                       <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon dark @click="aumentar_cantidad()"> mdi-plus </v-icon>
+                        <v-icon
+                          dark
+                          @click="aumentar_cantidad(carro.producto_id)"
+                        >
+                          mdi-plus
+                        </v-icon>
                       </v-btn>
                     </td>
-                    <td><span >{{carro.precio * carro.cantidad_id}}</span></td>
+                    <td>
+                      <span :id="`total${carro.producto_id}`">{{
+                        carro.precio * carro.cantidad_id
+                      }}</span>
+                    </td>
                     <td>
                       <v-btn class="mx-2" fab dark small color="pink">
                         <v-icon small @click="deleteItem(item)">
@@ -40,10 +60,6 @@
                       </v-btn>
                     </td>
                   </tr>
-
- 
-
-                  
                 </tbody>
               </template>
             </v-simple-table>
@@ -65,7 +81,7 @@
                 <v-col cols="6" md="4"> -10000 S/. </v-col>
               </v-row>
             </div>
-            <v-divider  class="mt-3 mb-3"></v-divider>
+            <v-divider class="mt-3 mb-3"></v-divider>
 
             <div>
               <v-row>
@@ -93,10 +109,11 @@ import Footer from "../components/Footer";
 export default {
   name: "Carrito",
   components: {
-    NavBar,Footer
+    NavBar,
+    Footer,
   },
 
-   data: () => ({
+  data: () => ({
     carrito: [],
     user: { role: "", nombre: "", email: "", id: "" },
   }),
@@ -107,14 +124,14 @@ export default {
       //carrito
       this.user = JSON.parse(sessionStorage.getItem("session"));
       const id = this.user.id;
-      const idCarrito = await Carrito.get(`/getCarritoId/${id}`);    
+      const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
       const aux = idCarrito.data.data.cliente.id_carrito;
-       const idCarritoProductos = await Carrito.get(`/getCarrito_tabla/${aux}`);
+      const idCarritoProductos = await Carrito.get(`/getCarrito_tabla/${aux}`);
       console.log(aux);
       this.carrito = idCarritoProductos.data.data.cliente;
 
       //redireccionar al inicio si no esta logueado
-     
+
       if (this.user == null) {
         this.$router.push("/");
       }
@@ -123,53 +140,31 @@ export default {
     }
   },
 
-  methods:{
-    aumentar_cantidad : function(){
+  methods: {
+    aumentar_cantidad: function (id_producto) {
+      document.getElementById("cantidad" + id_producto).innerHTML =
+        parseInt(document.getElementById("cantidad" + id_producto).innerHTML) +
+        1;
 
-      
-    ///console.log("gola");
-    /*var mas= document.getElementById("cantidad_producto").innerHTML;
-    mas++;
-    document.getElementById("cantidad_producto").innerHTML=mas;
+      var total = document.getElementById("total" + id_producto);
 
-    var precio=document.getElementById("precio").innerHTML;
-    console.log(precio);
-    var total = precio * document.getElementById("cantidad_producto").innerHTML;
-    document.getElementById("total").innerHTML=(total.toFixed(2));*/
-    
+      total.innerHTML = (
+        parseFloat(document.getElementById("precio" + id_producto).innerHTML) *
+        parseInt(document.getElementById("cantidad" + id_producto).innerHTML)
+      ).toFixed(1);
     },
 
-    disminuir_cantidad : function(){
-    /*var menos= document.getElementById("cantidad_producto").innerHTML;
-    if(menos>1){
-        menos--;
-        document.getElementById("cantidad_producto").innerHTML=menos;
-    }
-    var precio=document.getElementById("precio").innerHTML;
-    var total = precio * document.getElementById("cantidad_producto").innerHTML;
-    document.getElementById("total").innerHTML=(total.toFixed(2));*/
- 
+    disminuir_cantidad: function (id_producto) {
+      document.getElementById("cantidad" + id_producto).innerHTML =
+        parseInt(document.getElementById("cantidad" + id_producto).innerHTML) -
+        1;
+      var total = document.getElementById("total" + id_producto);
+
+      total.innerHTML = (
+        parseFloat(document.getElementById("precio" + id_producto).innerHTML) *
+        parseInt(document.getElementById("cantidad" + id_producto).innerHTML)
+      ).toFixed(1);
     },
-
-    /*calcular_total : function(){
-    var precio=document.getElementById("precio").innerHTML;
-    var total = precio * document.getElementById("cantidad_producto").innerHTML;
-    document.getElementById("total").innerHTML=(total.toFixed(2));
-    }*/
-
   },
-
-  
-
- 
-
-
-
 };
-
-
-
-
-
-
 </script>
