@@ -206,11 +206,12 @@ export default {
 @keyframes animate {
   0% {
     transform: translateX(-1100px);
-
+   
   }
 
   100% {
     transform: translateX(1100px);
+   
     
   }
 }

@@ -2,10 +2,10 @@
   <div>
     <NavBar></NavBar>
 
-    <v-container class="grey lighten-5">
+    <v-container class=" lighten-5">
       <h1 class="mb-5">Carrito de compras</h1>
       <v-row no-gutters>
-        <v-col cols="12" sm="6" md="8">
+        <v-col cols="12" sm="6" md="8" >
           <v-card>
             <v-simple-table>
               <template v-slot:default>
@@ -89,6 +89,7 @@
         </v-col>
       </v-row>
     </v-container>
+    
     <Footer></Footer>
   </div>
 </template>
@@ -113,10 +114,14 @@ export default {
   }),
 
   created: async function () {
+          this.user = JSON.parse(sessionStorage.getItem("session"));
+
+     if (this.user == null) {
+        this.$router.push("/");
+      }
     //al cargar la pagina
     try {
       //carrito
-      this.user = JSON.parse(sessionStorage.getItem("session"));
       const id = this.user.id;
       const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
       const aux = idCarrito.data.data.cliente.id_carrito;
@@ -127,9 +132,7 @@ export default {
       //redireccionar al inicio si no esta logueado
 
       this.getTotalofCarShop();
-      if (this.user == null) {
-        this.$router.push("/");
-      }
+     
     } catch (error) {
       console.log(error);
     }
@@ -179,9 +182,12 @@ export default {
     async insertar_tblpedido() {
       this.pedido.id_cliente=this.user.id;
       this.pedido.total=document.getElementById("TOTAL").value;
+      //creamos nuevo pedido
       const nuevo_pedido=await Pedido.post('/create/',this.pedido); 
+     //insertamos en ultima tabla 
+     this.insertIntoTbl_pedido_detalle();
      
-      this.deleteAfterBuy();
+      
     },
     async deleteAfterBuy(){
       const id = this.user.id;
@@ -197,6 +203,18 @@ export default {
       const aux = idCarrito.data.data.cliente.id_carrito;
       const monto=await Carrito.get(`/getTotal/${aux}`); 
       document.getElementById("TOTAL").value=monto.data.data.carrito.sum;
+    },
+    async insertIntoTbl_pedido_detalle(){
+      var productosencarrito=this.carrito
+      const last_id_pedido = await Pedido.get("/getLastIdPedido_detalle");
+       var aux=last_id_pedido.data.data.last[0].max; 
+      
+       for(var i =0;i<productosencarrito.length;i++){
+           
+            await Pedido.post(`/insertPedido_detalle/${aux}`,this.carrito[i]);  
+      } 
+
+      this.deleteAfterBuy();
     }
   },
 };

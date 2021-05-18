@@ -49,6 +49,14 @@ const routes = [
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Productos-Proveedor')
   }
+  ,
+
+  {
+    path: '/Comprobante/:id',
+    name: 'Comprobante',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Comprobante')
+  }
 ]
 
 const router = new VueRouter({
