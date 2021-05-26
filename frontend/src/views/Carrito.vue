@@ -204,13 +204,13 @@ export default {
       const monto=await Carrito.get(`/getTotal/${aux}`); 
       document.getElementById("TOTAL").value=monto.data.data.carrito.sum;
     },
-    async insertIntoTbl_pedido_detalle(){
+    async insertIntoTbl_pedido_detalle(){//Consulte a la bd en ese instante 
       var productosencarrito=this.carrito
       const last_id_pedido = await Pedido.get("/getLastIdPedido_detalle");
        var aux=last_id_pedido.data.data.last[0].max; 
-      
+        
        for(var i =0;i<productosencarrito.length;i++){
-           
+           console.log(this.carrito[i])
             await Pedido.post(`/insertPedido_detalle/${aux}`,this.carrito[i]);  
       } 
 

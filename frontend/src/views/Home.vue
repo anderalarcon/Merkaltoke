@@ -129,6 +129,7 @@ export default {
     passwordRules: [(value) => !!value || "Password is required"],
     user: { nombre: "", email: "", password: "", role: "" }, //mismo que backend
     suForm: true,
+    user: { role: "", nombre: "", email: "" },
   }),
   created: async function () {
     //al cargar la pagina
@@ -181,8 +182,12 @@ export default {
             };
           } else {
             sessionStorage.setItem("session", JSON.stringify(res.data));
-
-            this.$router.push("/Profile");
+            this.user = JSON.parse(sessionStorage.getItem("session"));
+            if (this.user.role == "cliente") {
+              this.$router.push("/Profile");
+            } else {
+              this.$router.push("/Profilev2");
+            }
           }
         } catch (error) {
           this.alert = {
@@ -206,13 +211,10 @@ export default {
 @keyframes animate {
   0% {
     transform: translateX(-1100px);
-   
   }
 
   100% {
     transform: translateX(1100px);
-   
-    
   }
 }
 </style>

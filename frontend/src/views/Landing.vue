@@ -12,7 +12,7 @@
         >
           <v-img
             height="250"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+            src="https://cdni.rt.com/actualidad/public_images/2016.02/article/56afe82bc46188be6a8b4606.jpg"
           >
           </v-img>
           <v-card-title>
