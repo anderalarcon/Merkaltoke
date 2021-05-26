@@ -186,7 +186,7 @@ export default {
             if (this.user.role == "cliente") {
               this.$router.push("/Profile");
             } else {
-              this.$router.push("/Profilev2");
+              this.$router.push("/ProfileProveedor");
             }
           }
         } catch (error) {

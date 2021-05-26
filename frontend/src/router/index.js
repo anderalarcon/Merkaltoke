@@ -57,6 +57,29 @@ const routes = [
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Comprobante')
   }
+  ,
+
+  {
+    path: '/ProfileProveedor/',
+    name: 'ProfileProveedor',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/ProfileProveedor')
+  } ,
+
+  {
+    path: '/MisProductos/',
+    name: 'MisProductos',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/MisProductos')
+  }
+  ,
+
+  {
+    path: '/Indicadores/',
+    name: 'Indicadores',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/Indicadores')
+  }
 ]
 
 const router = new VueRouter({
