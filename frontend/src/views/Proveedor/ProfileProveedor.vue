@@ -11,7 +11,11 @@
             <v-card-text>
               <h2>! Bienvenido !</h2>
               <div class="container">
-                <v-img height="320" width="400" v-bind:src="datos.img_proveedor">
+                <v-img
+                  height="320"
+                  width="400"
+                  v-bind:src="datos.img_proveedor"
+                >
                 </v-img>
               </div>
 
@@ -49,14 +53,21 @@ export default {
   }),
   created: async function () {
     try {
-      this.user = JSON.parse(sessionStorage.getItem("session"));
+     
 
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
       } else {
-        const datos_proveedor = await Proveedor.get(`/get/${this.user.id}`);
+           this.user = JSON.parse(sessionStorage.getItem("session"));
+          if(this.user.role=="proveedor"){
+            console.log("es proveedor")
+             const datos_proveedor = await Proveedor.get(`/get/${this.user.id}`);
         this.datos = datos_proveedor.data.data.proveedores;
-   
+          }else{
+             this.$router.push("/");
+          }
+
+       
       }
     } catch (error) {
       console.log(error);

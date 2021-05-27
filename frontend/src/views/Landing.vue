@@ -12,7 +12,7 @@
         >
           <v-img
             height="250"
-            src="https://cdni.rt.com/actualidad/public_images/2016.02/article/56afe82bc46188be6a8b4606.jpg"
+            v-bind:src="categoria.img_categoria"
           >
           </v-img>
           <v-card-title>
@@ -38,9 +38,10 @@
         >
           <v-img
             height="250"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+            v-bind:src="proveedor.img_proveedor"
           >
           </v-img>
+          
           <v-card-title> {{ proveedor.nombre_proveedor }} </v-card-title>
 
           <v-card-actions>
@@ -78,11 +79,13 @@ export default {
       //obtenemos categorias
       const res = await Categorias.get("/get");
       this.categorias = res.data.data.categorias;
+      console.log(this.categorias)
 
       //proveedores
 
       const proveedores = await Proveedor.get("/get");
       this.proveedores = proveedores.data.data.proveedores;
+      console.log(this.proveedores)
 
       //redireccionar al inicio si no esta logueado
       this.user = JSON.parse(sessionStorage.getItem("session"));

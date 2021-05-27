@@ -11,7 +11,8 @@
         >
           <v-img
             height="250"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+        v-bind:src="producto.img_producto"
+
           >
           </v-img>
           <v-card-title>Producto : {{ producto.nombre }} </v-card-title>
@@ -71,12 +72,13 @@ export default {
   created: async function () {
     //extraemos la data del session starage
     this.user = JSON.parse(sessionStorage.getItem("session"));
-    console.log(this.user);
+    
 
     try {
       const id = this.$route.params.id;
       const res = await Categorias.get(`/getProductos-Categoria/${id}`);
       this.productos = res.data.data.productos;
+      console.log(this.productos)
     } catch (error) {
       console.log(error);
     }

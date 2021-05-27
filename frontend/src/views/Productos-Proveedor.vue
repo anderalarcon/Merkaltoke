@@ -11,7 +11,8 @@
         >
           <v-img
             height="250"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+        v-bind:src="producto.img_producto"
+
           >
           </v-img>
           <v-card-title>Producto : {{ producto.nombre }} </v-card-title>

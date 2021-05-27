@@ -51,7 +51,7 @@
                   type="password"
                 >
                 </v-text-field>
-                       <v-text-field
+                <v-text-field
                   label="Direccion"
                   :rules="direccionRules"
                   v-model="user.direccion"
@@ -59,7 +59,7 @@
                   type="text"
                 >
                 </v-text-field>
-                    <v-text-field
+                <v-text-field
                   label="Dni o RUC"
                   :rules="dniRules"
                   v-model="user.dni"
@@ -100,8 +100,7 @@
                   type="password"
                 >
                 </v-text-field>
-             
-        
+
                 <v-radio-group
                   v-model="user.role"
                   row
@@ -145,12 +144,23 @@ export default {
       (value) => /.+@.+\..+/.test(value) || "Email must be valid ",
     ],
     passwordRules: [(value) => !!value || "Password is required"],
-    dniRules: [(value) => !!value || "DNI || RUC is required",
-     value=> (value && value.length ==8 || value && value.length ==11 ) || "El Dni contiene 8  y el RUC 11"
+    dniRules: [
+      (value) => !!value || "DNI || RUC is required",
+      (value) =>
+        (value && value.length == 8) ||
+        (value && value.length == 11) ||
+        "El Dni contiene 8  y el RUC 11",
     ],
     direccionRules: [(value) => !!value || "Direccion is required"],
-    
-    user: { nombre: "", email: "", password: "", role: "",direccion:"",dni:"" }, //mismo que backend
+
+    user: {
+      nombre: "",
+      email: "",
+      password: "",
+      role: "",
+      direccion: "",
+      dni: "",
+    }, //mismo que backend
     suForm: true,
     user: { role: "", nombre: "", email: "" },
   }),
@@ -209,7 +219,9 @@ export default {
             if (this.user.role == "cliente") {
               this.$router.push("/Profile");
             } else {
-              this.$router.push("/ProfileProveedor");
+              if (this.user.role == "proveedor") {
+                this.$router.push("/ProfileProveedor");
+              }
             }
           }
         } catch (error) {
