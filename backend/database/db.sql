@@ -51,18 +51,18 @@ CREATE TABLE carrito_producto(
 	producto_id BIGINT REFERENCES tbl_producto(id_producto) NOT NULL,
 	cantidad_id INTEGER
 );
-CREATE TABLE tbl_pedido(
+CREATE TABLE tbl_pedido( /* EL DECIMAL CAGA */
 	id_pedido serial primary key NOT NULL,
 	fecha DATE,
 	estado VARCHAR(20),
-	total DECIMAL(10, 4),
+	total DECIMAL
 	id_cliente BIGINT REFERENCES cliente(id_cliente) NOT NULL,
 	id_metodo BIGINT REFERENCES tbl_metodo_pago(id_metodo_pago) NOT NULL
 );
-CREATE TABLE tbl_pedido_detalle(
+CREATE TABLE tbl_pedido_detalle(/* EL DECIMAL CAGA */
 	id_pedido_detalle serial primary key NOT NULL,
 	cantidad INTEGER,
-	precio DECIMAL(10, 4),
+	precio DECIMAL
 	id_pedido BIGINT REFERENCES tbl_pedido(id_pedido) NOT NULL,
 	id_producto BIGINT REFERENCES tbl_producto(id_producto) NOT NULL
 );

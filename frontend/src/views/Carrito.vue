@@ -135,6 +135,7 @@
 <script>
 import NavBar from "../components/NavBar";
 import Carrito from "../apis/Carrito";
+import Productos from "../apis/Productos";
 import Pedido from "../apis/Pedidos"
 import Footer from "../components/Footer";
 
@@ -167,6 +168,7 @@ export default {
       const idCarritoProductos = await Carrito.get(`/getCarrito_tabla/${aux}`);
 
       this.carrito = idCarritoProductos.data.data.cliente;
+      console.log(this.carrito)
 
       //redireccionar al inicio si no esta logueado
 
@@ -227,29 +229,25 @@ export default {
     async insertar_tblpedido() {
       this.pedido.id_cliente=this.user.id;
       this.pedido.total=document.getElementById("TOTAL").value;
-
       //1ro Hacemos update a la tabla intermedia de carrito 
-        var productosencarrito=this.carrito
-         /* const nuevo_pedido=await Carrito.put('/update/',this.pedido);  */
+      var productosencarrito=this.carrito
+      this.update(productosencarrito)
+     //creamos nuevo pedido
+     const nuevo_pedido=await Pedido.post('/create/',this.pedido);  
+     // disminuimos el stock de esos productos antes de eliminarlos xd
+     this.disminuirStock(productosencarrito);
+     //insertamos en nuestra tabla que sera nuestro historial
+     this.insertIntoTbl_pedido_detalle();
+    
+  
+      
+    },
 
-           for(var i =0;i<productosencarrito.length;i++){
-             console.log(this.carrito[i])
-           /*  await Carrito.put(`/update/${aux}`,this.carrito[i]);  */
+    async update(productosencarrito){
+        for(var i =0;i<productosencarrito.length;i++){
+             await Carrito.put(`/update/${this.carrito[i].producto_id}/${ document.getElementById("cantidad"+productosencarrito[i].producto_id).innerHTML}`);   
             
       } 
-
-
-
-      //2do disminuimos el stock de esos productos
-
-
-
-      //creamos nuevo pedido
-   /*    const nuevo_pedido=await Pedido.post('/create/',this.pedido); 
-     //insertamos en ultima tabla 
-     this.insertIntoTbl_pedido_detalle();
-      */
-      
     },
 
     async deleteCarritoItem(idCarrito, IdProducto){
@@ -274,18 +272,32 @@ export default {
       const monto=await Carrito.get(`/getTotal/${aux}`); 
       document.getElementById("TOTAL").value=monto.data.data.carrito.sum;
     },
+
+    
     async insertIntoTbl_pedido_detalle(){//Consulte a la bd en ese instante 
-      var productosencarrito=this.carrito
-      const last_id_pedido = await Pedido.get("/getLastIdPedido_detalle");
+       const id = this.user.id;
+      const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
+      const aux2 = idCarrito.data.data.cliente.id_carrito;
+
+      const idCarritoProductos = await Carrito.get(`/getCarrito_tabla/${aux2}`);
+      var productosencarrito = idCarritoProductos.data.data.cliente;
+       const last_id_pedido = await Pedido.get("/getLastIdPedido_detalle");
        var aux=last_id_pedido.data.data.last[0].max; 
-        
+
        for(var i =0;i<productosencarrito.length;i++){
-           console.log(this.carrito[i])
-            await Pedido.post(`/insertPedido_detalle/${aux}`,this.carrito[i]);  
+            await Pedido.post(`/insertPedido_detalle/${aux}`,productosencarrito[i]);  
       } 
 
-      this.deleteAfterBuy();
+      this.deleteAfterBuy(); 
+    },
+    async disminuirStock(productosencarrito){
+           for(var i =0;i<productosencarrito.length;i++){
+             await Productos.put(`/updateStock/${this.carrito[i].producto_id}/${ document.getElementById("cantidad"+productosencarrito[i].producto_id).innerHTML}`);   
+            
+      } 
+
     }
+
   },
 };
 </script>

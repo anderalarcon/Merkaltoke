@@ -11,7 +11,7 @@
           :key="pedido.id_pedido"
         >
           <v-img
-            src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+            src="https://image.freepik.com/free-vector/food-delivery-cute-man-riding-motorcycles-cartoon-art-illustration_56104-609.jpg"
             height="200px"
           ></v-img>
 

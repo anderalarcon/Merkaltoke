@@ -94,28 +94,27 @@ router.route("/delete/:id").delete(async (req, res) => {
     console.error(err.message);
   }
 });
-/* 
-router.post("/", authorize, async (req, res) => {
+
+
+//update stock de productos al realizar compra 
+router.route("/updateStock/:id_producto/:cantidad").put(async (req, res) => {
   try {
-    const user = await pool.query(
-      "SELECT usuario_nickname FROM users WHERE id_cuenta_cliente = $1",
-      [req.user.id] //al ser el token valido obtenemos el id
-    ); 
-    
-  //if would be req.user if you change your payload to this:
-    
-  //   function jwtGenerator(user_id) {
-  //   const payload = {
-  //     user: user_id
-  //   };
-    
-    res.json(user.rows[0]);
+    const { id_producto } = req.params;
+    const { cantidad } = req.params;
+
+    const carrito = await pool.query(
+      "UPDATE tbl_producto SET stock=stock-$1 where id_producto=$2 returning *",
+      [cantidad,id_producto]
+    );
+    res.status(200).json({
+      status:"success",
+      data:{carrito:carrito.rows[0]},
+
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
   }
-}); */
-
+});
 
 module.exports = router;
 

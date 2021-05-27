@@ -12,7 +12,7 @@
             ></v-img>
           </v-flex>
           <v-flex class="border ml-2" md3>
-            <p>RUC : 123456789</p>
+            <p>RUC : 12345678912</p>
             <p>Empresa : Merkaltoke</p>
             <p>Dirección: San Isidro 123</p>
           </v-flex>
@@ -23,8 +23,8 @@
             <p>Dni | Ruc : Por ahora no tenemos este dato</p>
           </v-flex>
           <v-flex md-3>
-            <p>Ciudad: Lima</p>
-            <p>Distrito: San Luis</p>
+            <p>Direccion de Envío: Lima</p>
+      
           </v-flex>
           <v-flex md-3>
             <p>Fecha : {{this.fecha}}</p>
