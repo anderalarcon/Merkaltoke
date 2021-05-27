@@ -147,5 +147,27 @@ router.route("/getTotal/:carrito_id").get(async (req, res) => {
 
 
 
+//Update carrito_producto
+router.route("/update/:producto_id/:cantidad_id").put(async (req, res) => {
+  try {
+    const { producto_id } = req.params;
+    const { cantidad_id } = req.params;
+
+    const carrito = await pool.query(
+      "UPDATE carrito_producto SET cantidad_id=$1 where producto_id=$2 returning *",
+      [cantidad_id,producto_id]
+    );
+    res.status(200).json({
+      status:"success",
+      data:{carrito:carrito.rows[0]},
+
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
 module.exports = router;
 

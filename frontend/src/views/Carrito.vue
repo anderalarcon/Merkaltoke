@@ -182,11 +182,28 @@ export default {
     async insertar_tblpedido() {
       this.pedido.id_cliente=this.user.id;
       this.pedido.total=document.getElementById("TOTAL").value;
+
+      //1ro Hacemos update a la tabla intermedia de carrito 
+        var productosencarrito=this.carrito
+         /* const nuevo_pedido=await Carrito.put('/update/',this.pedido);  */
+
+           for(var i =0;i<productosencarrito.length;i++){
+             console.log(this.carrito[i])
+           /*  await Carrito.put(`/update/${aux}`,this.carrito[i]);  */
+            
+      } 
+
+
+
+      //2do disminuimos el stock de esos productos
+
+
+
       //creamos nuevo pedido
-      const nuevo_pedido=await Pedido.post('/create/',this.pedido); 
+   /*    const nuevo_pedido=await Pedido.post('/create/',this.pedido); 
      //insertamos en ultima tabla 
      this.insertIntoTbl_pedido_detalle();
-     
+      */
       
     },
     async deleteAfterBuy(){
