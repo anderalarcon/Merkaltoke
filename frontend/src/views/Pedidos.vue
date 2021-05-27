@@ -21,8 +21,8 @@
 
           <v-card-actions>
        
-            <a v-bind:href="'/Comprobante/' + pedido.id_pedido"
-              >Comprobante de Pago</a
+            <v-btn  color="success" class="btn btn" v-bind:href="'/Comprobante/' + pedido.id_pedido"
+              >Comprobante de Pago</v-btn
               >
             <v-spacer></v-spacer>
 
@@ -32,9 +32,12 @@
           <v-expand-transition>
             <div >
               <v-divider></v-divider>
+              <v-card-text> <p>Estado: {{ pedido.estado }}</p>  
 
-              <v-card-text> Estado: {{ pedido.estado }} </v-card-text>
-              <v-card-text> Monto total: {{ pedido.total }} </v-card-text>
+            <p>Metodo de Pago: {{ pedido.metodo }}</p> 
+            <p>Monto total: {{ pedido.total }}</p> 
+              </v-card-text>
+  
             </div>
           </v-expand-transition>
         </v-card></v-row

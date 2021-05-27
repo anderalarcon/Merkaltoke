@@ -19,8 +19,8 @@
             <h3>{{ categoria.categoria }}</h3>
           </v-card-title>
           <v-card-actions>
-            <a v-bind:href="'/Productos-Categoria/' + categoria.id_categoria"
-              >Ver</a
+            <v-btn color="blue" v-bind:href="'/Productos-Categoria/' + categoria.id_categoria"
+              >Ver</v-btn
             >
           </v-card-actions>
         </v-card>
@@ -45,8 +45,8 @@
           <v-card-title> {{ proveedor.nombre_proveedor }} </v-card-title>
 
           <v-card-actions>
-          <a v-bind:href="'/Productos-Proveedor/' + proveedor.id_proveedor"
-              >Ver</a
+          <v-btn color="warning" v-bind:href="'/Productos-Proveedor/' + proveedor.id_proveedor"
+              >Ver</v-btn
               >
           </v-card-actions>
         </v-card>

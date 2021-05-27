@@ -110,12 +110,13 @@
               <v-row>
                 <v-col cols="12" md="8" sm="6"> <h1 class="mt-5 ml-5">Total</h1> </v-col>
                 <v-col  cols="6" md="4"><v-text-field id="TOTAL"  disabled  ></v-text-field>  </v-col>
-                <v-col> <v-select class="col-6"
-                :items="items"
+                <v-col> <v-select class="col-6" id="te"
+                        :items="items"
                         item-text="metodo"
                         item-value="id_metodo_pago"
                         label="Seleccione el Método de pago*"
                         required
+                        v-model="metodo_pago.id"
                          :rules="[(v) => !!v || 'Método requerido']"
                         
         ></v-select></v-col>
@@ -163,7 +164,8 @@ export default {
     carrito: [],
     user: { role: "", nombre: "", email: "", id: "" },
     pedido:{},
-    dialog:false
+    dialog:false,
+    metodo_pago:{}
   }),
 
   created: async function () {
@@ -181,10 +183,10 @@ export default {
       const idCarritoProductos = await Carrito.get(`/getCarrito_tabla/${aux}`);
 
       this.carrito = idCarritoProductos.data.data.cliente;
-     
+       
      const metodosDePago= await Metodo.get("/get")
      this.items=metodosDePago.data.data.metodos
-      console.log(this.items)
+      
       //redireccionar al inicio si no esta logueado
 
       this.getTotalofCarShop();
@@ -242,8 +244,16 @@ export default {
       }
     },
     async insertar_tblpedido() {
-      this.pedido.id_cliente=this.user.id;
+      if( this.carrito.length==0  ){
+       
+        console.log("Carro vacio")
+      
+      }else{
+        if(this.metodo_pago.id!=undefined){
+       
+    this.pedido.id_cliente=this.user.id;
       this.pedido.total=document.getElementById("TOTAL").value;
+      this.pedido.id_metodo=this.metodo_pago.id
       //1ro Hacemos update a la tabla intermedia de carrito 
       var productosencarrito=this.carrito
       this.update(productosencarrito)
@@ -253,6 +263,11 @@ export default {
      this.disminuirStock(productosencarrito);
      //insertamos en nuestra tabla que sera nuestro historial
      this.insertIntoTbl_pedido_detalle();
+     }else{
+       console.log("falta escoger metodo de pago")
+     }
+      }
+  
     
   
       
@@ -289,7 +304,7 @@ export default {
     },
 
     
-    async insertIntoTbl_pedido_detalle(){//Consulte a la bd en ese instante 
+    async insertIntoTbl_pedido_detalle(){ 
        const id = this.user.id;
       const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
       const aux2 = idCarrito.data.data.cliente.id_carrito;
