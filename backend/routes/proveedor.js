@@ -114,13 +114,13 @@ router.route("/delete/:id_proveedor").delete(async (req, res) => {
 
 
 //GetId
-router.route("/get/:id").get(async (req, res) => {
+router.route("/get/:id_proveedor").get(async (req, res) => {
   try {
-    const { id } = req.params;
-    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID=$1", [id]);
+    const { id_proveedor } = req.params;
+    const proveedor = await pool.query("SELECT * FROM tbl_producto WHERE ID_proveedor=$1", [id]);
     res.status(200).json({
       status: "success",
-      data: { producto: producto.rows[0] },
+      data: { proveedor: proveedor.rows[0] },
     });
   } catch (err) {
     console.error(err.message);

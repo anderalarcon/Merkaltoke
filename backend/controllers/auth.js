@@ -2,13 +2,13 @@ import pool from "../database/keys";
 
 const aunthentication = {};
 aunthentication.signUp = async (req, res) => {
-  const { nombre, email, password, role, last_id_ } = req.body;
+  const { nombre, email, password, role,direccion,dni, last_id_ } = req.body;
 
   if (role == "cliente") {
     try {
       await pool.query(
-        "INSERT INTO cliente (nombre_cliente,email_cliente,password_cliente)values($1,$2,$3)",
-        [nombre, email, password]
+        "INSERT INTO cliente (nombre_cliente,email_cliente,password_cliente,direccion_cliente,DNI,img_cliente)values($1,$2,$3,$4,$5,'https://image.freepik.com/free-vector/follow-me-social-business-theme-design_24877-50426.jpg')",
+        [nombre, email, password,direccion,dni]
       );
       await pool.query(
         "INSERT INTO tbl_carrito(id_cliente) ((SELECT MAX(ID_CLIENTE)FROM CLIENTE))"
@@ -38,8 +38,8 @@ aunthentication.signUp = async (req, res) => {
   } else {
     try {
       await pool.query(
-        "INSERT INTO proveedor (nombre_proveedor,email_proveedor,password_proveedor)values($1,$2,$3)",
-        [nombre, email, password]
+        "INSERT INTO proveedor (nombre_proveedor,email_proveedor,password_proveedor,direccion_proveedor,ruc,img_proveedor)values($1,$2,$3,$4,$5,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg')",
+        [nombre, email, password,direccion,dni]
       );
       res.status(200).json({
         message: "succesfull registred proveedor",
