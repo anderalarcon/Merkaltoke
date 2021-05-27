@@ -81,7 +81,7 @@ router.route("/getCarritoId/:id_cliente").get(async (req, res) => {
 router.route("/getCarrito_tabla/:id_carrito").get(async (req, res) => {
   try {
     const { id_carrito } = req.params;
-    const cliente = await pool.query("select distinct(c.producto_id), c.carrito_id ,c.cantidad_id ,p.precio, p.nombre from carrito_producto c, tbl_producto p where c.carrito_id=$1 and c.producto_id=p.id_producto order by c.producto_id;", [id_carrito]);
+    const cliente = await pool.query("select distinct(c.producto_id),c.carrito_id ,c.cantidad_id ,p.precio, p.nombre from carrito_producto c, tbl_producto p where c.carrito_id=$1 and c.producto_id=p.id_producto order by c.producto_id;", [id_carrito]);
     res.status(200).json({
       status: "success",
       data: { cliente: cliente.rows },
@@ -122,6 +122,19 @@ router.route("/deleteMid/:carrito_id").delete(async (req, res) => {
     const { carrito_id } = req.params;
     const productosAeliminar = await pool.query("DElETE FROM carrito_producto WHERE carrito_id=$1", [
       carrito_id,
+    ]);
+    res.status(200).json("Productos eliminados");
+  } catch (err) {
+    console.error(err.message);
+  }
+}); 
+
+router.route("/deleteItemCarrito/:carrito_id/:producto_id").delete(async (req, res) => {
+  try {
+    const { carrito_id } = req.params;
+    const { producto_id} = req.params;
+    const ItemAeliminar = await pool.query("delete from carrito_producto where carrito_id=$1 and producto_id=$2;", [
+      carrito_id,producto_id
     ]);
     res.status(200).json("Productos eliminados");
   } catch (err) {

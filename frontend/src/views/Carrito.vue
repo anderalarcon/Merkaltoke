@@ -30,7 +30,7 @@
                       <v-btn class="mx-2" fab dark small color="primary">
                         <v-icon
                           dark
-                          @click="disminuir_cantidad(carro.producto_id)"
+                          @click="disminuir_cantidad(carro.producto_id,carro.carrito_id)"
                         >
                           mdi-minus
                         </v-icon>
@@ -54,9 +54,47 @@
                     </td>
                     <td>
                       <v-btn class="mx-2" fab dark small color="pink">
-                        <v-icon small @click="deleteItem(item)">
+                        <v-icon small @click="dialog=true">
+                        <!--<v-icon small @click="deleteCarritoItem(carro.carrito_id,carro.producto_id)">-->
                           mdi-delete
                         </v-icon>
+
+                        <!--dialog-->
+                                <v-dialog
+                                  v-model="dialog"
+                                  max-width="290"
+                                >
+                                  <v-card>
+                                    <v-card-title class="headline">
+                                      Eliminar el producto 
+                                    </v-card-title>
+
+                                    <v-card-text>
+                                     ¿Desea eliminar el producto <b>{{carro.nombre}}</b> del carrito?
+                                    </v-card-text>
+
+                                    <v-card-actions>
+                                      <v-spacer></v-spacer>
+
+                                      <v-btn
+                                        color="green darken-1"
+                                        text
+                                        @click="dialog = false"
+                                      >
+                                        NO
+                                      </v-btn>
+
+                                      <v-btn
+                                        color="green darken-1"
+                                        text
+                                        
+                                        @click="deleteCarritoItem(carro.carrito_id,carro.producto_id), dialog = false"
+                                      >
+                                        SI
+                                      </v-btn>
+                                    </v-card-actions>
+                                  </v-card>
+                                </v-dialog>
                       </v-btn>
                     </td>
                   </tr>
@@ -110,7 +148,8 @@ export default {
   data: () => ({
     carrito: [],
     user: { role: "", nombre: "", email: "", id: "" },
-    pedido:{}
+    pedido:{},
+    dialog:false
   }),
 
   created: async function () {
@@ -166,7 +205,13 @@ export default {
       this.obtenertotal();
     },
 
-    disminuir_cantidad: function (id_producto) {
+    disminuir_cantidad: function (id_producto,idCarrito) {
+      if(document.getElementById("cantidad" + id_producto).innerHTML == 1){
+           //this.deleteCarritoItem(idCarrito, id_producto);
+           this.dialog=true;
+      }
+
+      else{
       document.getElementById("cantidad" + id_producto).innerHTML =
         parseInt(document.getElementById("cantidad" + id_producto).innerHTML) -
         1;
@@ -177,7 +222,7 @@ export default {
         parseInt(document.getElementById("cantidad" + id_producto).innerHTML)
       ).toFixed(1);
          this.obtenertotal();
-
+      }
     },
     async insertar_tblpedido() {
       this.pedido.id_cliente=this.user.id;
@@ -206,6 +251,14 @@ export default {
       */
       
     },
+
+    async deleteCarritoItem(idCarrito, IdProducto){
+      console.log("el id del carrito es: " + idCarrito+ " y producto " + IdProducto);
+      const eliminarItem= await Carrito.delete(`/deleteItemCarrito/${idCarrito}/${IdProducto}`);
+        const index = this.carrito.findIndex((c) => c.id_producto == IdProducto);
+      this.carrito.splice(index, 1); //Desaparecer al instante  asyncrono
+    },
+
     async deleteAfterBuy(){
       const id = this.user.id;
       const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
