@@ -13,8 +13,8 @@ router.route("/create").post(async (req, res) => {
  /*    const { id_metodo } = req.body; */
 
     const newPedido = await pool.query(
-      "INSERT INTO tbl_pedido(fecha,estado,total,id_cliente,id_metodo) VALUES($1,$2,$3,$4,$5) RETURNING *",
-      ['2021-05-16','Entregado',total,id_cliente,1]
+      "INSERT INTO tbl_pedido(fecha,estado,total,id_cliente,id_metodo) VALUES(CURRENT_TIMESTAMP,$1,$2,$3,$4) RETURNING *",
+      ['Por Confirmar',total,id_cliente,1]
     );
     res.status(200).json({
       status: "succes",

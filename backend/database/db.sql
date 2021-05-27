@@ -14,7 +14,7 @@ CREATE TABLE proveedor(
 	email_proveedor VARCHAR(59) UNIQUE,
 	password_proveedor VARCHAR(50),
 	direccion_proveedor VARCHAR(100),
-	RUC INTEGER,
+	RUC BIGINT,
 	img_proveedor VARCHAR
 );
 CREATE TABLE admin(

@@ -20,9 +20,9 @@ app.use("/productos", require('./routes/productos'));
 app.use("/proveedores", require('./routes/proveedor'));
 app.use("/categorias", require('./routes/categorias'));
 app.use("/carrito", require('./routes/carrito'));
-/* app.use("/Comprobante", require('./routes/Comprobante')); */
 app.use("/pedidos", require('./routes/pedidos'));
 app.use("/cliente", require('./routes/cliente'));
+app.use("/metodos", require('./routes/metodopago'));
 
 
 

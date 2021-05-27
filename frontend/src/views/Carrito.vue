@@ -108,8 +108,18 @@
           <v-card class="pa-2" outlined tile>
             <div>
               <v-row>
-                <v-col cols="12" md="8" sm="6"> Total </v-col>
+                <v-col cols="12" md="8" sm="6"> <h1 class="mt-5 ml-5">Total</h1> </v-col>
                 <v-col  cols="6" md="4"><v-text-field id="TOTAL"  disabled  ></v-text-field>  </v-col>
+                <v-col> <v-select class="col-6"
+                :items="items"
+                        item-text="metodo"
+                        item-value="id_metodo_pago"
+                        label="Seleccione el Método de pago*"
+                        required
+                         :rules="[(v) => !!v || 'Método requerido']"
+                        
+        ></v-select></v-col>
+                  
               </v-row>
             </div>
 
@@ -122,6 +132,7 @@
               >
                 Realizar compra
               </v-btn>
+              
             </div>
           </v-card>
         </v-col>
@@ -137,6 +148,7 @@ import NavBar from "../components/NavBar";
 import Carrito from "../apis/Carrito";
 import Productos from "../apis/Productos";
 import Pedido from "../apis/Pedidos"
+import Metodo from "../apis/Metodos"
 import Footer from "../components/Footer";
 
 export default {
@@ -147,6 +159,7 @@ export default {
   },
 
   data: () => ({
+    items: [],
     carrito: [],
     user: { role: "", nombre: "", email: "", id: "" },
     pedido:{},
@@ -168,8 +181,10 @@ export default {
       const idCarritoProductos = await Carrito.get(`/getCarrito_tabla/${aux}`);
 
       this.carrito = idCarritoProductos.data.data.cliente;
-      console.log(this.carrito)
-
+     
+     const metodosDePago= await Metodo.get("/get")
+     this.items=metodosDePago.data.data.metodos
+      console.log(this.items)
       //redireccionar al inicio si no esta logueado
 
       this.getTotalofCarShop();
