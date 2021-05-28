@@ -1,15 +1,33 @@
 <template>
-    <h1>Vista "iNDICADORES"</h1>
+<div>
+    <NavBar></NavBar>
+    <v-container>
+      <v-row justify="center">
+        <v-col>
+          <v-card class="mt-5" max-width="450" style="margin: auto">
+
+
+          </v-card>
+          <v-card> </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+    <Footer></Footer>
+  </div>
 </template>
 
 <script>
+import NavBar from "../../components/NavBarProveedor";
+import Footer from "../../components/Footer";
+import Proveedor from "../../apis/Proveedor";
 export default {
   name: "MisProductos",
   components: {
-  
+   NavBar,
+    Footer,
   },
   data: () => ({
-   
+    
   }),
   created: async function () {
     try {
