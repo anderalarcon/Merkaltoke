@@ -45,10 +45,10 @@ router.route("/get").get(async (req, res) => {
 });
 
 //GetId
-router.route("/get/:id").get(async (req, res) => {
+router.route("/get/:id_producto").get(async (req, res) => {
   try {
-    const { id } = req.params;
-    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID=$1", [id]);
+    const { id_producto } = req.params;
+    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID=$1", [id_producto]);
     res.status(200).json({
       status: "success",
       data: { producto: producto.rows[0] },
