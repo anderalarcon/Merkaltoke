@@ -32,18 +32,7 @@
       </v-card>
     </v-footer>
 
-    <v-row
-      align="center"
-      justify="center"
-      class="ma-12"
-    >
-      <v-col
-        cols="12"
-        md="8"
-      >
 
-      </v-col>
-    </v-row>
   </v-card>
 </template>
 

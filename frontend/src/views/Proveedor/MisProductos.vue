@@ -52,36 +52,34 @@
         >
       </v-card>
     </v-container>
-
+    <Footer></Footer>
 
     <v-btn @click="add = true" color="red" large right fixed botoom fab dark
       ><v-icon>mdi-plus</v-icon></v-btn
     >
-            <v-dialog v-model="add" max-width="500">
-                  <v-card>
-                    <v-card-title>Create a new area</v-card-title>
-                    <v-card-text>
-                      <v-form ref="addForm" @submit.prevent="addArea()">
-                        <v-text-field
-                          prepend-icon="mdi-biohazard"
-                          label="Name"
-                          :rules="[(v) => !!v || 'Name is required']"
-                        >
-                        </v-text-field>
-                        <v-text-field
-                          type="number"
-                          prepend-icon="mdi-biohazard"
-                          label="Code"
-                          :rules="[(v) => !!v || 'code is required']"
-                        >
-                        </v-text-field>
-                        <v-btn block class="success ma-2" type="submit"
-                          >Add</v-btn
-                        >
-                      </v-form>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
+    <v-dialog v-model="add" max-width="500">
+      <v-card>
+        <v-card-title>Create a new area</v-card-title>
+        <v-card-text>
+          <v-form ref="addForm" @submit.prevent="addArea()">
+            <v-text-field
+              prepend-icon="mdi-biohazard"
+              label="Name"
+              :rules="[(v) => !!v || 'Name is required']"
+            >
+            </v-text-field>
+            <v-text-field
+              type="number"
+              prepend-icon="mdi-biohazard"
+              label="Code"
+              :rules="[(v) => !!v || 'code is required']"
+            >
+            </v-text-field>
+            <v-btn block class="success ma-2" type="submit">Add</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -108,10 +106,10 @@ export default {
         sortable: false,
         value: "nombre",
       },
-      { text: "Precio", value: "precio",sortable:true },
+      { text: "Precio", value: "precio", sortable: true },
       { text: "Stock", value: "stock" },
-      { text: "Detalle", value: "detalle",sortable:false },
-      { text: "Categoria", value: "categoria",sortable:false },
+      { text: "Detalle", value: "detalle", sortable: false },
+      { text: "Categoria", value: "categoria", sortable: false },
       { text: "Operacion", value: "operacion", sortable: false },
     ],
 
