@@ -14,16 +14,21 @@
                     <th class="text-left">Precio</th>
                     <th class="text-left">Stock</th>
                     <th class="text-left">Detalle</th>
+                    <th class="text-left">Categoria</th>
                     <th class="text-left">Operacion</th>
                     
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Coca Cola</td>
-                    <td>11.5</td>
-                    <td>500</td>
-                    <td>6 und</td>
+                  <tr           
+                    v-for="producto in productos"
+                    :key="producto.id_producto"
+                  >
+                    <td>{{producto.nombre}}</td>
+                    <td>{{ producto.precio }}</td>
+                    <td>{{ producto.stock }}</td>
+                    <td>{{ producto.detalle }}</td>
+                    <td>{{ producto.categoria}}</td>
                     <td>
                       <v-btn class="mx-2" fab dark small color="primary">
                           <v-icon small @click="dialog=true">
@@ -41,29 +46,7 @@
                         
                     </td>
                   </tr>
-                  <tr>
-                    <td>Chicha Morada</td>
-                    <td>11.5</td>
-                    <td>500</td>
-                    <td>6 und</td>
-                    <td>
-                        <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon
-                          dark
-                          @click=""
-                        >
-                          mdi-pencil
-                        </v-icon>
-                      </v-btn>
 
-                      <v-btn class="mx-2" fab dark small color="pink">
-                        <v-icon small @click="dialog=true">
-                            <!--<v-icon small @click="">-->
-                              mdi-delete
-                            </v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
                 </tbody>
                 </template>
             </v-simple-table>
@@ -119,14 +102,20 @@ export default {
     Footer,
   },
   data: () => ({
+    productos: [],
     add: false
   }),
   created: async function () {
     try {
+
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
       } else {
         this.user = JSON.parse(sessionStorage.getItem("session"));
+        const id = this.user.id;
+        console.log(id);
+        const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+        this.productos = res.data.data.productos;
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
         } else {
