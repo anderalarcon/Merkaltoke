@@ -1,40 +1,63 @@
 <template>
   <div>
     <NavBar></NavBar>
-    <v-container class="lighten-5">
-      <h1 class="mb-5">Mis Productos</h1>
-      <v-row no-gutters>
-        <v-col>
-          <!-- TABLA NUEVA-->
-          <v-card>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-            <v-data-table
-              :headers="headers"
-              :items="desserts"
-              sort-by="precio"
-              class="elevation-1"
-              :search="search"
-            >
-              <template v-slot:top>
-                <v-btn
-                  @click="add = true"
-                  color="red"
-                  large
-                  right
-                  fixed
-                  botoom
-                  fab
-                  dark
-                  ><v-icon>mdi-plus</v-icon></v-btn
-                >
 
-                <v-dialog v-model="add" max-width="500">
+    <v-container class="mt-5">
+      <v-card elevation="15" shaped loading class="pb-3">
+        <v-card-title>
+          Gestión de Productos
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table :headers="headers" :items="productos" :search="search">
+          <template v-slot:item="row">
+            <tr>
+              <td>{{ row.item.nombre }}</td>
+              <td>{{ row.item.precio }}</td>
+              <td>{{ row.item.stock }}</td>
+              <td>{{ row.item.detalle }}</td>
+
+              <td>{{ row.item.categoria }}</td>
+
+              <td>
+                <v-btn
+                  color="orange"
+                  x-small
+                  small
+                  dark
+                  fab
+                  class=""
+                  @click="readMemberToUpdate()"
+                >
+                  <v-icon small> mdi-pencil </v-icon></v-btn
+                >
+                <v-btn
+                  color="red"
+                  x-small
+                  small
+                  dark
+                  fab
+                  @click="readMemberToDelete()"
+                >
+                  <v-icon small> mdi-delete </v-icon>
+                </v-btn>
+              </td>
+            </tr>
+          </template></v-data-table
+        >
+      </v-card>
+    </v-container>
+
+
+    <v-btn @click="add = true" color="red" large right fixed botoom fab dark
+      ><v-icon>mdi-plus</v-icon></v-btn
+    >
+            <v-dialog v-model="add" max-width="500">
                   <v-card>
                     <v-card-title>Create a new area</v-card-title>
                     <v-card-text>
@@ -59,95 +82,6 @@
                     </v-card-text>
                   </v-card>
                 </v-dialog>
-              </template>
-
-              <template>
-                <v-icon small class="mr-2" @click="dialog = true">
-                  mdi-pencil
-                </v-icon>
-                <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-              </template>
-            </v-data-table>
-
-            <!-- TABLA ANTERIOR-->
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Producto</th>
-                    <th class="text-left">Precio</th>
-                    <th class="text-left">Stock</th>
-                    <th class="text-left">Detalle</th>
-                    <th class="text-left">Categoria</th>
-                    <th class="text-left">Operacion</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="producto in productos" :key="producto.id_producto">
-                    <td>{{ producto.nombre }}</td>
-                    <td>{{ producto.precio }}</td>
-                    <td>{{ producto.stock }}</td>
-                    <td>{{ producto.detalle }}</td>
-                    <td>{{ producto.categoria }}</td>
-                    <td>
-                      <v-btn class="mx-2" fab dark small color="primary">
-                        <v-icon small @click="dialog = true">
-                          mdi-pencil
-                        </v-icon>
-                      </v-btn>
-
-                      <v-btn class="mx-2" fab dark small color="pink">
-                        <v-icon small @click="dialog = true">
-                          <!--<v-icon small @click="">-->
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-card>
-
-          <v-btn
-            @click="add = true"
-            color="red"
-            large
-            right
-            fixed
-            botoom
-            fab
-            dark
-            ><v-icon>mdi-plus</v-icon></v-btn
-          >
-
-          <v-dialog v-model="add" max-width="500">
-            <v-card>
-              <v-card-title>Create a new area</v-card-title>
-              <v-card-text>
-                <v-form ref="addForm" @submit.prevent="addArea()">
-                  <v-text-field
-                    prepend-icon="mdi-biohazard"
-                    label="Name"
-                    :rules="[(v) => !!v || 'Name is required']"
-                  >
-                  </v-text-field>
-                  <v-text-field
-                    type="number"
-                    prepend-icon="mdi-biohazard"
-                    label="Code"
-                    :rules="[(v) => !!v || 'code is required']"
-                  >
-                  </v-text-field>
-                  <v-btn block class="success ma-2" type="submit">Add</v-btn>
-                </v-form>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-        </v-col>
-      </v-row>
-    </v-container>
-    <Footer></Footer>
   </div>
 </template>
 
@@ -172,46 +106,15 @@ export default {
         text: "Producto",
         align: "start",
         sortable: false,
-        value: "name",
+        value: "nombre",
       },
-      { text: "Precio", value: "precio" },
+      { text: "Precio", value: "precio",sortable:true },
       { text: "Stock", value: "stock" },
-      { text: "Detalle", value: "detalle" },
+      { text: "Detalle", value: "detalle",sortable:false },
+      { text: "Categoria", value: "categoria",sortable:false },
       { text: "Operacion", value: "operacion", sortable: false },
     ],
-    desserts: [
-      {
-        name: "Coca cola",
-        precio: 159,
-        stock: 6.0,
-        detalle: 24,
-      },
-      {
-        name: "Chicha Morada",
-        precio: 237,
-        stock: 9.0,
-        detalle: 37,
-      },
-      {
-        name: "Inka Cola",
-        precio: 262,
-        stock: 16.0,
-        detalle: 23,
-      },
-    ],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      precio: 0,
-      stock: 0,
-      detalle: 0,
-    },
-    defaultItem: {
-      name: "",
-      precio: 0,
-      stock: 0,
-      detalle: 0,
-    },
+
     add: false,
   }),
   created: async function () {
@@ -224,6 +127,7 @@ export default {
         console.log(id);
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
         this.productos = res.data.data.productos;
+        console.log(this.productos);
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
         } else {
