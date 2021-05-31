@@ -45,10 +45,10 @@ router.route("/get").get(async (req, res) => {
 });
 
 //GetId
-router.route("/get/:id").get(async (req, res) => {
+router.route("/get/:id_producto").get(async (req, res) => {
   try {
-    const { id } = req.params;
-    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID=$1", [id]);
+    const { id_producto } = req.params;
+    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID_producto=$1", [id_producto]);
     res.status(200).json({
       status: "success",
       data: { producto: producto.rows[0] },
@@ -83,13 +83,13 @@ router.route("/update/:id").put(async (req, res) => {
 });
 
 //Delete
-router.route("/delete/:id").delete(async (req, res) => {
+router.route("/delete/:id_producto").delete(async (req, res) => {
   try {
-    const { id } = req.params;
-    const productoAeliminar = await pool.query("DElETE FROM tbl_producto WHERE ID=$1", [
-      id,
+    const { id_producto } = req.params;
+    const productoAeliminar = await pool.query("DElETE FROM tbl_producto WHERE ID_producto=$1", [
+      id_producto,
     ]);
-    res.status(200).json("Area eliminada");
+    res.status(200).json("Producto eliminada");
   } catch (err) {
     console.error(err.message);
   }

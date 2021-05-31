@@ -113,7 +113,7 @@ router.route("/getLastIdPedido_detalle").get(async (req, res) => {
 });
 
 
-//chapamos para la factura 
+//chapamos para la factura acaaaaaa 
 
 
 router.route("/get_pedidos_detalle/:id_pedido").get(async (req, res) => {

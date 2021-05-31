@@ -42,7 +42,7 @@
                   small
                   dark
                   fab
-                  @click="readMemberToDelete()"
+                  @click="readProductoToDelete(row.item.id_producto)"
                 >
                   <v-icon small> mdi-delete </v-icon>
                 </v-btn>
@@ -57,6 +57,8 @@
     <v-btn @click="add = true" color="red" large right fixed botoom fab dark
       ><v-icon>mdi-plus</v-icon></v-btn
     >
+
+    <!--  Modal crear Producto -->
     <v-dialog v-model="add" max-width="500">
       <v-card>
         <v-card-title>Create a new area</v-card-title>
@@ -75,9 +77,28 @@
               :rules="[(v) => !!v || 'code is required']"
             >
             </v-text-field>
-            <v-btn block class="success ma-2" type="submit">Add</v-btn>
+            <v-btn  block class="success ma-2" type="submit">Add</v-btn>
           </v-form>
         </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <!-- Modal Eliminar -->
+    <v-dialog v-model="advertencia" persistent max-width="450">
+      <v-card>
+        <v-card-title class="headline"> Eliminar el producto </v-card-title>
+
+        <v-card-text> ¿Desea eliminar el producto ? </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="green darken-1" text @click="advertencia = false">
+            NO
+          </v-btn>
+
+          <v-btn color="red" text @click="deleteProducto()"> SI </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -87,7 +108,10 @@
 <script>
 import NavBar from "../../components/NavBarProveedor";
 import Footer from "../../components/Footer";
+import Productos from "../../apis/Productos";
 import Proveedor from "../../apis/Proveedor";
+import Carrito from "../../apis/Carrito";
+
 export default {
   name: "MisProductos",
   components: {
@@ -97,8 +121,9 @@ export default {
   data: () => ({
     productos: [],
     search: "",
-    dialog: false,
+    advertencia: false,
     dialogDelete: false,
+    productoToDelete: {},
     headers: [
       {
         text: "Producto",
@@ -135,6 +160,44 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  methods: {
+    async readProductoToDelete(id_producto) {
+      const res = await Productos.get(`/get/${id_producto}`);
+
+      this.advertencia = true;
+      this.productoToDelete = res.data.data.producto;
+      console.log(this.productoToDelete);
+    },
+
+    async deleteProducto() {
+      try {
+        //Primero borrar la tabla anterior carrito_producto
+
+        await Carrito.delete(
+          `/deleteProductFromAllCars/${this.productoToDelete.id_producto}`
+        );
+        await Productos.delete(`/delete/${this.productoToDelete.id_producto}`);
+        /*  const index = this.productos.findIndex(
+          (c) => c.id_producto == this.productoToDelete.id_producto
+        );
+        this.productos.splice(index, 1); */
+        this.advertencia = false;
+        /*     this.alert = {
+          show: true,
+          type: "Completado",
+          message: "Completo producto borrado",
+        }; */
+      } catch (error) {
+        /*      this.alert = {
+          show: true,
+          type: "error",
+          message: error,
+        }; */
+        console.log(error);
+      }
+    },
   },
 };
 </script>
