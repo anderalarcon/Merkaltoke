@@ -49,7 +49,6 @@ export default {
   }),
   created: async function () {
     try {
-     
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
       } else {

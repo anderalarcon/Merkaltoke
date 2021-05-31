@@ -1,13 +1,10 @@
 <template>
-<div>
+  <div>
     <NavBar></NavBar>
     <v-container>
       <v-row justify="center">
         <v-col>
-          <v-card class="mt-5" max-width="450" style="margin: auto">
-
-
-          </v-card>
+          <v-card class="mt-5" max-width="450" style="margin: auto"> </v-card>
           <v-card> </v-card>
         </v-col>
       </v-row>
@@ -23,12 +20,10 @@ import Proveedor from "../../apis/Proveedor";
 export default {
   name: "MisProductos",
   components: {
-   NavBar,
+    NavBar,
     Footer,
   },
-  data: () => ({
-    
-  }),
+  data: () => ({}),
   created: async function () {
     try {
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
