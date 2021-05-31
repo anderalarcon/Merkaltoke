@@ -11,11 +11,12 @@ router.route("/create").post(async (req, res) => {
     const { stock } = req.body;
     const { detalle } = req.body;
     const { id_proveedor } = req.body;
-    const { id_categoria } = req.body;
+    const { id_categoria } = req.body;    
+    const { img_producto } = req.body;
 
     const newProducto = await pool.query(
-      "INSERT INTO tbl_producto(nombre,precio,stock,detalle,id_proveedor,id_categoria) VALUES($1,$2,$3,$4,$5,$6) RETURNING *",
-      [nombre,precio,stock,detalle,id_proveedor,id_categoria]
+      "INSERT INTO tbl_producto(nombre,precio,stock,detalle,id_proveedor,id_categoria,img_producto,visible) VALUES($1,$2,$3,$4,$5,$6,$7,'no') RETURNING *",
+      [nombre,precio,stock,detalle,id_proveedor,id_categoria,img_producto]
     );
     res.status(200).json({
       status: "succes",

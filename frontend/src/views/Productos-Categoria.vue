@@ -22,6 +22,7 @@
           <v-card-subtitle>Precio : {{ producto.precio }} </v-card-subtitle>
           <v-card-subtitle>Stock : {{ producto.stock }} </v-card-subtitle>
           <v-card-subtitle>Detalle : {{ producto.detalle }} </v-card-subtitle>
+          <v-card-subtitle>Visible : {{ producto.visible }} </v-card-subtitle>
 
           <v-card-actions>
             <v-btn color="blue" small dark @click="addToCarrito(producto.id_producto)"
@@ -57,6 +58,7 @@ export default {
       //1.Obtener el carrito id del cliente
       
       const consultar_id_cliente = await Carrito.get(`/getCarritoId/${this.user.id}`);
+      console.log(consultar_id_cliente)
       const id_carrito=consultar_id_cliente.data.data.cliente.id_carrito;
      
       //2. Hacer el insert a la tabla intermedia a penas le da a seleccionar
