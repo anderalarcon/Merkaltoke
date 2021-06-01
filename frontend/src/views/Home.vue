@@ -4,7 +4,6 @@
       src="https://picsum.photos/1920/1080?random"
       dark
       shrink-on-scroll
-    
     >
       <v-toolbar-title>Merkaltoke</v-toolbar-title>
       <v-spacer></v-spacer>

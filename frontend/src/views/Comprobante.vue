@@ -21,14 +21,15 @@
         <v-layout>
           <v-flex md-3>
             <h3 class="mt-4">Cliente : {{ this.user.nombre }}</h3>
-            <h4 class="mt-4 mb-4">Dni  : {{this.datos.dni}}</h4>
+            <h4 class="mt-4 mb-4">Dni : {{ this.datos.dni }}</h4>
           </v-flex>
           <v-flex md-3>
-            <h3 class="mt-4">Direccion de Envío: {{this.datos.direccion_cliente}}</h3>
-      
+            <h3 class="mt-4">
+              Direccion de Envío: {{ this.datos.direccion_cliente }}
+            </h3>
           </v-flex>
           <v-flex md-3>
-            <h3 class="mt-4">Fecha de transacción : {{this.fecha}}</h3>
+            <h3 class="mt-4">Fecha de transacción : {{ this.fecha }}</h3>
           </v-flex>
         </v-layout>
 
@@ -46,16 +47,17 @@
                 </tr>
               </thead>
               <tbody>
-             <tr v-for="producto in productos_del_pedido" :key="producto.id_pedido_detalle">
-                
-                  <td>{{producto.id_pedido_detalle}}</td>
-                  <td>{{producto.nombre}}</td>
-                  <td>{{producto.detalle}}</td>
-                  <td>{{producto.cantidad}}</td>
-                  <td>{{producto.precio}}</td>
-                  <td>{{producto.cantidad*producto.precio}}</td>
+                <tr
+                  v-for="producto in productos_del_pedido"
+                  :key="producto.id_pedido_detalle"
+                >
+                  <td>{{ producto.id_pedido_detalle }}</td>
+                  <td>{{ producto.nombre }}</td>
+                  <td>{{ producto.detalle }}</td>
+                  <td>{{ producto.cantidad }}</td>
+                  <td>{{ producto.precio }}</td>
+                  <td>{{ producto.cantidad * producto.precio }}</td>
                 </tr>
-          
               </tbody>
             </template>
           </v-simple-table>
@@ -79,9 +81,9 @@ export default {
   },
   data: () => ({
     user: { role: "", nombre: "", email: "" },
-    productos_del_pedido:[],
-    fecha:{},
-    datos:{}
+    productos_del_pedido: [],
+    fecha: {},
+    datos: {},
   }),
   created: async function () {
     this.user = JSON.parse(sessionStorage.getItem("session"));
@@ -90,17 +92,17 @@ export default {
     }
 
     try {
-       const datos_cliente = await Cliente.get(`/get/${this.user.id}`);
-          this.datos = datos_cliente.data.data.cliente;
+      const datos_cliente = await Cliente.get(`/get/${this.user.id}`);
+      this.datos = datos_cliente.data.data.cliente;
 
-          console.log(this.datos)
+      console.log(this.datos);
       const id_pedido = this.$route.params.id;
-      const data_pedido_detalle = await Pedido.get(`/get_pedidos_detalle/${id_pedido}`);
-      const fecha_pedido= await Pedido.get(`/pedido_fecha/${id_pedido}`);
-       this.productos_del_pedido=data_pedido_detalle.data.data.pedido; 
-       this.fecha=fecha_pedido.data.data.pedido.fecha
-       
-       
+      const data_pedido_detalle = await Pedido.get(
+        `/get_pedidos_detalle/${id_pedido}`
+      );
+      const fecha_pedido = await Pedido.get(`/pedido_fecha/${id_pedido}`);
+      this.productos_del_pedido = data_pedido_detalle.data.data.pedido;
+      this.fecha = fecha_pedido.data.data.pedido.fecha;
     } catch (error) {}
   },
 };

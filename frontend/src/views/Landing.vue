@@ -30,16 +30,15 @@
         <div class="col-4">
           <h1>Proveedores</h1>
         </div>
-           <div class="col-8">
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Búsqueda por el nombre del proveedor"
-          single-line
-        ></v-text-field>
+        <div class="col-8">
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Búsqueda por el nombre del proveedor"
+            single-line
+          ></v-text-field>
         </div>
       </div>
-   
 
       <v-spacer></v-spacer>
       <!--hide-details como atributo en el v-text-field-->

@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const pool = require("../database/keys");
 
-
-
 //Create
 router.route("/create").post(async (req, res) => {
   try {
@@ -11,12 +9,12 @@ router.route("/create").post(async (req, res) => {
     const { stock } = req.body;
     const { detalle } = req.body;
     const { id_proveedor } = req.body;
-    const { id_categoria } = req.body;    
+    const { id_categoria } = req.body;
     const { img_producto } = req.body;
 
     const newProducto = await pool.query(
       "INSERT INTO tbl_producto(nombre,precio,stock,detalle,id_proveedor,id_categoria,img_producto,visible) VALUES($1,$2,$3,$4,$5,$6,$7,'no') RETURNING *",
-      [nombre,precio,stock,detalle,id_proveedor,id_categoria,img_producto]
+      [nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto]
     );
     res.status(200).json({
       status: "succes",
@@ -32,7 +30,6 @@ router.route("/create").post(async (req, res) => {
 //GET
 router.route("/get").get(async (req, res) => {
   try {
-  
     const productos = await pool.query("SELECT * FROM tbl_producto");
 
     res.status(200).json({
@@ -49,7 +46,10 @@ router.route("/get").get(async (req, res) => {
 router.route("/get/:id_producto").get(async (req, res) => {
   try {
     const { id_producto } = req.params;
-    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID_producto=$1", [id_producto]);
+    const producto = await pool.query(
+      "SELECT * FROM tbl_producto WHERE ID_producto=$1",
+      [id_producto]
+    );
     res.status(200).json({
       status: "success",
       data: { producto: producto.rows[0] },
@@ -71,12 +71,11 @@ router.route("/update/:id").put(async (req, res) => {
     const { id_categoria } = req.body;
     const producto = await pool.query(
       "UPDATE tbl_producto SET NOMBRE=$1, PRECIO=$2, STOCK=$3, DETALLE=$4, ID_PROVEEDOR=$5, ID_CATEGORIA=$6 WHERE ID=$7 returning *",
-      [nombre,precio,stock,detalle,id_proveedor,id_categoria,id]
+      [nombre, precio, stock, detalle, id_proveedor, id_categoria, id]
     );
     res.status(200).json({
-      status:"success",
-      data:{producto:producto.rows[0]},
-
+      status: "success",
+      data: { producto: producto.rows[0] },
     });
   } catch (err) {
     console.error(err.message);
@@ -87,17 +86,20 @@ router.route("/update/:id").put(async (req, res) => {
 router.route("/delete/:id_producto").delete(async (req, res) => {
   try {
     const { id_producto } = req.params;
-    const productoAeliminar = await pool.query("DElETE FROM tbl_producto WHERE ID_producto=$1", [
-      id_producto,
-    ]);
+    const productoAeliminar = await pool.query(
+      "DElETE FROM tbl_producto WHERE ID_producto=$1",
+      [id_producto]
+    );
     res.status(200).json("Producto eliminada");
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    res.status(500).json({
+      message: "El producto se encuentra asociado a pedidos realizados anteriormente por lo cual , no es posible eliminarlo.Si desea puede volverlo 'No visible' ",
+      error,
+    });
   }
 });
 
-
-//update stock de productos al realizar compra 
+//update stock de productos al realizar compra
 router.route("/updateStock/:id_producto/:cantidad").put(async (req, res) => {
   try {
     const { id_producto } = req.params;
@@ -105,12 +107,11 @@ router.route("/updateStock/:id_producto/:cantidad").put(async (req, res) => {
 
     const carrito = await pool.query(
       "UPDATE tbl_producto SET stock=stock-$1 where id_producto=$2 returning *",
-      [cantidad,id_producto]
+      [cantidad, id_producto]
     );
     res.status(200).json({
-      status:"success",
-      data:{carrito:carrito.rows[0]},
-
+      status: "success",
+      data: { carrito: carrito.rows[0] },
     });
   } catch (err) {
     console.error(err.message);
@@ -118,4 +119,3 @@ router.route("/updateStock/:id_producto/:cantidad").put(async (req, res) => {
 });
 
 module.exports = router;
-
