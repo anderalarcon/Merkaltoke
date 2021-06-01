@@ -45,10 +45,10 @@ router.route("/get").get(async (req, res) => {
 });
 
 //GetId
-router.route("/get/:id").get(async (req, res) => {
+router.route("/get/:id_producto").get(async (req, res) => {
   try {
-    const { id } = req.params;
-    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID=$1", [id]);
+    const { id_producto } = req.params;
+    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID_PRODUCTO=$1", [id]);
     res.status(200).json({
       status: "success",
       data: { producto: producto.rows[0] },
@@ -59,9 +59,9 @@ router.route("/get/:id").get(async (req, res) => {
 });
 
 //Update
-router.route("/update/:id").put(async (req, res) => {
+router.route("/update/:id_producto").put(async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id_producto } = req.params; //corregir esto
     const { nombre } = req.body;
     const { precio } = req.body;
     const { stock } = req.body;
@@ -69,8 +69,8 @@ router.route("/update/:id").put(async (req, res) => {
     const { id_proveedor } = req.body;
     const { id_categoria } = req.body;
     const producto = await pool.query(
-      "UPDATE tbl_producto SET NOMBRE=$1, PRECIO=$2, STOCK=$3, DETALLE=$4, ID_PROVEEDOR=$5, ID_CATEGORIA=$6 WHERE ID=$7 returning *",
-      [nombre,precio,stock,detalle,id_proveedor,id_categoria,id]
+      "UPDATE tbl_producto SET NOMBRE=$1, PRECIO=$2, STOCK=$3, DETALLE=$4, ID_PROVEEDOR=$5, ID_CATEGORIA=$6 WHERE ID_PRODUCTO=$7 returning *",
+      [nombre,precio,stock,detalle,id_proveedor,id_categoria,id_producto]
     );
     res.status(200).json({
       status:"success",
