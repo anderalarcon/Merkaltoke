@@ -20,24 +20,24 @@
           <v-card-subtitle> Fecha: {{ pedido.fecha }} </v-card-subtitle>
 
           <v-card-actions>
-       
-            <v-btn  color="success" class="btn btn" v-bind:href="'/Comprobante/' + pedido.id_pedido"
+            <v-btn
+              color="success"
+              class="btn btn"
+              v-bind:href="'/Comprobante/' + pedido.id_pedido"
               >Comprobante de Pago</v-btn
-              >
+            >
             <v-spacer></v-spacer>
-
-         
           </v-card-actions>
 
           <v-expand-transition>
-            <div >
+            <div>
               <v-divider></v-divider>
-              <v-card-text> <p>Estado: {{ pedido.estado }}</p>  
+              <v-card-text>
+                <p>Estado: {{ pedido.estado }}</p>
 
-            <p>Metodo de Pago: {{ pedido.metodo }}</p> 
-            <p>Monto total: {{ pedido.total }}</p> 
+                <p>Metodo de Pago: {{ pedido.metodo }}</p>
+                <p>Monto total: {{ pedido.total }}</p>
               </v-card-text>
-  
             </div>
           </v-expand-transition>
         </v-card></v-row
@@ -67,20 +67,14 @@ export default {
     //al cargar la pagina
     try {
       //redireccionar al inicio si no esta logueado
-      
+
       this.user = JSON.parse(sessionStorage.getItem("session"));
       if (this.user == null) {
         this.$router.push("/");
       }
 
-
       const res = await Pedidos.get(`/get_pedidos_cliente/${this.user.id}`);
       this.pedidos = res.data.data.pedido;
-      
-     
-
-      
-
     } catch (error) {
       console.log(error);
     }

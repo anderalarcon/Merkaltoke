@@ -38,7 +38,7 @@ router.route("/get/:id").get(async (req, res) => {
 router.route("/getProductos-Categoria/:id_categoria").get(async (req, res) => {
     try {
       const { id_categoria } = req.params;
-      const categoria = await pool.query("select p.img_producto, pro.nombre_proveedor ,cat.categoria, p.id_producto,p.nombre,p.precio,p.stock,p.detalle,p.id_proveedor,p.id_categoria from tbl_producto p ,tbl_categoria cat,proveedor pro  where p.id_categoria=cat.id_categoria and pro.id_proveedor=p.id_proveedor and  p.id_categoria=$1", [id_categoria]);
+      const categoria = await pool.query("select p.visible, p.img_producto, pro.nombre_proveedor ,cat.categoria, p.id_producto,p.nombre,p.precio,p.stock,p.detalle,p.id_proveedor,p.id_categoria from tbl_producto p ,tbl_categoria cat,proveedor pro  where p.id_categoria=cat.id_categoria and pro.id_proveedor=p.id_proveedor and  p.id_categoria=$1", [id_categoria]);
       res.status(200).json({
         status: "success",
         data: { productos: categoria.rows },

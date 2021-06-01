@@ -181,6 +181,20 @@ router.route("/update/:producto_id/:cantidad_id").put(async (req, res) => {
 });
 
 
+router.route("/deleteProductFromAllCars/:producto_id").delete(async (req, res) => {
+  try {
+    
+    const { producto_id} = req.params;
+    const ItemAeliminar = await pool.query("delete from carrito_producto where producto_id=$1 ;", [
+      producto_id
+    ]);
+    res.status(200).json("Producto eliminado de todos los carros ");
+  } catch (err) {
+    console.error(err.message);
+  }
+}); 
+
+
 
 module.exports = router;
 
