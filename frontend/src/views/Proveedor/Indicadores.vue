@@ -4,7 +4,7 @@
     <v-container>
       <v-row justify="center">
         <v-col>
-          <v-card class="mt-5" style="margin: auto">
+          <v-card  elevation="15" shaped loading class="mt-5 mb-5" style="margin: auto">
             <v-card-title>
               Gestión de Pedidos
               <v-spacer></v-spacer>
@@ -36,15 +36,15 @@
           <v-card> </v-card>
           <v-card
             class="mx-auto text-center"
-            color="green"
-            dark
+            color="white"
+           light
             max-width="600"
           >
             <v-card-text>
-              <v-sheet color="rgba(0, 0, 0, .12)">
+              <v-sheet color="orange">
                 <v-sparkline
                   :value="value"
-                  color="rgba(255, 255, 255, .7)"
+                  color="black"
                   height="100"
                   padding="24"
                   stroke-linecap="round"
@@ -118,7 +118,6 @@ export default {
         
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
-        console.log(id);
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
         this.productos = res.data.data.productos;
         console.log(this.productos);
