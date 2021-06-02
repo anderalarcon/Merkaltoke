@@ -11,7 +11,7 @@ router.route("/create").post(async (req, res) => {
     const { id_proveedor } = req.body;
     const { id_categoria } = req.body;
     const { img_producto } = req.body;
-
+    console.log(id_proveedor);
     const newProducto = await pool.query(
       "INSERT INTO tbl_producto(nombre,precio,stock,detalle,id_proveedor,id_categoria,img_producto,visible) VALUES($1,$2,$3,$4,$5,$6,$7,'no') RETURNING *",
       [nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto]
@@ -22,8 +22,11 @@ router.route("/create").post(async (req, res) => {
         producto: newProducto.rows[0],
       },
     });
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    res.status(500).json({
+      message: "Ha ocurrido un error ",
+      error,
+    });
   }
 });
 
@@ -93,7 +96,8 @@ router.route("/delete/:id_producto").delete(async (req, res) => {
     res.status(200).json("Producto eliminada");
   } catch (error) {
     res.status(500).json({
-      message: "El producto se encuentra asociado a pedidos realizados anteriormente por lo cual , no es posible eliminarlo.Si desea puede volverlo 'No visible' ",
+      message:
+        "El producto se encuentra asociado a pedidos realizados anteriormente por lo cual , no es posible eliminarlo.Si desea puede volverlo 'No visible' ",
       error,
     });
   }

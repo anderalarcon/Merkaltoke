@@ -82,20 +82,54 @@
       <v-card>
         <v-card-title>Create a new area</v-card-title>
         <v-card-text>
-          <v-form ref="addForm" @submit.prevent="addArea()">
+          <v-form ref="addForm" @submit.prevent="Save()">
             <v-text-field
               prepend-icon="mdi-biohazard"
-              label="Name"
-              :rules="[(v) => !!v || 'Name is required']"
+              v-model="producto.nombre"
+              label="Nombre"
+              :rules="[(v) => !!v || 'Nombre es requerido']"
             >
             </v-text-field>
             <v-text-field
               type="number"
               prepend-icon="mdi-biohazard"
-              label="Code"
-              :rules="[(v) => !!v || 'code is required']"
+              v-model="producto.precio"
+              label="Precio"
+              :rules="[(v) => !!v || 'Precio es requerido']"
             >
             </v-text-field>
+            <v-text-field
+              type="number"
+              prepend-icon="mdi-biohazard"
+              v-model="producto.stock"
+              label="Stock"
+              :rules="[(v) => !!v || 'Stock es requerido']"
+            >
+            </v-text-field>
+            <v-text-field
+              prepend-icon="mdi-biohazard"
+              v-model="producto.detalle"
+              label="Detalle"
+              :rules="[(v) => !!v || 'Detalle es requerido']"
+            >
+            </v-text-field>
+            <v-select
+              :items="categorias"
+              item-text="categoria"
+              item-value="id_categoria"
+              label="Categoria"
+              v-model="producto.id_categoria"
+              :rules="[(v) => !!v || 'Categoria es requerido']"
+            >
+            </v-select>
+            <v-text-field
+              prepend-icon="mdi-biohazard"
+              v-model="producto.img_producto"
+              label="Url img "
+              :rules="[(v) => !!v || 'Url img es requerido']"
+            >
+            </v-text-field>
+
             <v-btn block class="success ma-2" type="submit">Add</v-btn>
           </v-form>
         </v-card-text>
@@ -184,6 +218,7 @@ import Footer from "../../components/Footer";
 import Productos from "../../apis/Productos";
 import Proveedor from "../../apis/Proveedor";
 import Carrito from "../../apis/Carrito";
+import Categorias from "../../apis/Categorias";
 
 export default {
   name: "MisProductos",
@@ -193,6 +228,8 @@ export default {
   },
   data: () => ({
     productos: [],
+    producto: {},
+    categorias: [],
     search: "",
     advertencia: false,
     dialogDelete: false,
@@ -225,7 +262,12 @@ export default {
         const id = this.user.id;
 
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+
         this.productos = res.data.data.productos;
+
+        const categoria = await Categorias.get("/get");
+        this.categorias = categoria.data.data.categorias;
+
         if (this.user.role == "proveedor") {
         } else {
           this.$router.push("/");
@@ -237,12 +279,37 @@ export default {
   },
 
   methods: {
+    async Save() {
+      //boton para que se abra modal
+      let valid = this.$refs.addForm.validate();
+      if (valid) {
+        try {
+          var id = this.user.id;
+          this.producto.id_proveedor = id.toString();
+          const nuevo_producto = await Productos.post("/create", this.producto);
+          const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+          this.productos = res.data.data.productos;
+          this.$refs.addForm.reset(); //borrar todo en modal
+          this.add = false; //cerrar modal
+          this.alert = {
+            show: true,
+            type: "success",
+            message: " Producto Creado !",
+          };
+        } catch (error) {
+          this.add = false;
+          this.alert = {
+            show: true,
+            type: "error",
+            message: error,
+          };
+        }
+      }
+    },
     async readProductoToDelete(id_producto) {
       const res = await Productos.get(`/get/${id_producto}`);
-
       this.advertencia = true;
       this.productoToDelete = res.data.data.producto;
-      console.log(this.productoToDelete);
     },
 
     methods: {
