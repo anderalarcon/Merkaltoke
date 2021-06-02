@@ -2,6 +2,11 @@
   <div>
     <NavBar></NavBar>
 
+    <v-container>
+      <v-alert v-model="alert.show" :type="alert.type" dismissible>
+        {{ alert.message }}
+      </v-alert></v-container
+    >
     <v-container class="mt-5">
       <v-card elevation="15" shaped loading class="pb-3">
         <v-card-title>
@@ -24,6 +29,10 @@
 
               <td>{{ row.item.categoria }}</td>
 
+              <td :id="`visible${row.item.id_producto}`">
+                {{ row.item.visible }}
+              </td>
+
               <td>
                 <v-btn
                   color="orange"
@@ -45,6 +54,16 @@
                   @click="readProductoToDelete(row.item.id_producto)"
                 >
                   <v-icon small> mdi-delete </v-icon>
+                </v-btn>
+                <v-btn
+                  color="green"
+                  x-small
+                  small
+                  dark
+                  fab
+                  @click="HacerVisible(row.item.id_producto)"
+                >
+                  <v-icon small> mdi-eye </v-icon>
                 </v-btn>
               </td>
             </tr>
@@ -162,6 +181,7 @@ export default {
     advertencia: false,
     dialogDelete: false,
     productoToDelete: {},
+    alert: { show: false },
     headers: [
       {
         text: "Producto",
@@ -173,6 +193,8 @@ export default {
       { text: "Stock", value: "stock" },
       { text: "Detalle", value: "detalle", sortable: false },
       { text: "Categoria", value: "categoria", sortable: false },
+
+      { text: "Visible", value: "visible", sortable: false },
       { text: "Operacion", value: "operacion", sortable: false },
     ],
 
@@ -185,8 +207,6 @@ export default {
       } else {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
-        console.log(id);
-
 
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
         
@@ -198,7 +218,6 @@ export default {
          this.categorias = categoria.data.data.categorias;
          console.log(this.categorias[1]);
         if (this.user.role == "proveedor") {
-          console.log("es proveedor");
         } else {
           this.$router.push("/");
         }
@@ -243,24 +262,30 @@ export default {
           `/deleteProductFromAllCars/${this.productoToDelete.id_producto}`
         );
         await Productos.delete(`/delete/${this.productoToDelete.id_producto}`);
-        /*  const index = this.productos.findIndex(
+        const index = this.productos.findIndex(
           (c) => c.id_producto == this.productoToDelete.id_producto
         );
-        this.productos.splice(index, 1); */
+        this.productos.splice(index, 1);
         this.advertencia = false;
-        /*     this.alert = {
+        this.alert = {
           show: true,
-          type: "Completado",
-          message: "Completo producto borrado",
-        }; */
+          type: "success",
+          message: "Producto Eliminado",
+        };
       } catch (error) {
-        /*      this.alert = {
+        this.advertencia = false;
+        this.alert = {
           show: true,
           type: "error",
-          message: error,
-        }; */
-        console.log(error);
+          message: error.response.data.message,
+        };
+        
       }
+    },
+    async HacerVisible(id_producto) {
+      var visible = document.getElementById("visible" + id_producto);
+      visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
+      //Hacer el update de visible  y ya ps
     },
   },
 };

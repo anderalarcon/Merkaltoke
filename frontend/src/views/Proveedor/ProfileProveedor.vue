@@ -53,21 +53,17 @@ export default {
   }),
   created: async function () {
     try {
-     
-
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
       } else {
-           this.user = JSON.parse(sessionStorage.getItem("session"));
-          if(this.user.role=="proveedor"){
-            console.log("es proveedor")
-             const datos_proveedor = await Proveedor.get(`/get/${this.user.id}`);
-        this.datos = datos_proveedor.data.data.proveedores;
-          }else{
-             this.$router.push("/");
-          }
-
-       
+        this.user = JSON.parse(sessionStorage.getItem("session"));
+        if (this.user.role == "proveedor") {
+          console.log("es proveedor");
+          const datos_proveedor = await Proveedor.get(`/get/${this.user.id}`);
+          this.datos = datos_proveedor.data.data.proveedores;
+        } else {
+          this.$router.push("/");
+        }
       }
     } catch (error) {
       console.log(error);
