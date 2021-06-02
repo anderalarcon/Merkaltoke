@@ -46,14 +46,10 @@ router.route("/get").get(async (req, res) => {
 router.route("/get/:id_producto").get(async (req, res) => {
   try {
     const { id_producto } = req.params;
-<<<<<<< HEAD
-    const producto = await pool.query("SELECT * FROM tbl_producto WHERE ID_PRODUCTO=$1", [id]);
-=======
     const producto = await pool.query(
       "SELECT * FROM tbl_producto WHERE ID_producto=$1",
       [id_producto]
     );
->>>>>>> aae72fcaa1c1308e8a7577d661f2f41fa52fc713
     res.status(200).json({
       status: "success",
       data: { producto: producto.rows[0] },

@@ -101,6 +101,60 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <!--  Modal Editar Producto -->
+    <v-btn @click="add = true" class="mx-2" fab dark small color="primary">
+                          <v-icon small @click="dialog=true">
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
+                          <v-dialog v-model="add">
+                          <v-card>
+                            <v-card-title>Editar Producto</v-card-title>
+                            <v-card-text>
+                             <v-form ref="MisProductos/update/{{producto:id_producto}}" > 
+                                <v-text-field input-value=""
+                                  prepend-icon="mdi-pencil"
+                                  label="Nombre del Producto"
+                                  :rules="[(v) => !!v || 'Se editara el nombre']"
+                                  
+                                >
+                                </v-text-field>
+                                <v-text-field 
+                                  type="number"
+                                  prepend-icon="mdi-pencil"
+                                  label="Precio"
+                                  :rules="[(v) => !!v || 'Se editara el precio']"
+                                
+                                >
+                                </v-text-field>
+                                <v-text-field 
+                                  type="number"
+                                  prepend-icon="mdi-pencil"
+                                  label="Stock"
+                                  :rules="[(v) => !!v || 'Se editara el stock']"
+                                
+                                >
+                                </v-text-field>
+                                <v-text-field 
+                                  prepend-icon="mdi-pencil"
+                                  label="Detalle"
+                                  :rules="[(v) => !!v || 'Se editara los detalles del producto']"
+                                
+                                >
+                                </v-text-field>
+                                <v-file-input 
+                                    :rules="rules"
+                                    accept="image/png, image/jpeg, image/bmp"
+                                    placeholder="Escoja una imagen"
+                                    prepend-icon="mdi-camera"
+                                    label="Imagen de producto"
+                                  ></v-file-input>
+
+                                <v-btn block class="success ma-2" type="submit">Actualizar</v-btn>
+                              </v-form>
+                            </v-card-text>
+                          </v-card>
+                        </v-dialog>
 
     <!-- Modal Eliminar -->
     <v-dialog v-model="advertencia" persistent max-width="450">
@@ -191,6 +245,13 @@ export default {
       console.log(this.productoToDelete);
     },
 
+    methods: {
+    async readProductoToUpdate(id_producto) {
+      const res = await Productos.get(`/get/${id_producto}`);
+      this.productoToUpdate = res.data.data.producto;
+      console.log(this.productoToUpdate);
+    },
+
     async deleteProducto() {
       try {
         //Primero borrar la tabla anterior carrito_producto
@@ -216,7 +277,6 @@ export default {
           type: "error",
           message: error.response.data.message,
         };
-        
       }
     },
     async HacerVisible(id_producto) {
@@ -225,5 +285,6 @@ export default {
       //Hacer el update de visible  y ya ps
     },
   },
+  }
 };
 </script>
