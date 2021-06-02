@@ -72,7 +72,7 @@ export default {
     },
   },
   created: async function () {
-    //extraemos la data del session starage
+    //extraemos la data del session storage
     this.user = JSON.parse(sessionStorage.getItem("session"));
     
 

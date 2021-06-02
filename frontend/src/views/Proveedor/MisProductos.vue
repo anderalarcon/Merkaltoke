@@ -63,20 +63,55 @@
       <v-card>
         <v-card-title>Create a new area</v-card-title>
         <v-card-text>
-          <v-form ref="addForm" @submit.prevent="addArea()">
+          <v-form ref="addForm" @submit.prevent="Save()">
             <v-text-field
               prepend-icon="mdi-biohazard"
-              label="Name"
+              v-model="producto.nombre"
+              label="Nombre"
               :rules="[(v) => !!v || 'Name is required']"
             >
             </v-text-field>
             <v-text-field
               type="number"
               prepend-icon="mdi-biohazard"
-              label="Code"
+              v-model="producto.precio"
+              label="Precio"
               :rules="[(v) => !!v || 'code is required']"
             >
             </v-text-field>
+            <v-text-field
+              type="number"
+              prepend-icon="mdi-biohazard"
+              v-model="producto.stock"
+              label="Stock"
+              :rules="[(v) => !!v || 'code is required']"
+            >
+            </v-text-field>
+            <v-text-field
+              prepend-icon="mdi-biohazard"
+              v-model="producto.detalle"
+              label="Detalle"
+              :rules="[(v) => !!v || 'Name is required']"
+            >
+            </v-text-field>
+            <v-select
+            :items="categorias"
+            item-text="categoria"
+            
+            item-value="id_categoria"
+              label ="Categoria"
+             v-model="producto.id_categoria"
+              :rules="[(v) => !!v || 'categoria is required']"
+            >
+            </v-select>
+              <v-file-input 
+              
+              accept="image/png, image/jpeg, image/bmp"
+              placeholder="Escoja una imagen"
+              
+              label="Imagen de producto"
+            ></v-file-input>
+
             <v-btn  block class="success ma-2" type="submit">Add</v-btn>
           </v-form>
         </v-card-text>
@@ -111,6 +146,7 @@ import Footer from "../../components/Footer";
 import Productos from "../../apis/Productos";
 import Proveedor from "../../apis/Proveedor";
 import Carrito from "../../apis/Carrito";
+import Categorias from "../../apis/Categorias";
 
 export default {
   name: "MisProductos",
@@ -120,6 +156,8 @@ export default {
   },
   data: () => ({
     productos: [],
+    producto: {},
+    categorias: [],
     search: "",
     advertencia: false,
     dialogDelete: false,
@@ -148,9 +186,17 @@ export default {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
         console.log(id);
+
+
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+        
         this.productos = res.data.data.productos;
-        console.log(this.productos);
+        
+
+
+        const categoria = await Categorias.get("/get");
+         this.categorias = categoria.data.data.categorias;
+         console.log(this.categorias[1]);
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
         } else {
@@ -163,6 +209,24 @@ export default {
   },
 
   methods: {
+    async Save() {
+      
+      //console.log(this.productos.nombre);
+      //console.log(this.productos.precio);
+      //console.log(this.productos.stock);
+      //console.log(this.productos.detalle);
+      var id=this.user.id;
+      
+     this.producto.id_proveedor=id.toString();
+     // console.log(this.productos.id_proveedor)
+     // console.log(this.productos.id_categoria);
+      console.log(this.producto)
+     // console.log(id);
+      const nuevo_producto=await Productos.post("/create",this.producto); 
+      
+      
+      
+    },
     async readProductoToDelete(id_producto) {
       const res = await Productos.get(`/get/${id_producto}`);
 
