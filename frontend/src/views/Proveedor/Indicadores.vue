@@ -4,7 +4,13 @@
     <v-container>
       <v-row justify="center">
         <v-col>
-          <v-card  elevation="15" shaped loading class="mt-5 mb-5" style="margin: auto">
+          <v-card
+            elevation="15"
+            shaped
+            loading
+            class="mt-5 mb-5"
+            style="margin: auto"
+          >
             <v-card-title>
               Gestión de Pedidos
               <v-spacer></v-spacer>
@@ -37,7 +43,7 @@
           <v-card
             class="mx-auto text-center"
             color="white"
-           light
+            light
             max-width="600"
           >
             <v-card-text>
@@ -84,15 +90,7 @@ export default {
     Footer,
   },
   data: () => ({
-          value: [
-        423,
-        446,
-        675,
-        510,
-        590,
-        610,
-        760,
-      ],
+    value: [423, 446, 675, 510, 590, 610, 760],
     productos: [],
     search: "",
     headers: [
@@ -105,7 +103,7 @@ export default {
       { text: "Cantidad", value: "cantidad", sortable: true },
       { text: "Precio", value: "precio", sortable: true },
       { text: "Total", value: "total" },
-      { text: "Fecha", value: "fecha" },  
+      { text: "Fecha", value: "fecha" },
       { text: "Detalle", value: "detalle" },
       { text: "Estado", value: "estado", sortable: false },
     ],
@@ -115,7 +113,6 @@ export default {
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
       } else {
-        
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);

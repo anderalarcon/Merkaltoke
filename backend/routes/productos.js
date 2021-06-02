@@ -4,7 +4,6 @@ const pool = require("../database/keys");
 //Create
 router.route("/create").post(async (req, res) => {
   try {
-    console.log("a ver");
     const { nombre } = req.body;
     const { precio } = req.body;
     const { stock } = req.body;
@@ -23,8 +22,11 @@ router.route("/create").post(async (req, res) => {
         producto: newProducto.rows[0],
       },
     });
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    res.status(500).json({
+      message: "Ha ocurrido un error ",
+      error,
+    });
   }
 });
 
@@ -94,7 +96,8 @@ router.route("/delete/:id_producto").delete(async (req, res) => {
     res.status(200).json("Producto eliminada");
   } catch (error) {
     res.status(500).json({
-      message: "El producto se encuentra asociado a pedidos realizados anteriormente por lo cual , no es posible eliminarlo.Si desea puede volverlo 'No visible' ",
+      message:
+        "El producto se encuentra asociado a pedidos realizados anteriormente por lo cual , no es posible eliminarlo.Si desea puede volverlo 'No visible' ",
       error,
     });
   }

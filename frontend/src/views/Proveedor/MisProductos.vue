@@ -87,7 +87,7 @@
               prepend-icon="mdi-biohazard"
               v-model="producto.nombre"
               label="Nombre"
-              :rules="[(v) => !!v || 'Name is required']"
+              :rules="[(v) => !!v || 'Nombre es requerido']"
             >
             </v-text-field>
             <v-text-field
@@ -95,7 +95,7 @@
               prepend-icon="mdi-biohazard"
               v-model="producto.precio"
               label="Precio"
-              :rules="[(v) => !!v || 'code is required']"
+              :rules="[(v) => !!v || 'Precio es requerido']"
             >
             </v-text-field>
             <v-text-field
@@ -103,35 +103,34 @@
               prepend-icon="mdi-biohazard"
               v-model="producto.stock"
               label="Stock"
-              :rules="[(v) => !!v || 'code is required']"
+              :rules="[(v) => !!v || 'Stock es requerido']"
             >
             </v-text-field>
             <v-text-field
               prepend-icon="mdi-biohazard"
               v-model="producto.detalle"
               label="Detalle"
-              :rules="[(v) => !!v || 'Name is required']"
+              :rules="[(v) => !!v || 'Detalle es requerido']"
             >
             </v-text-field>
             <v-select
-            :items="categorias"
-            item-text="categoria"
-            
-            item-value="id_categoria"
-              label ="Categoria"
-             v-model="producto.id_categoria"
-              :rules="[(v) => !!v || 'categoria is required']"
+              :items="categorias"
+              item-text="categoria"
+              item-value="id_categoria"
+              label="Categoria"
+              v-model="producto.id_categoria"
+              :rules="[(v) => !!v || 'Categoria es requerido']"
             >
             </v-select>
-              <v-file-input 
-              
-              accept="image/png, image/jpeg, image/bmp"
-              placeholder="Escoja una imagen"
-              
-              label="Imagen de producto"
-            ></v-file-input>
+            <v-text-field
+              prepend-icon="mdi-biohazard"
+              v-model="producto.img_producto"
+              label="Url img "
+              :rules="[(v) => !!v || 'Url img es requerido']"
+            >
+            </v-text-field>
 
-            <v-btn  block class="success ma-2" type="submit">Add</v-btn>
+            <v-btn block class="success ma-2" type="submit">Add</v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -209,14 +208,12 @@ export default {
         const id = this.user.id;
 
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
-        
-        this.productos = res.data.data.productos;
-        
 
+        this.productos = res.data.data.productos;
 
         const categoria = await Categorias.get("/get");
-         this.categorias = categoria.data.data.categorias;
-         console.log(this.categorias[1]);
+        this.categorias = categoria.data.data.categorias;
+
         if (this.user.role == "proveedor") {
         } else {
           this.$router.push("/");
@@ -229,29 +226,36 @@ export default {
 
   methods: {
     async Save() {
-      
-      //console.log(this.productos.nombre);
-      //console.log(this.productos.precio);
-      //console.log(this.productos.stock);
-      //console.log(this.productos.detalle);
-      var id=this.user.id;
-      
-     this.producto.id_proveedor=id.toString();
-     // console.log(this.productos.id_proveedor)
-     // console.log(this.productos.id_categoria);
-      console.log(this.producto)
-     // console.log(id);
-      const nuevo_producto=await Productos.post("/create",this.producto); 
-      
-      
-      
+      //boton para que se abra modal
+      let valid = this.$refs.addForm.validate();
+      if (valid) {
+        try {
+          var id = this.user.id;
+          this.producto.id_proveedor = id.toString();
+          const nuevo_producto = await Productos.post("/create", this.producto);
+          const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+          this.productos = res.data.data.productos;
+          this.$refs.addForm.reset(); //borrar todo en modal
+          this.add = false; //cerrar modal
+          this.alert = {
+            show: true,
+            type: "success",
+            message: " Producto Creado !",
+          };
+        } catch (error) {
+          this.add = false;
+          this.alert = {
+            show: true,
+            type: "error",
+            message: error,
+          };
+        }
+      }
     },
     async readProductoToDelete(id_producto) {
       const res = await Productos.get(`/get/${id_producto}`);
-
       this.advertencia = true;
       this.productoToDelete = res.data.data.producto;
-      console.log(this.productoToDelete);
     },
 
     async deleteProducto() {
@@ -279,7 +283,6 @@ export default {
           type: "error",
           message: error.response.data.message,
         };
-        
       }
     },
     async HacerVisible(id_producto) {
