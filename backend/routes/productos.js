@@ -4,6 +4,7 @@ const pool = require("../database/keys");
 //Create
 router.route("/create").post(async (req, res) => {
   try {
+    console.log("a ver");
     const { nombre } = req.body;
     const { precio } = req.body;
     const { stock } = req.body;
@@ -11,7 +12,7 @@ router.route("/create").post(async (req, res) => {
     const { id_proveedor } = req.body;
     const { id_categoria } = req.body;
     const { img_producto } = req.body;
-
+    console.log(id_proveedor);
     const newProducto = await pool.query(
       "INSERT INTO tbl_producto(nombre,precio,stock,detalle,id_proveedor,id_categoria,img_producto,visible) VALUES($1,$2,$3,$4,$5,$6,$7,'no') RETURNING *",
       [nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto]
