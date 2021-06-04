@@ -38,7 +38,7 @@
                       small
                       dark
                       fab
-                      v-bind:href="'/Productos-Pedido/' + row.item.id_pedido"
+                      v-bind:href="'/Productos-Pedido/' + row.item.id_pedido "
                     >
                       <!-- @click="
                         VerProducto(row.item.id_pedido, row.item.id_proveedor)
