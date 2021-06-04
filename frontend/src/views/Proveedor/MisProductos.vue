@@ -166,6 +166,8 @@ import Proveedor from "../../apis/Proveedor";
 import Carrito from "../../apis/Carrito";
 import Categorias from "../../apis/Categorias";
 
+import { test } from "../../apis/test";
+
 export default {
   name: "MisProductos",
   components: {
@@ -200,6 +202,7 @@ export default {
     add: false,
   }),
   created: async function () {
+    test(); //si funca
     try {
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
