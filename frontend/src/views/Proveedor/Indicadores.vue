@@ -38,53 +38,24 @@
                       small
                       dark
                       fab
-                      v-bind:href="'/Productos-Pedido/' + row.item.id_pedido "
+                      v-bind:href="'/Productos-Pedido/' + row.item.id_pedido"
                     >
-                      <!-- @click="
-                        VerProducto(row.item.id_pedido, row.item.id_proveedor)
-                      " -->
                       <v-icon small> mdi-eye </v-icon>
-                      <v-dialog v-model="dialog" max-width="700">
-                        <v-card>
-                          <v-card-title class="headline">
-                            Productos
-                            <v-spacer></v-spacer>
-                            <v-text-field
-                              v-model="search1"
-                              append-icon="mdi-magnify"
-                              label="Search"
-                              single-line
-                            ></v-text-field>
-                          </v-card-title>
-
-                          <v-data-table
-                            :headers="headers2"
-                            :items="mostrarProductos"
-                            :search="search1"
-                          >
-                            <tr>
-                              <td>{{ row.item.nombre }}</td>
-                              <td>{{ row.item.cantidad }}</td>
-                              <td>{{ row.item.precio }}</td>
-                              
-                            </tr>
-                          </v-data-table>
-                          <v-btn
-                            color="green darken-1"
-                            text
-                            @click="dialog = false"
-                          >
-                            ok
-                          </v-btn>
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
+                    </v-btn>
+                      <v-btn
+                      color="orange"
+                      x-small
+                      small
+                      dark
+                      fab
+                     
+                    >
+                      <v-icon small> mdi-check </v-icon>
                     </v-btn>
                   </td>
-                </tr> </template
-            ></v-data-table>
+                </tr>
+              </template></v-data-table
+            >
           </v-card>
 
           <!--      <v-card

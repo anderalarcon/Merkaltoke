@@ -4,9 +4,9 @@
     <v-container>
       <v-row justify="center">
         <v-col>
-          <v-card>
+          <v-card elevation="15" shaped loading class="mt-5 mb-5">
             <v-card-title class="headline">
-              Productos
+              Gestión de Productos del Pedido
               <v-spacer></v-spacer>
               <v-text-field
                 v-model="search"
@@ -62,7 +62,7 @@ export default {
       },
       { text: "Cantidad", value: "cantidad", sortable: true },
       { text: "Precio", value: "precio", sortable: true },
-       { text: "Monto", value: "Monto", sortable: true },
+      { text: "Posible Ingreso", value: "Monto", sortable: true },
     ],
   }),
 
