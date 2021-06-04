@@ -66,6 +66,7 @@
                               <td>{{ row.item.nombre }}</td>
                               <td>{{ row.item.cantidad }}</td>
                               <td>{{ row.item.precio }}</td>
+                              
                             </tr>
                           </v-data-table>
                           <v-btn
