@@ -137,64 +137,63 @@
       </v-card>
     </v-dialog>
 
-
-
-
     <!--  Modal Editar Producto-->
     <v-dialog v-model="updating" max-width="600px">
       <v-card>
-          <v-form ref="updateProducto" @submit.prevent="updateProducto()">
-            <v-card-title>Editar Producto</v-card-title>
-              <v-card-text>
-                  <v-text-field
-                    prepend-icon="mdi-pencil"
-                    v-model="productoToUpdate.nombre"
-                    label="Nombre"
-                    :rules="[(v) => !!v || 'Nombre es requerido']"
-                  >
-                  </v-text-field>
-                  <v-text-field
-                    type="number"
-                    prepend-icon="mdi-pencil"
-                    v-model="productoToUpdate.precio"
-                    label="Precio"
-                    :rules="[(v) => !!v || 'Precio es requerido']"
-                  >
-                  </v-text-field>
-                  <v-text-field
-                    type="number"
-                    prepend-icon="mdi-pencil"
-                    v-model="productoToUpdate.stock"
-                    label="Stock"
-                    :rules="[(v) => !!v || 'Stock es requerido']"
-                  >
-                  </v-text-field>
-                  <v-text-field
-                    prepend-icon="mdi-pencil"
-                    v-model="productoToUpdate.detalle"
-                    label="Detalle"
-                    :rules="[(v) => !!v || 'Detalle es requerido']"
-                  >
-                  </v-text-field>
-                  <v-select
-                    :items="categorias"
-                    prepend-icon="mdi-pencil"
-                    item-text="categoria"
-                    item-value="id_categoria"
-                    label="Categoria"
-                    v-model="productoToUpdate.categoria"
-                    :rules="[(v) => !!v || 'Categoria es requerido']"
-                  >
-                  </v-select>
-                  <v-text-field
-                    prepend-icon="mdi-pencil"
-                    v-model="productoToUpdate.img_producto"
-                    label="Url img "
-                    :rules="[(v) => !!v || 'Url img es requerido']"
-                  >
-                  </v-text-field>    
-                <v-btn block class="success ma-2" type="submit">Actualizar datos</v-btn>            
-              </v-card-text>
+        <v-form ref="updateProducto" @submit.prevent="updateProducto()">
+          <v-card-title>Editar Producto</v-card-title>
+          <v-card-text>
+            <v-text-field
+              prepend-icon="mdi-pencil"
+              v-model="productoToUpdate.nombre"
+              label="Nombre"
+              :rules="[(v) => !!v || 'Nombre es requerido']"
+            >
+            </v-text-field>
+            <v-text-field
+              type="number"
+              prepend-icon="mdi-pencil"
+              v-model="productoToUpdate.precio"
+              label="Precio"
+              :rules="[(v) => !!v || 'Precio es requerido']"
+            >
+            </v-text-field>
+            <v-text-field
+              type="number"
+              prepend-icon="mdi-pencil"
+              v-model="productoToUpdate.stock"
+              label="Stock"
+              :rules="[(v) => !!v || 'Stock es requerido']"
+            >
+            </v-text-field>
+            <v-text-field
+              prepend-icon="mdi-pencil"
+              v-model="productoToUpdate.detalle"
+              label="Detalle"
+              :rules="[(v) => !!v || 'Detalle es requerido']"
+            >
+            </v-text-field>
+            <v-select
+              :items="categorias"
+              prepend-icon="mdi-pencil"
+              item-text="categoria"
+              item-value="id_categoria"
+              label="Categoria"
+              v-model="productoToUpdate.id_categoria"
+              :rules="[(v) => !!v || 'Categoria es requerido']"
+            >
+            </v-select>
+            <v-text-field
+              prepend-icon="mdi-pencil"
+              v-model="productoToUpdate.img_producto"
+              label="Url img "
+              :rules="[(v) => !!v || 'Url img es requerido']"
+            >
+            </v-text-field>
+            <v-btn block class="success ma-2" type="submit"
+              >Actualizar datos</v-btn
+            >
+          </v-card-text>
         </v-form>
       </v-card>
     </v-dialog>
@@ -242,7 +241,7 @@ export default {
     producto: {},
     categorias: [],
     search: "",
-    productoToUpdate:[],
+    productoToUpdate: [],
     updating: false,
     advertencia: false,
     dialogDelete: false,
@@ -327,37 +326,48 @@ export default {
       this.productoToUpdate = res.data.data.producto;
     },
 
-
     async updateProducto() {
-      console.log(this.productoToUpdate);
-        let valid = this.$refs.updateProducto.validate();
-        
-        const res = await Productos.put(
-              `/update/${this.productoToUpdate.id_producto}`,
-              this.productoToUpdate);
-        /*if (valid) {
-          try {
-            
-            const index = this.productos.findIndex(
-              (c) => c.id_producto == this.productoToUpdate.id_producto
-            );
-            this.Productos[index].nombre = this.productoToUpdate.nombre;
-            this.Productos[index].precio = this.productoToUpdate.precio;
-            this.Productos[index].stock = this.productoToUpdate.stock;
-            this.Productos[index].detalle = this.productoToUpdate.detalle;
-            this.Productos[index].categoria = this.productoToUpdate.categoria;
-            this.Productos[index].img_producto = this.productoToUpdate.img_producto;
-          } catch (error) {
-            this.updating = false;
-            this.alert = {
-              show: true,
-              type: "error",
-              message: error,
-            };
-          }
-        }*/
-      },
-    
+      let valid = this.$refs.updateProducto.validate();
+
+      if (valid) {
+        try {
+          const res = await Productos.put(
+            `/update/${this.productoToUpdate.id_producto}`,
+            this.productoToUpdate
+          );
+
+          const index = this.productos.findIndex(
+            (c) => c.id_producto == this.productoToUpdate.id_producto
+          );
+          this.productos[index].nombre = this.productoToUpdate.nombre;
+          this.productos[index].precio = this.productoToUpdate.precio;
+          this.productos[index].stock = this.productoToUpdate.stock;
+          this.productos[index].detalle = this.productoToUpdate.detalle;
+          this.productos[
+            index
+          ].img_producto = this.productoToUpdate.img_producto;
+          const aux2 = await Productos.get(
+            `/getcat/${this.productoToUpdate.id_producto}`
+          );
+          this.productos[index].categoria = aux2.data.data.producto.categoria;
+          this.updating = false;
+          this.alert = {
+            show: true,
+            type: "success",
+            message: "Producto editado con éxito",
+          };
+        } catch (error) {
+          this.updating = false;
+          this.alert = {
+            show: true,
+            type: "error",
+            message: error,
+          };
+        }
+      } else {
+        console.log("falta llenar");
+      }
+    },
 
     async readProductoToDelete(id_producto) {
       const res = await Productos.get(`/get/${id_producto}`);
@@ -365,40 +375,38 @@ export default {
       this.productoToDelete = res.data.data.producto;
     },
 
-      async deleteProducto() {
-        try {
-          //Primero borrar la tabla anterior carrito_producto
+    async deleteProducto() {
+      try {
+        //Primero borrar la tabla anterior carrito_producto
 
-          await Carrito.delete(
-            `/deleteProductFromAllCars/${this.productoToDelete.id_producto}`
-          );
-          await Productos.delete(
-            `/delete/${this.productoToDelete.id_producto}`
-          );
-          const index = this.productos.findIndex(
-            (c) => c.id_producto == this.productoToDelete.id_producto
-          );
-          this.productos.splice(index, 1);
-          this.advertencia = false;
-          this.alert = {
-            show: true,
-            type: "success",
-            message: "Producto Eliminado",
-          };
-        } catch (error) {
-          this.advertencia = false;
-          this.alert = {
-            show: true,
-            type: "error",
-            message: error.response.data.message,
-          };
-        }
-      },
-      async HacerVisible(id_producto) {
-        var visible = document.getElementById("visible" + id_producto);
-        visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
-        //Hacer el update de visible  y ya ps
-      },
+        await Carrito.delete(
+          `/deleteProductFromAllCars/${this.productoToDelete.id_producto}`
+        );
+        await Productos.delete(`/delete/${this.productoToDelete.id_producto}`);
+        const index = this.productos.findIndex(
+          (c) => c.id_producto == this.productoToDelete.id_producto
+        );
+        this.productos.splice(index, 1);
+        this.advertencia = false;
+        this.alert = {
+          show: true,
+          type: "success",
+          message: "Producto Eliminado",
+        };
+      } catch (error) {
+        this.advertencia = false;
+        this.alert = {
+          show: true,
+          type: "error",
+          message: error.response.data.message,
+        };
+      }
     },
+    async HacerVisible(id_producto) {
+      var visible = document.getElementById("visible" + id_producto);
+      visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
+      //Hacer el update de visible  y ya ps
+    },
+  },
 };
 </script>

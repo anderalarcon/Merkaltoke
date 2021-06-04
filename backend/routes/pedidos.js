@@ -148,7 +148,7 @@ router.route("/pedido_fecha/:id_pedido").get(async (req, res) => {
 router.route("/getpedido_proveedor/:id_proveedor").get(async (req, res) => {
   try {
     const { id_proveedor } = req.params;
-    const pedidosnuevos = await pool.query("select p.total,prov.nombre_proveedor, p.id_pedido,p.fecha,pe.id_producto,pro.nombre,pro.id_proveedor from tbl_pedido p  , tbl_pedido_detalle pe,tbl_producto pro, proveedor prov where pro.id_proveedor = prov.id_proveedor and p.id_pedido=pe.id_pedido and pe.id_producto=pro.id_producto and pro.id_proveedor=$1; ", [id_proveedor]);
+    const pedidosnuevos = await pool.query("select pe.id_pedido,pe.fecha,pe.estado,pe.total,prov.id_proveedor,prov.nombre_proveedor,c.nombre_cliente,c.direccion_cliente from tbl_pedido pe ,tbl_pedido_detalle pede,tbl_producto pro,proveedor prov,cliente c where pede.id_pedido=pe.id_pedido and pede.id_producto=pro.id_producto and prov.id_proveedor=pro.id_proveedor and prov.id_proveedor=$1 and c.id_cliente=pe.id_cliente  group by pe.id_pedido,prov.nombre_proveedor,prov.id_proveedor,c.direccion_cliente,c.nombre_cliente order by pe.id_pedido; ", [id_proveedor]);
     res.status(200).json({
       status: "success",
       data: { pedidos: pedidosnuevos.rows },
@@ -159,6 +159,7 @@ router.route("/getpedido_proveedor/:id_proveedor").get(async (req, res) => {
 });
 
 
+/* "select p.total,prov.nombre_proveedor, p.id_pedido,p.fecha,pe.id_producto,pro.nombre,pro.id_proveedor from tbl_pedido p  , tbl_pedido_detalle pe,tbl_producto pro, proveedor prov where pro.id_proveedor = prov.id_proveedor and p.id_pedido=pe.id_pedido and pe.id_producto=pro.id_producto and pro.id_proveedor=$1; */
 
 router.route("/getpedido_productos/:id_pedido/:id_proveedor").get(async (req, res) => {
   try {

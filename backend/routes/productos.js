@@ -123,4 +123,23 @@ router.route("/updateStock/:id_producto/:cantidad").put(async (req, res) => {
   }
 });
 
+
+
+//Getcategoriabyid
+router.route("/getcat/:id_producto").get(async (req, res) => {
+  try {
+    const { id_producto } = req.params;
+    const producto = await pool.query(
+      "select p.id_producto, p.nombre, g.id_categoria, g.categoria from tbl_producto p , tbl_categoria g where p.id_categoria=g.id_categoria and  id_producto=$1;",
+      [id_producto]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { producto: producto.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 module.exports = router;

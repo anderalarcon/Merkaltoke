@@ -27,7 +27,10 @@
                   <td>{{ row.item.id_pedido }}</td>
                   <td>{{ row.item.nombre_proveedor }}</td>
                   <td>{{ row.item.fecha }}</td>
-                  <td>{{ row.item.total }}</td>
+                  <td>{{ row.item.nombre_cliente }}</td>
+                  <td>{{ row.item.direccion_cliente }}</td>
+                  <td>{{ row.item.estado }}</td>
+
                   <td>
                     <v-btn
                       color="green"
@@ -35,9 +38,11 @@
                       small
                       dark
                       fab
-                      
-                      @click="VerProducto(row.item.id_pedido,row.item.id_proveedor)"
+                      v-bind:href="'/Productos-Pedido/' + row.item.id_pedido"
                     >
+                      <!-- @click="
+                        VerProducto(row.item.id_pedido, row.item.id_proveedor)
+                      " -->
                       <v-icon small> mdi-eye </v-icon>
                       <v-dialog v-model="dialog" max-width="700">
                         <v-card>
@@ -57,17 +62,19 @@
                             :items="mostrarProductos"
                             :search="search1"
                           >
-                               <tr>
-                                <td>{{ row.item.nombre }}</td>
-                                <td>{{ row.item.cantidad }}</td>
-                                <td>{{ row.item.precio }}</td>
-                             
-                               </tr>
-
-
-
+                            <tr>
+                              <td>{{ row.item.nombre }}</td>
+                              <td>{{ row.item.cantidad }}</td>
+                              <td>{{ row.item.precio }}</td>
+                            </tr>
                           </v-data-table>
-                          <v-btn color="green darken-1" text @click="dialog = false"> ok </v-btn>
+                          <v-btn
+                            color="green darken-1"
+                            text
+                            @click="dialog = false"
+                          >
+                            ok
+                          </v-btn>
                           <v-card-actions>
                             <v-spacer></v-spacer>
                           </v-card-actions>
@@ -78,8 +85,8 @@
                 </tr> </template
             ></v-data-table>
           </v-card>
-          <v-card> </v-card>
-          <v-card
+
+          <!--      <v-card
             class="mx-auto text-center"
             color="white"
             light
@@ -109,7 +116,7 @@
             <v-card-actions class="justify-center">
               <v-btn block text> Go to Report </v-btn>
             </v-card-actions>
-          </v-card>
+          </v-card> -->
         </v-col>
       </v-row>
     </v-container>
@@ -141,13 +148,15 @@ export default {
         text: "Pedido",
         align: "start",
         sortable: true,
-        value: "nombre",
+        value: "id_pedido",
       },
-      { text: "Proveedor", value: "proveedor", sortable: true },
-      { text: "Fecha", value: "Fecha", sortable: true },
-      { text: "Ingreso", value: "total" },
+      { text: "Proveedor", value: "proveedor", sortable: false },
+      { text: "Fecha de Transaccion", value: "Fecha", sortable: false },
+
+      { text: "Cliente", value: "total" },
+      { text: "Direccion", value: "total" },
+      { text: "Estado", value: "total" },
       { text: "Operacion", value: "operacion", sortable: false },
- 
     ],
     headers2: [
       {
@@ -158,7 +167,6 @@ export default {
       },
       { text: "Cantidad", value: "cantidad", sortable: true },
       { text: "Precio", value: "precio", sortable: true },
-     // { text: "Monto", value: "total", sortable: true },
     ],
   }),
   created: async function () {
@@ -168,9 +176,9 @@ export default {
       } else {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
-        const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+        /*    const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
         this.productos = res.data.data.productos;
-        console.log(this.productos);
+        console.log(this.productos); */
 
         //Prueba
         const cos = await Pedidos.get(`/getpedido_proveedor/${id}`);
@@ -188,12 +196,13 @@ export default {
   },
 
   methods: {
-    async VerProducto(id_pedido,id_proveedor) {
-      const res = await Pedidos.get(`/getpedido_productos/${id_pedido}/${id_proveedor}`);
+    async VerProducto(id_pedido, id_proveedor) {
+      const res = await Pedidos.get(
+        `/getpedido_productos/${id_pedido}/${id_proveedor}`
+      );
 
       this.dialog = true;
       this.mostrarProductos = res.data.data.pedidos;
-
     },
   },
 };
