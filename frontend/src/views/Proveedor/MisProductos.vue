@@ -41,7 +41,7 @@
                   dark
                   fab
                   class=""
-                  @click="readMemberToUpdate()"
+                  @click="readProductoToUpdate(row.item.id_producto)"
                 >
                   <v-icon small> mdi-pencil </v-icon></v-btn
                 >
@@ -80,7 +80,7 @@
     <!--  Modal crear Producto -->
     <v-dialog v-model="add" max-width="500">
       <v-card>
-        <v-card-title>Create a new area</v-card-title>
+        <v-card-title>Crear producto</v-card-title>
         <v-card-text>
           <v-form ref="addForm" @submit.prevent="Save()">
             <v-text-field
@@ -115,6 +115,7 @@
             </v-text-field>
             <v-select
               :items="categorias"
+              prepend-icon="mdi-biohazard"
               item-text="categoria"
               item-value="id_categoria"
               label="Categoria"
@@ -130,65 +131,73 @@
             >
             </v-text-field>
 
-            <v-btn block class="success ma-2" type="submit">Add</v-btn>
+            <v-btn block class="success ma-2" type="submit">Crear</v-btn>
           </v-form>
         </v-card-text>
       </v-card>
     </v-dialog>
-    <!--  Modal Editar Producto -->
-    <v-btn @click="add = true" class="mx-2" fab dark small color="primary">
-                          <v-icon small @click="dialog=true">
-                            mdi-pencil
-                          </v-icon>
-                        </v-btn>
-                          <v-dialog v-model="add">
-                          <v-card>
-                            <v-card-title>Editar Producto</v-card-title>
-                            <v-card-text>
-                             <v-form ref="MisProductos/update/{{producto:id_producto}}" > 
-                                <v-text-field input-value=""
-                                  prepend-icon="mdi-pencil"
-                                  label="Nombre del Producto"
-                                  :rules="[(v) => !!v || 'Se editara el nombre']"
-                                  
-                                >
-                                </v-text-field>
-                                <v-text-field 
-                                  type="number"
-                                  prepend-icon="mdi-pencil"
-                                  label="Precio"
-                                  :rules="[(v) => !!v || 'Se editara el precio']"
-                                
-                                >
-                                </v-text-field>
-                                <v-text-field 
-                                  type="number"
-                                  prepend-icon="mdi-pencil"
-                                  label="Stock"
-                                  :rules="[(v) => !!v || 'Se editara el stock']"
-                                
-                                >
-                                </v-text-field>
-                                <v-text-field 
-                                  prepend-icon="mdi-pencil"
-                                  label="Detalle"
-                                  :rules="[(v) => !!v || 'Se editara los detalles del producto']"
-                                
-                                >
-                                </v-text-field>
-                                <v-file-input 
-                                    :rules="rules"
-                                    accept="image/png, image/jpeg, image/bmp"
-                                    placeholder="Escoja una imagen"
-                                    prepend-icon="mdi-camera"
-                                    label="Imagen de producto"
-                                  ></v-file-input>
 
-                                <v-btn block class="success ma-2" type="submit">Actualizar</v-btn>
-                              </v-form>
-                            </v-card-text>
-                          </v-card>
-                        </v-dialog>
+
+
+
+    <!--  Modal Editar Producto-->
+    <v-dialog v-model="updating" max-width="600px">
+      <v-card>
+          <v-form ref="updateProducto" @submit.prevent="updateProducto()">
+            <v-card-title>Editar Producto</v-card-title>
+              <v-card-text>
+                  <v-text-field
+                    prepend-icon="mdi-pencil"
+                    v-model="productoToUpdate.nombre"
+                    label="Nombre"
+                    :rules="[(v) => !!v || 'Nombre es requerido']"
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    type="number"
+                    prepend-icon="mdi-pencil"
+                    v-model="productoToUpdate.precio"
+                    label="Precio"
+                    :rules="[(v) => !!v || 'Precio es requerido']"
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    type="number"
+                    prepend-icon="mdi-pencil"
+                    v-model="productoToUpdate.stock"
+                    label="Stock"
+                    :rules="[(v) => !!v || 'Stock es requerido']"
+                  >
+                  </v-text-field>
+                  <v-text-field
+                    prepend-icon="mdi-pencil"
+                    v-model="productoToUpdate.detalle"
+                    label="Detalle"
+                    :rules="[(v) => !!v || 'Detalle es requerido']"
+                  >
+                  </v-text-field>
+                  <v-select
+                    :items="categorias"
+                    prepend-icon="mdi-pencil"
+                    item-text="categoria"
+                    item-value="id_categoria"
+                    label="Categoria"
+                    v-model="productoToUpdate.categoria"
+                    :rules="[(v) => !!v || 'Categoria es requerido']"
+                  >
+                  </v-select>
+                  <v-text-field
+                    prepend-icon="mdi-pencil"
+                    v-model="productoToUpdate.img_producto"
+                    label="Url img "
+                    :rules="[(v) => !!v || 'Url img es requerido']"
+                  >
+                  </v-text-field>    
+                <v-btn block class="success ma-2" type="submit">Actualizar datos</v-btn>            
+              </v-card-text>
+        </v-form>
+      </v-card>
+    </v-dialog>
 
     <!-- Modal Eliminar -->
     <v-dialog v-model="advertencia" persistent max-width="450">
@@ -231,6 +240,8 @@ export default {
     producto: {},
     categorias: [],
     search: "",
+    productoToUpdate:[],
+    updating: false,
     advertencia: false,
     dialogDelete: false,
     productoToDelete: {},
@@ -306,52 +317,85 @@ export default {
         }
       }
     },
+
+    async readProductoToUpdate(id_producto) {
+      const res = await Productos.get(`/get/${id_producto}`);
+      this.updating = true;
+      this.productoToUpdate = res.data.data.producto;
+    },
+
+
+    async updateProducto() {
+      console.log(this.productoToUpdate);
+        let valid = this.$refs.updateProducto.validate();
+        
+        const res = await Productos.put(
+              `/update/${this.productoToUpdate.id_producto}`,
+              this.productoToUpdate);
+        /*if (valid) {
+          try {
+            
+            const index = this.productos.findIndex(
+              (c) => c.id_producto == this.productoToUpdate.id_producto
+            );
+            this.Productos[index].nombre = this.productoToUpdate.nombre;
+            this.Productos[index].precio = this.productoToUpdate.precio;
+            this.Productos[index].stock = this.productoToUpdate.stock;
+            this.Productos[index].detalle = this.productoToUpdate.detalle;
+            this.Productos[index].categoria = this.productoToUpdate.categoria;
+            this.Productos[index].img_producto = this.productoToUpdate.img_producto;
+          } catch (error) {
+            this.updating = false;
+            this.alert = {
+              show: true,
+              type: "error",
+              message: error,
+            };
+          }
+        }*/
+      },
+    
+
     async readProductoToDelete(id_producto) {
       const res = await Productos.get(`/get/${id_producto}`);
       this.advertencia = true;
       this.productoToDelete = res.data.data.producto;
     },
 
-    methods: {
-    async readProductoToUpdate(id_producto) {
-      const res = await Productos.get(`/get/${id_producto}`);
-      this.productoToUpdate = res.data.data.producto;
-      console.log(this.productoToUpdate);
-    },
+      async deleteProducto() {
+        try {
+          //Primero borrar la tabla anterior carrito_producto
 
-    async deleteProducto() {
-      try {
-        //Primero borrar la tabla anterior carrito_producto
-
-        await Carrito.delete(
-          `/deleteProductFromAllCars/${this.productoToDelete.id_producto}`
-        );
-        await Productos.delete(`/delete/${this.productoToDelete.id_producto}`);
-        const index = this.productos.findIndex(
-          (c) => c.id_producto == this.productoToDelete.id_producto
-        );
-        this.productos.splice(index, 1);
-        this.advertencia = false;
-        this.alert = {
-          show: true,
-          type: "success",
-          message: "Producto Eliminado",
-        };
-      } catch (error) {
-        this.advertencia = false;
-        this.alert = {
-          show: true,
-          type: "error",
-          message: error.response.data.message,
-        };
-      }
+          await Carrito.delete(
+            `/deleteProductFromAllCars/${this.productoToDelete.id_producto}`
+          );
+          await Productos.delete(
+            `/delete/${this.productoToDelete.id_producto}`
+          );
+          const index = this.productos.findIndex(
+            (c) => c.id_producto == this.productoToDelete.id_producto
+          );
+          this.productos.splice(index, 1);
+          this.advertencia = false;
+          this.alert = {
+            show: true,
+            type: "success",
+            message: "Producto Eliminado",
+          };
+        } catch (error) {
+          this.advertencia = false;
+          this.alert = {
+            show: true,
+            type: "error",
+            message: error.response.data.message,
+          };
+        }
+      },
+      async HacerVisible(id_producto) {
+        var visible = document.getElementById("visible" + id_producto);
+        visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
+        //Hacer el update de visible  y ya ps
+      },
     },
-    async HacerVisible(id_producto) {
-      var visible = document.getElementById("visible" + id_producto);
-      visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
-      //Hacer el update de visible  y ya ps
-    },
-  },
-  }
 };
 </script>
