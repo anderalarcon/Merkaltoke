@@ -143,13 +143,36 @@ router.route("/pedido_fecha/:id_pedido").get(async (req, res) => {
   }
 });
 
+// NUEVO 
+
+router.route("/getpedido_proveedor/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const pedidosnuevos = await pool.query("select p.total,prov.nombre_proveedor, p.id_pedido,p.fecha,pe.id_producto,pro.nombre,pro.id_proveedor from tbl_pedido p  , tbl_pedido_detalle pe,tbl_producto pro, proveedor prov where pro.id_proveedor = prov.id_proveedor and p.id_pedido=pe.id_pedido and pe.id_producto=pro.id_producto and pro.id_proveedor=$1; ", [id_proveedor]);
+    res.status(200).json({
+      status: "success",
+      data: { pedidos: pedidosnuevos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 
 
-
-
-
-
+router.route("/getpedido_productos/:id_pedido/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const { id_proveedor } = req.params;
+    const pedidosproductos = await pool.query("select  pro.precio,pro.nombre,pe.cantidad from tbl_pedido p  , tbl_pedido_detalle pe,tbl_producto pro where p.id_pedido=pe.id_pedido and pe.id_producto=pro.id_producto and p.id_pedido=$1 and pro.id_proveedor=$2; ", [id_pedido,id_proveedor]);
+    res.status(200).json({
+      status: "success",
+      data: { pedidos: pedidosproductos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 
 
