@@ -63,18 +63,19 @@ router.route("/get/:id_producto").get(async (req, res) => {
 });
 
 //Update
-router.route("/update/:id").put(async (req, res) => {
+router.route("/update/:id_producto").put(async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id_producto } = req.params; //corregir esto
     const { nombre } = req.body;
     const { precio } = req.body;
     const { stock } = req.body;
     const { detalle } = req.body;
     const { id_proveedor } = req.body;
     const { id_categoria } = req.body;
+    const { img_producto } = req.body;
     const producto = await pool.query(
-      "UPDATE tbl_producto SET NOMBRE=$1, PRECIO=$2, STOCK=$3, DETALLE=$4, ID_PROVEEDOR=$5, ID_CATEGORIA=$6 WHERE ID=$7 returning *",
-      [nombre, precio, stock, detalle, id_proveedor, id_categoria, id]
+      "UPDATE tbl_producto SET NOMBRE=$1, PRECIO=$2, STOCK=$3, DETALLE=$4, ID_PROVEEDOR=$5, ID_CATEGORIA=$6, IMG_PRODUCTO=$7 WHERE ID_PRODUCTO=$8 returning *",
+      [nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto, id_producto]
     );
     res.status(200).json({
       status: "success",
