@@ -15,23 +15,62 @@
                 single-line
               ></v-text-field>
             </v-card-title>
-            <v-data-table
-              :headers="headers"
-              :items="productos"
-              :search="search"
-            >
+            <v-data-table :headers="headers" :items="pedidos" :search="search">
               <template v-slot:item="row">
                 <tr>
-                  <td>{{ row.item.nombre }}</td>
+                  <td>{{ row.item.id_pedido }}</td>
+                  <td>{{ row.item.nombre_proveedor }}</td>
                   <td>{{ row.item.fecha }}</td>
-                  <td>{{ row.item.precio }}</td>
-                  <td></td>
-                  <td></td>
-                  <td>{{ row.item.detalle }}</td>
-                  <td>Por confirmar</td>
-                </tr>
-              </template></v-data-table
-            >
+                  <td>{{ row.item.total }}</td>
+                  <td>
+                    <v-btn
+                      color="green"
+                      x-small
+                      small
+                      dark
+                      fab
+                      
+                      @click="VerProducto(row.item.id_pedido,row.item.id_proveedor)"
+                    >
+                      <v-icon small> mdi-eye </v-icon>
+                      <v-dialog v-model="dialog" max-width="700">
+                        <v-card>
+                          <v-card-title class="headline">
+                            Productos
+                            <v-spacer></v-spacer>
+                            <v-text-field
+                              v-model="search1"
+                              append-icon="mdi-magnify"
+                              label="Search"
+                              single-line
+                            ></v-text-field>
+                          </v-card-title>
+
+                          <v-data-table
+                            :headers="headers2"
+                            :items="mostrarProductos"
+                            :search="search1"
+                          >
+                               <tr>
+                                <td>{{ row.item.nombre }}</td>
+                                <td>{{ row.item.cantidad }}</td>
+                                <td>{{ row.item.precio }}</td>
+                             
+                               </tr>
+
+
+<!---->
+                          </v-data-table>
+                          <v-btn color="green darken-1" text @click="dialog = false"> ok </v-btn>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-btn>
+                  </td>
+                </tr> </template
+            ></v-data-table>
           </v-card>
           <v-card> </v-card>
           <v-card
@@ -84,30 +123,36 @@ export default {
     Footer,
   },
   data: () => ({
-          value: [
-        423,
-        446,
-        675,
-        510,
-        590,
-        610,
-        760,
-      ],
+    value: [423, 446, 675, 510, 590, 610, 760],
+    dialog: false,
     productos: [],
+    mostrarProductos: [],
+    pedidos: [],
     search: "",
+    search1: "",
     headers: [
+      {
+        text: "Pedido",
+        align: "start",
+        sortable: true,
+        value: "nombre",
+      },
+      { text: "Proveedor", value: "proveedor", sortable: true },
+      { text: "Fecha", value: "Fecha", sortable: true },
+      { text: "Ingreso", value: "total" },
+      { text: "Operacion", value: "operacion", sortable: false },
+ 
+    ],
+    headers2: [
       {
         text: "Producto",
         align: "start",
-        sortable: false,
+        sortable: true,
         value: "nombre",
       },
       { text: "Cantidad", value: "cantidad", sortable: true },
       { text: "Precio", value: "precio", sortable: true },
-      { text: "Total", value: "total" },
-      { text: "Fecha", value: "fecha" },  
-      { text: "Detalle", value: "detalle" },
-      { text: "Estado", value: "estado", sortable: false },
+     // { text: "Monto", value: "total", sortable: true },
     ],
   }),
   created: async function () {
@@ -115,13 +160,17 @@ export default {
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
       } else {
-        
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
         console.log(id);
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
         this.productos = res.data.data.productos;
         console.log(this.productos);
+
+        //Prueba
+        const cos = await Pedidos.get(`/getpedido_proveedor/${id}`);
+        this.pedidos = cos.data.data.pedidos;
+
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
         } else {
@@ -131,6 +180,16 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  methods: {
+    async VerProducto(id_pedido,id_proveedor) {
+      const res = await Pedidos.get(`/getpedido_productos/${id_pedido}/${id_proveedor}`);
+
+      this.dialog = true;
+      this.mostrarProductos = res.data.data.pedidos;
+
+    },
   },
 };
 </script>
