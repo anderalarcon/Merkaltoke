@@ -38,7 +38,7 @@
                       small
                       dark
                       fab
-                      v-bind:href="'/Productos-Pedido/' + row.item.id_pedido"
+                      v-bind:href="'/Productos-Pedido/' + row.item.id_pedido "
                     >
                       <!-- @click="
                         VerProducto(row.item.id_pedido, row.item.id_proveedor)
@@ -66,6 +66,7 @@
                               <td>{{ row.item.nombre }}</td>
                               <td>{{ row.item.cantidad }}</td>
                               <td>{{ row.item.precio }}</td>
+                              
                             </tr>
                           </v-data-table>
                           <v-btn
