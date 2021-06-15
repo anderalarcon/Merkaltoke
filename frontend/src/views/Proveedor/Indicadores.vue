@@ -48,7 +48,6 @@
                       small
                       dark
                       fab
-                     
                     >
                       <v-icon small> mdi-check </v-icon>
                     </v-btn>
@@ -57,49 +56,16 @@
               </template></v-data-table
             >
           </v-card>
-
-          <!--      <v-card
-            class="mx-auto text-center"
-            color="white"
-            light
-            max-width="600"
-          >
-            <v-card-text>
-              <v-sheet color="orange">
-                <v-sparkline
-                  :value="value"
-                  color="black"
-                  height="100"
-                  padding="24"
-                  stroke-linecap="round"
-                  smooth
-                >
-                  <template v-slot:label="item"> ${{ item.value }} </template>
-                </v-sparkline>
-              </v-sheet>
-            </v-card-text>
-
-            <v-card-text>
-              <div class="display-1 font-weight-thin">Sales Last 24h</div>
-            </v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-card-actions class="justify-center">
-              <v-btn block text> Go to Report </v-btn>
-            </v-card-actions>
-          </v-card> -->
         </v-col>
       </v-row>
     </v-container>
-    <Footer></Footer>
+   <!--  <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import NavBar from "../../components/NavBarProveedor";
 import Footer from "../../components/Footer";
-import Proveedor from "../../apis/Proveedor";
 import Pedidos from "../../apis/Pedidos";
 export default {
   name: "MisPedidos",
@@ -148,11 +114,8 @@ export default {
       } else {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
-        /*    const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
-        this.productos = res.data.data.productos;
-        console.log(this.productos); */
 
-        //Prueba
+  
         const cos = await Pedidos.get(`/getpedido_proveedor/${id}`);
         this.pedidos = cos.data.data.pedidos;
 

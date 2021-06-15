@@ -68,7 +68,7 @@ export default {
   },
   created: async function () {
     this.user = JSON.parse(sessionStorage.getItem("session"));
-    console.log(this.user);
+  
 
     try {
       const id = this.$route.params.id;

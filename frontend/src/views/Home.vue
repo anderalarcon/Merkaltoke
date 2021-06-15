@@ -159,31 +159,31 @@ export default {
       role: "",
       direccion: "",
       dni: "",
-    }, //mismo que backend
+    },
     suForm: true,
     user: { role: "", nombre: "", email: "" },
   }),
   created: async function () {
-    //al cargar la pagina
-    try {
-      //redireccionar al profile si ya esta logueado
-      this.user_test = JSON.parse(sessionStorage.getItem("session"));
-      if (this.user_test != null) {
-        this.$router.push("/Profile");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    this.Auth();
   },
 
   methods: {
+    async Auth() {
+      try {
+        this.user_test = JSON.parse(sessionStorage.getItem("session"));
+        if (this.user_test != null) {
+          this.$router.push("/Profile");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async signUp() {
       let valid = this.$refs.signupForm.validate();
       if (valid) {
         try {
           const res = await this.axios.post("/signup", this.user);
           this.$refs.signupForm.reset();
-          console.log(res);
           this.alert = {
             show: true,
             type: "success",
@@ -204,8 +204,6 @@ export default {
         try {
           const res = await this.axios.post("/signin", this.user);
           this.$refs.signinForm.reset();
-          console.log(res);
-
           if (res.data.NotFound) {
             this.alert = {
               show: true,

@@ -94,8 +94,6 @@ export default {
     try {
       const datos_cliente = await Cliente.get(`/get/${this.user.id}`);
       this.datos = datos_cliente.data.data.cliente;
-
-      console.log(this.datos);
       const id_pedido = this.$route.params.id;
       const data_pedido_detalle = await Pedido.get(
         `/get_pedidos_detalle/${id_pedido}`
@@ -103,7 +101,9 @@ export default {
       const fecha_pedido = await Pedido.get(`/pedido_fecha/${id_pedido}`);
       this.productos_del_pedido = data_pedido_detalle.data.data.pedido;
       this.fecha = fecha_pedido.data.data.pedido.fecha;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   },
 };
 </script>

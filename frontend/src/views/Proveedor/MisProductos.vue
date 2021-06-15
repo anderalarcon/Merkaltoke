@@ -266,7 +266,6 @@ export default {
     add: false,
   }),
   created: async function () {
-    test(); //si funca
     try {
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
@@ -293,7 +292,6 @@ export default {
 
   methods: {
     async Save() {
-      //boton para que se abra modal
       let valid = this.$refs.addForm.validate();
       if (valid) {
         try {
@@ -377,8 +375,6 @@ export default {
 
     async deleteProducto() {
       try {
-        //Primero borrar la tabla anterior carrito_producto
-
         await Carrito.delete(
           `/deleteProductFromAllCars/${this.productoToDelete.id_producto}`
         );

@@ -176,6 +176,81 @@ router.route("/getpedido_productos/:id_pedido/:id_proveedor").get(async (req, re
 });
 
 
+//Eliminar productos de la factura al cancelar pedfido 
+router.route("/cancelar/:id_pedido").delete(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const productoAeliminar = await pool.query(
+      "DElETE FROM tbl_pedido_detalle WHERE id_pedido=$1",
+      [id_pedido]
+    );
+    res.status(200).json("Pedido Cancelado");
+  } catch (error) {
+    res.status(500).json({
+      message:
+        "Ah ocurrido un error ",
+      error,
+    });
+  }
+});
+
+router.route("/delete/:id_pedido").delete(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const productoAeliminar = await pool.query(
+      "DElETE FROM tbl_pedido WHERE id_pedido=$1",
+      [id_pedido]
+    );
+    res.status(200).json({
+      message:'Pedido  Cancelado'
+    });
+  } catch (error) {
+    res.status(500).json({
+      message:
+        "Ah ocurrido un error ",
+      error,
+    });
+  }
+});
+
+
+//Obtener productos y stock del pedido
+router.route("/ProStock/:id_pedido").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const productos = await pool.query("SELECT id_producto,cantidad FROM tbl_pedido_detalle WHERE id_pedido=$1", [id_pedido]);
+    res.status(200).json({
+      status: "success",
+      data: { producto: productos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
+//Update stock de productos al cancelar pedido
+router.route("/update/:id_producto/:cantidad").put(async (req, res) => {
+  try {
+    const {id_producto } = req.params;
+    const { cantidad } = req.params;
+
+    const carrito = await pool.query(
+      "UPDATE tbl_producto SET stock=stock+$1 where id_producto=$2 returning *",
+      [cantidad,id_producto]
+    );
+    res.status(200).json({
+      status:"success",
+      data:{carrito:carrito.rows[0]},
+
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
 
 
 
