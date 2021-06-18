@@ -102,7 +102,8 @@ aunthentication.signIn = async (req, res) => {
           [email, password]
         )
       ).rows;
-      if (proveedor.length > 0) {
+    
+      if (proveedor.length > 0 && proveedor[0].activo!="Inactivo") {
         res.status(200).json({
           id: proveedor[0].id_proveedor,
           nombre: proveedor[0].nombre_proveedor,
@@ -111,7 +112,7 @@ aunthentication.signIn = async (req, res) => {
         });
       } else {
         res.status(200).json({
-          message: " Proveedor no existe",
+          message: " La cuenta no existe o ha cancelado su suscripción",
           NotFound: true,
         });
       }
