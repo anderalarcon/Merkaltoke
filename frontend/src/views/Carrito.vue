@@ -200,7 +200,10 @@ export default {
 
       //redireccionar al inicio si no esta logueado
 
+      if(this.carrito.length>0){
       this.getTotalofCarShop();
+
+      }
     } catch (error) {
       console.log(error);
     }

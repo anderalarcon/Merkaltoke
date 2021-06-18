@@ -38,7 +38,7 @@ aunthentication.signUp = async (req, res) => {
   } else {
     try {
       await pool.query(
-        "INSERT INTO proveedor (nombre_proveedor,email_proveedor,password_proveedor,direccion_proveedor,ruc,img_proveedor)values($1,$2,$3,$4,$5,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg')",
+        "INSERT INTO proveedor (nombre_proveedor,email_proveedor,password_proveedor,direccion_proveedor,ruc,img_proveedor,activo)values($1,$2,$3,$4,$5,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg','Activo')",
         [nombre, email, password,direccion,dni]
       );
       res.status(200).json({
