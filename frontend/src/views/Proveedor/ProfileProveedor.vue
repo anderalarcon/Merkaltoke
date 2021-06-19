@@ -42,6 +42,7 @@
 import NavBar from "../../components/NavBarProveedor";
 import Footer from "../../components/Footer";
 import Proveedor from "../../apis/Proveedor";
+import Productos from "../../apis/Productos";
 export default {
   name: "Profile",
   components: {
@@ -49,6 +50,7 @@ export default {
     Footer,
   },
   data: () => ({
+    productos: [],
     datos: {},
   }),
   created: async function () {
@@ -57,6 +59,13 @@ export default {
         this.$router.push("/");
       } else {
         this.user = JSON.parse(sessionStorage.getItem("session"));
+        const id = this.user.id;
+
+        const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+
+        this.productos = res.data.data.productos;
+        console.log(this.user.id)
+
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
           const datos_proveedor = await Proveedor.get(`/get/${this.user.id}`);
@@ -69,5 +78,14 @@ export default {
       console.log(error);
     }
   },
+   methods: {
+     async Save() {
+          var id = this.user.id;
+          
+          const nuevo_producto = await Productos.put(`/updatecancel/${id}`);
+          const res = await Proveedor.put(`/updatecancel/${id}`);
+          
+    },
+   },
 };
 </script>

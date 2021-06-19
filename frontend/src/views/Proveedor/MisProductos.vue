@@ -276,6 +276,7 @@ export default {
         const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
 
         this.productos = res.data.data.productos;
+        console.log(this.productos)
 
         const categoria = await Categorias.get("/get");
         this.categorias = categoria.data.data.categorias;
