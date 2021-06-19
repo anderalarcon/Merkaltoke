@@ -77,13 +77,13 @@ export default {
       this.datos = datos_proveedor.data.data.proveedores;
 
       const id_pedido = this.$route.params.id;
-      console.log(id_pedido);
-      console.log(this.user.id);
       const res = await Pedidos.get(
         `/getpedido_productos/${id_pedido}/${this.user.id}`
       );
       this.mostrarProductos = res.data.data.pedidos;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   },
 };
 </script>

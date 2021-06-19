@@ -11,7 +11,9 @@
       <v-toolbar-title>Merkaltoke</v-toolbar-title>
        <v-btn text to="/ProfileProveedor">Mi Perfil </v-btn>
       <v-btn text to="/MisProductos"> Mis Productos </v-btn>
-      <v-btn text to="/Indicadores"> Indicadores </v-btn>
+    
+       <v-btn text to="/Indicadores"> Pedidos </v-btn>
+          <v-btn text to="/IndicadoresB"> Indicadores</v-btn> 
 
     </v-toolbar>
   </div>

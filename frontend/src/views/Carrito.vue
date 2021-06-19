@@ -289,13 +289,11 @@ export default {
 
   created: async function () {
     this.user = JSON.parse(sessionStorage.getItem("session"));
-
     if (this.user == null) {
       this.$router.push("/");
     }
-    //al cargar la pagina
+  
     try {
-      //carrito
       const id = this.user.id;
       const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
       const aux = idCarrito.data.data.cliente.id_carrito;
@@ -311,7 +309,10 @@ export default {
 
       //redireccionar al inicio si no esta logueado
 
+      if(this.carrito.length>0){
       this.getTotalofCarShop();
+
+      }
     } catch (error) {
       console.log(error);
     }
@@ -321,7 +322,6 @@ export default {
     obtenertotal() {
       var productos = this.carrito;
       var acu = 0;
-
       for (var i = 0; i < productos.length; i++) {
         acu =
           acu +
@@ -350,7 +350,6 @@ export default {
 
     disminuir_cantidad: function (id_producto, idCarrito) {
       if (document.getElementById("cantidad" + id_producto).innerHTML == 1) {
-        //this.deleteCarritoItem(idCarrito, id_producto);
         this.dialog = true;
       } else {
         document.getElementById("cantidad" + id_producto).innerHTML =
@@ -378,7 +377,7 @@ export default {
           this.pedido.id_metodo = this.metodo_pago.id;
           //1ro Hacemos update a la tabla intermedia de carrito
           var productosencarrito = this.carrito;
-          this.update(productosencarrito);
+          this.update(productosencarrito);//ponerle un set time out para que no haya problemas 
           //creamos nuevo pedido
           const nuevo_pedido = await Pedido.post("/create/", this.pedido);
           // disminuimos el stock de esos productos antes de eliminarlos xd

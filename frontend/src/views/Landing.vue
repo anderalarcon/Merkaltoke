@@ -41,8 +41,6 @@
       </div>
 
       <v-spacer></v-spacer>
-      <!--hide-details como atributo en el v-text-field-->
-
       <v-row justify="center">
         <v-card
           class="ma-3"
@@ -95,8 +93,6 @@ export default {
 
   computed: {
     filteredProveedores() {
-      //const proveedores = await Proveedor.get("/get");
-      //this.proveedores = proveedores.data.data.proveedores;
       return this.proveedores.filter((proveedores) =>
         proveedores.nombre_proveedor
           .toLowerCase()
@@ -106,20 +102,11 @@ export default {
   },
 
   created: async function () {
-    //al cargar la pagina
     try {
-      //obtenemos categorias
       const res = await Categorias.get("/get");
       this.categorias = res.data.data.categorias;
-      console.log(this.categorias);
-
-      //proveedores
-
       const proveedores = await Proveedor.get("/get");
       this.proveedores = proveedores.data.data.proveedores;
-      console.log(this.proveedores);
-
-      //redireccionar al inicio si no esta logueado
       this.user = JSON.parse(sessionStorage.getItem("session"));
       if (this.user == null) {
         this.$router.push("/");

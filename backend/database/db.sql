@@ -1,4 +1,4 @@
-CREATE DATABASE MERKALTOK_VUE;
+
 CREATE TABLE cliente(
 	id_cliente SERIAL PRIMARY KEY NOT NULL,
 	nombre_cliente VARCHAR(50),
@@ -15,7 +15,8 @@ CREATE TABLE proveedor(
 	password_proveedor VARCHAR(50),
 	direccion_proveedor VARCHAR(100),
 	RUC BIGINT,
-	img_proveedor VARCHAR
+	img_proveedor VARCHAR,
+	activo VARCHAR
 );
 CREATE TABLE admin(
 	id SERIAL primary key NOT NULL,
@@ -31,6 +32,12 @@ CREATE TABLE tbl_categoria(
 	categoria VARCHAR(20),
 	img_categoria VARCHAR
 );
+
+CREATE TABLE tbl_estado(
+	id_estado bigserial primary key NOT NULL,
+	estado VARCHAR(20)
+);
+
 CREATE TABLE tbl_producto(
 	id_producto bigserial primary key NOT NULL,
 	nombre VARCHAR(50),
@@ -55,7 +62,7 @@ CREATE TABLE carrito_producto(
 CREATE TABLE tbl_pedido( 
 	id_pedido serial primary key NOT NULL,
 	fecha DATE,
-	estado VARCHAR(20),
+	id_estado BIGINT REFERENCES tbl_estado(id_estado) NOT NULL,
 	total DECIMAL,
 	id_cliente BIGINT REFERENCES cliente(id_cliente) NOT NULL,
 	id_metodo BIGINT REFERENCES tbl_metodo_pago(id_metodo_pago) NOT NULL
@@ -67,6 +74,8 @@ CREATE TABLE tbl_pedido_detalle(
 	id_pedido BIGINT REFERENCES tbl_pedido(id_pedido) NOT NULL,
 	id_producto BIGINT REFERENCES tbl_producto(id_producto) NOT NULL
 );
+
+
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
@@ -91,11 +100,16 @@ INSERT INTO tbl_carrito(id_cliente) values(6);
 
 
 
+INSERT INTO TBL_estado(id_estado,estado)VALUES(1,'Por confirmar');
+INSERT INTO TBL_estado(id_estado,estado)VALUES(2,'Confirmado');
+INSERT INTO TBL_estado(id_estado,estado)VALUES(3,'En camino');
+INSERT INTO TBL_estado(id_estado,estado)VALUES(4,'Entregado');
 
 
-INSERT INTO proveedor( nombre_proveedor, email_proveedor, password_proveedor, direccion_proveedor, RUC, img_proveedor)VALUES('Coca Cola','coca@gmail.com','123', 'Direccion Prov 1', 12345678,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg');
-INSERT INTO proveedor( nombre_proveedor, email_proveedor, password_proveedor, direccion_proveedor, RUC, img_proveedor)VALUES('LG','lg@gmail.com','123', 'Direccion Prov 2', 12345678,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg');
-INSERT INTO proveedor( nombre_proveedor, email_proveedor, password_proveedor, direccion_proveedor, RUC, img_proveedor)VALUES('Backus','backus@gmail.com','123', 'Direccion Prov 3', 12345678,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg');
+
+INSERT INTO proveedor( nombre_proveedor, email_proveedor, password_proveedor, direccion_proveedor, RUC, img_proveedor,activo)VALUES('Coca Cola','coca@gmail.com','123', 'Direccion Prov 1', 12345678,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg','Activo');
+INSERT INTO proveedor( nombre_proveedor, email_proveedor, password_proveedor, direccion_proveedor, RUC, img_proveedor,activo)VALUES('LG','lg@gmail.com','123', 'Direccion Prov 2', 12345678,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg','Activo');
+INSERT INTO proveedor( nombre_proveedor, email_proveedor, password_proveedor, direccion_proveedor, RUC, img_proveedor,activo)VALUES('Backus','backus@gmail.com','123', 'Direccion Prov 3', 12345678,'https://image.freepik.com/free-photo/millennial-asia-businessmen-businesswomen-meeting-brainstorming-ideas-about-new-paperwork-project-colleagues-working-together-planning-success-strategy-enjoy-teamwork-small-modern-night-office_7861-2386.jpg','Activo');
 
 
 

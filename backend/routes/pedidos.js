@@ -13,8 +13,8 @@ router.route("/create").post(async (req, res) => {
      const { id_metodo } = req.body; 
 
     const newPedido = await pool.query(
-      "INSERT INTO tbl_pedido(fecha,estado,total,id_cliente,id_metodo) VALUES(CURRENT_TIMESTAMP,$1,$2,$3,$4) RETURNING *",
-      ['Por Confirmar',total,id_cliente,id_metodo]
+      "INSERT INTO tbl_pedido(fecha,id_estado,total,id_cliente,id_metodo) VALUES(CURRENT_TIMESTAMP,$1,$2,$3,$4) RETURNING *",
+      [1,total,id_cliente,id_metodo]
     );
     res.status(200).json({
       status: "succes",
@@ -61,7 +61,7 @@ router.route("/get/:id_pedido").get(async (req, res) => {
 router.route("/get_pedidos_cliente/:id_cliente").get(async (req, res) => {
   try {
     const { id_cliente } = req.params;
-    const pedido = await pool.query("select p.id_pedido, p.fecha,p.estado,p.total,p.id_cliente,p.id_metodo,m.metodo from tbl_pedido p , tbl_metodo_pago m where p.id_metodo=m.id_metodo_pago and id_cliente=$1; ", [id_cliente]);
+    const pedido = await pool.query("select p.id_pedido, p.fecha,p.id_estado,est.estado, p.total,p.id_cliente,p.id_metodo,m.metodo from tbl_pedido p , tbl_metodo_pago m,tbl_estado est where p.id_metodo=m.id_metodo_pago and p.id_estado=est.id_estado and id_cliente=$1; ", [id_cliente]);
     res.status(200).json({
       status: "success",
       data: { pedido: pedido.rows },
@@ -169,6 +169,81 @@ router.route("/getpedido_productos/:id_pedido/:id_proveedor").get(async (req, re
     res.status(200).json({
       status: "success",
       data: { pedidos: pedidosproductos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+//Eliminar productos de la factura al cancelar pedfido 
+router.route("/cancelar/:id_pedido").delete(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const productoAeliminar = await pool.query(
+      "DElETE FROM tbl_pedido_detalle WHERE id_pedido=$1",
+      [id_pedido]
+    );
+    res.status(200).json("Pedido Cancelado");
+  } catch (error) {
+    res.status(500).json({
+      message:
+        "Ah ocurrido un error ",
+      error,
+    });
+  }
+});
+
+router.route("/delete/:id_pedido").delete(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const productoAeliminar = await pool.query(
+      "DElETE FROM tbl_pedido WHERE id_pedido=$1",
+      [id_pedido]
+    );
+    res.status(200).json({
+      message:'Pedido  Cancelado'
+    });
+  } catch (error) {
+    res.status(500).json({
+      message:
+        "Ah ocurrido un error ",
+      error,
+    });
+  }
+});
+
+
+//Obtener productos y stock del pedido
+router.route("/ProStock/:id_pedido").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const productos = await pool.query("SELECT id_producto,cantidad FROM tbl_pedido_detalle WHERE id_pedido=$1", [id_pedido]);
+    res.status(200).json({
+      status: "success",
+      data: { producto: productos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
+//Update stock de productos al cancelar pedido
+router.route("/update/:id_producto/:cantidad").put(async (req, res) => {
+  try {
+    const {id_producto } = req.params;
+    const { cantidad } = req.params;
+
+    const carrito = await pool.query(
+      "UPDATE tbl_producto SET stock=stock+$1 where id_producto=$2 returning *",
+      [cantidad,id_producto]
+    );
+    res.status(200).json({
+      status:"success",
+      data:{carrito:carrito.rows[0]},
+
     });
   } catch (err) {
     console.error(err.message);
