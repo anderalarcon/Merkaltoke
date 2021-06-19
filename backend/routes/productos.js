@@ -90,11 +90,11 @@ router.route("/update/:id_producto").put(async (req, res) => {
 router.route("/updatecancel/:id_proveedor").put(async (req, res) => {
   try {
     
-    const { id_proveedor } = req.body;
-    
+    const { id_proveedor } = req.params;
+    console.log(req.params)
     const producto = await pool.query(
       "UPDATE tbl_producto SET visible=$1 WHERE ID_PROVEEDOR=$2 returning *",
-      [ 'si', id_proveedor]
+      [ 'no', id_proveedor]
     );
     res.status(200).json({
       status: "success",

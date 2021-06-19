@@ -34,9 +34,9 @@
                   small
                   dark
                   fab
-                  @click="Cancel()"
+                  @click="readCuentaToDelete()"
                 >
-                  <v-icon small> mdi-delete </v-icon>
+                  <v-icon small> mdi-cancel </v-icon>
                 </v-btn>
               
               
@@ -48,7 +48,23 @@
     </v-container>
     <Footer></Footer>
     <!-- Modal Eliminar -->
-   
+   <v-dialog v-model="advertencia" persistent max-width="450">
+      <v-card>
+        <v-card-title class="headline"> Eliminar la cuenta </v-card-title>
+
+        <v-card-text> ¿Desea eliminar su suscripcion ? </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="green darken-1" text @click="advertencia = false">
+            NO
+          </v-btn>
+
+          <v-btn color="red" text @click="Cancel()"> SI </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
   </div>
 </template>
@@ -68,6 +84,8 @@ export default {
   data: () => ({
     productos: [],
     datos: {},
+    advertencia: false,
+
   }),
   created: async function () {
     try {
@@ -98,7 +116,7 @@ export default {
      async Cancel() {
           var id = this.user.id;
           
-          
+          var id2 =id.toString();
           const nuevo_producto = await Productos.put(`/updatecancel/${id}`);
           const c = await Proveedor.put(`/updatecancel/${id}`);
 
@@ -110,6 +128,12 @@ export default {
         
           
     },
+    async readCuentaToDelete() {
+     
+      this.advertencia = true;
+     
+    },
+
    },
 };
 </script>
