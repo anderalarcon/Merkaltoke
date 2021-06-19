@@ -27,6 +27,19 @@
                 Direccion: {{ this.datos.direccion_proveedor }}
               </h4>
               <h4 class="mt-2">RUC: {{ this.datos.ruc }}</h4>
+               <h4 class="mt-2">Activo: {{ this.datos.activo }}</h4>
+                 <v-btn
+                  color="red"
+                  x-small
+                  small
+                  dark
+                  fab
+                  @click="Cancel()"
+                >
+                  <v-icon small> mdi-delete </v-icon>
+                </v-btn>
+              
+              
             </v-card-text>
           </v-card>
           <v-card> </v-card>
@@ -34,6 +47,9 @@
       </v-row>
     </v-container>
     <Footer></Footer>
+    <!-- Modal Eliminar -->
+   
+
   </div>
 </template>
 
@@ -61,10 +77,10 @@ export default {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
 
-        const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+      // const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
 
-        this.productos = res.data.data.productos;
-        console.log(this.user.id)
+      // this.productos = res.data.data.productos;
+       // console.log(this.user.id)
 
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
@@ -79,11 +95,19 @@ export default {
     }
   },
    methods: {
-     async Save() {
+     async Cancel() {
           var id = this.user.id;
           
+          
           const nuevo_producto = await Productos.put(`/updatecancel/${id}`);
-          const res = await Proveedor.put(`/updatecancel/${id}`);
+          const c = await Proveedor.put(`/updatecancel/${id}`);
+
+          const a = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+
+        this.productos = a.data.data.productos;
+        
+          console.log(this.productos)
+        
           
     },
    },

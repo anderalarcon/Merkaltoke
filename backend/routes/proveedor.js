@@ -117,7 +117,7 @@ router.route("/updatecancel/:id_proveedor").put(async (req, res) => {
     const { id_proveedor } = req.params;
     
     const proveedores = await pool.query(
-      "UPDATE tbl_proveedor SET activo=$1 WHERE id_proveedor=$2 returning *",
+      "UPDATE proveedor SET activo=$1 WHERE id_proveedor=$2 returning *",
       [
        'no',
         id_proveedor,
