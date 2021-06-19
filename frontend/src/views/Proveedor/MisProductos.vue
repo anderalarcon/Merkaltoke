@@ -399,9 +399,17 @@ export default {
       }
     },
     async HacerVisible(id_producto) {
+      var p = id_producto;
+      console.log(p);
       var visible = document.getElementById("visible" + id_producto);
       visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
-      //Hacer el update de visible  y ya ps
+      var aux = visible.innerHTML
+        await Productos.put(`/updateVisible/${p}/${(aux.toString())}`);
+        
+      console.log(aux);
+      console.log(this.productos);
+      
+      //Hacer el update de visible  y ya ps 
     },
   },
 };
