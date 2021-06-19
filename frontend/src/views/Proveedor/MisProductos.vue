@@ -399,12 +399,12 @@ export default {
       }
     },
     async HacerVisible(id_producto) {
-      var p = id_producto;
-      console.log(p);
+      var prod = id_producto;
+      console.log(prod);
       var visible = document.getElementById("visible" + id_producto);
       visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
       var aux = visible.innerHTML
-        await Productos.put(`/updateVisible/${p}/${(aux.toString())}`);
+        await Productos.put(`/updateVisible/${prod}/${(aux.toString())}`);
         
       console.log(aux);
       console.log(this.productos);
