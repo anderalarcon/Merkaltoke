@@ -405,7 +405,6 @@ export default {
       visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
       var aux = visible.innerHTML
         await Productos.put(`/updateVisible/${prod}/${(aux.toString())}`);
-        
       console.log(aux);
       console.log(this.productos);
       
