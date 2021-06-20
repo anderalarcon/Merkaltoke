@@ -126,7 +126,7 @@
             </div>
 
             <div>
-              <v-btn @click="dialog2 = true" class="mt-5" color="warning" dark>
+              <v-btn @click="carrito.length!=0?dialog2 = true:dialog2=false" class="mt-5" color="warning" dark>
                 Realizar compra
                 <v-dialog v-model="dialog2" max-width="600px">
                   <v-card>
@@ -381,9 +381,14 @@ export default {
           //creamos nuevo pedido
           const nuevo_pedido = await Pedido.post("/create/", this.pedido);
           // disminuimos el stock de esos productos antes de eliminarlos xd
-          this.disminuirStock(productosencarrito);
+
+          setTimeout(() => {
+               this.disminuirStock(productosencarrito);
+               this.insertIntoTbl_pedido_detalle();
+          }, 2000);
+      /*     this.disminuirStock(productosencarrito);
           //insertamos en nuestra tabla que sera nuestro historial
-          this.insertIntoTbl_pedido_detalle();
+          this.insertIntoTbl_pedido_detalle(); */
         } else {
           console.log("falta escoger metodo de pago");
         }
