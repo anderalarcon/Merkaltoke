@@ -256,7 +256,7 @@ router.route("/getestado/:id_estado/:id_pedido").get(async (req, res)  =>{
   try{
     const {id_estado} = req.params;
     const {id_pedido} = req.params;
-    const estadopedido = await poo.query(
+    const estadopedido = await pool.query(
       "SELECT est.estado, p.id_estado,p.id_pedido from tbl_estado est, tbl_pedido p WHERE est.id_estado = p.id_estado and p.id_estado =$1 and p.id_pedido=$2", 
       [id_estado,id_pedido]
     );
