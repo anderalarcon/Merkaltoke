@@ -1,9 +1,3 @@
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script> 
 
 
 
@@ -115,16 +109,6 @@
       
     </v-container>
             
-
-            <div id="app">
-              <canvas id="myChart" width="400" height="400"></canvas>
-            </div>
-              <div class="chart">
-    <Chart 
-    :chartData="chartData" 
-    :chartOptions="chartOptions" 
-    :chartType="chartType" />
-  </div>
             
 
    <!--  <Footer></Footer> -->
@@ -148,49 +132,9 @@ import Chart from "chart.js";
 export default {
   name: "MisPedidos",
     extends: Bar,
-  mounted () {
-    //this.renderChart(data, options);
-    let {chartType,chartData,chartOptions} = this;
-    this.chartConstructor(chartType, chartData, chartOptions);
-  },
 
   
-  chartConstructor(chartType, chartData, chartOptions) {
-    const chartElement = document.querySelector("canvas");
-    const chart = new Chart(chartElement, {
-    type: chartType,
-    data: chartData,
-    options: chartOptions,
-  });
-},
-data: {
-    labels: ["Jan1", "Jan2", "Jan3", "Jan4", "Jan5", "Jan6", "Jan7"],
-    datasets: [
-      {
-        label: "This week",
-        data:  [12, 19, 10, 17, 6, 3, 7],
-        backgroundColor: "rgba(224, 248, 255, 0.4)",
-        borderColor: "#5cddff",
-        lineTension: 0,
-        pointBackgroundColor: "#5cddff",
-      },
-      {
-        label: "Last week",
-        data:  [10, 25, 3, 25, 17, 4, 9],
-        backgroundColor: "rgba(241, 225, 197, 0.4)",
-        borderColor: "#ffc764",
-        lineTension: 0,
-        pointBackgroundColor: "#ffc764",
-      },
-    ],
-  },
-
-  props:{
-  chartType:String,
-  chartData:Object,
-  chartOptions:Object
-},
-
+ 
   components: {
     NavBar,
     Footer,
