@@ -273,7 +273,7 @@ export default {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
 
-        const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+        const res = await Proveedor.get(`/getProductos-Proveedor2/${id}`);
 
         this.productos = res.data.data.productos;
 
