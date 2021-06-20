@@ -111,6 +111,26 @@ router.route("/update/:id_proveedor").put(async (req, res) => {
     console.error(err.message);
   }
 });
+//Updatecancel
+router.route("/updatecancel/:id_proveedor").put(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    
+    const proveedores = await pool.query(
+      "UPDATE proveedor SET activo=$1 WHERE id_proveedor=$2 returning *",
+      [
+       'Inactivo',
+        id_proveedor,
+      ]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { proveedores: proveedores.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 //Delete
 router.route("/delete/:id_proveedor").delete(async (req, res) => {
