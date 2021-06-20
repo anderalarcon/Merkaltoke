@@ -51,6 +51,8 @@
                       small
                       dark
                       fab
+                      class=""
+                      @click="readEstadoToUpdate(row.item.id_estado,row.item.id_pedido)"
                     >
                       <v-icon small> mdi-check </v-icon>
                     </v-btn>
@@ -140,6 +142,10 @@ export default {
     Footer,
   },
   data: () => ({
+    estadoToUpdate:[],
+    updating: false,
+    estado:{},
+
     value: [423, 446, 675, 510, 590, 610, 760],
     dialog: false,
     productos: [],
@@ -194,6 +200,7 @@ export default {
         this.clientesVentas = Clientes.data.data.productos;
   
         const cos = await Pedidos.get(`/getpedido_proveedor/${id}`);
+  
         this.pedidos = cos.data.data.pedidos;
         
 
@@ -222,6 +229,12 @@ export default {
 
       this.dialog = true;
       this.mostrarProductos = res.data.data.pedidos;
+    },
+
+      async readEstadoToUpdate(id_estado,id_pedido) {
+      const est = await Pedidos.get(`/getestado/${id_estado}/${id_pedido}`);
+      this.updating = true;
+      this.estadoToUpdate = est.data.data.estado;
     },
   },
 };
