@@ -195,6 +195,38 @@ router.route("/getProductos-Proveedor2/:id_proveedor").get(async (req, res) => {
   }
 });
 
+router.route("/getVentasPorMes/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const proveedor = await pool.query(
+      "select sum(total) totalMes, mes from (select distinct(ped.id_pedido),ped.total,extract(month from ped.fecha) mes from tbl_pedido ped, tbl_pedido_detalle pedd, tbl_producto prod, proveedor prov where ped.id_pedido = pedd.id_pedido AND pedd.id_pedido = ped.id_pedido AND pedd.id_producto = prod.id_producto AND prod.id_proveedor = prov.id_proveedor AND prov.id_proveedor = $1) T group by mes ORDER BY mes DESC;",
+      [id_proveedor]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { productos: proveedor.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+router.route("/getClientePotenciales/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const proveedor = await pool.query(
+      "SELECT id_client, name_client, sum(totalClient) sumaCliente from (SELECT distinct (ped.id_pedido), cli.id_cliente id_client, cli.nombre_cliente name_client,ped.total totalClient FROM cliente cli, tbl_pedido ped, tbl_pedido_detalle pedd, tbl_producto prod, proveedor prov where ped.id_pedido = pedd.id_pedido AND ped.id_cliente = cli.id_cliente	 AND pedd.id_producto = prod.id_producto AND prod.id_proveedor = prov.id_proveedor AND prov.id_proveedor = $1) T GROUP BY id_client, name_client ORDER BY sumaCliente DESC;",
+      [id_proveedor]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { productos: proveedor.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 
 
 

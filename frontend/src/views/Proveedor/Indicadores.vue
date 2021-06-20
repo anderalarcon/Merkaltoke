@@ -1,3 +1,6 @@
+
+
+
 <template>
   <div>
     <NavBar></NavBar>
@@ -48,6 +51,8 @@
                       small
                       dark
                       fab
+                      class=""
+                      @click="readEstadoToUpdate(row.item.id_estado,row.item.id_pedido)"
                     >
                       <v-icon small> mdi-check </v-icon>
                     </v-btn>
@@ -59,24 +64,93 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-container>
+      <h1>Indicadores</h1>
+      <v-row>
+        <v-col>
+          <h2>Ventas por mes</h2>
+          <v-simple-table>
+            <template>
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>Monto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="venta in ventas" :key="venta.mes">
+                  <td>{{venta.mes}}</td>
+                  <td>{{venta.totalmes}}</td>
+
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+        <v-col>
+          <h2>Compras de clientes potenciales</h2>
+          <v-simple-table>
+            <template>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Monto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="cliente in clientesVentas" :key="cliente.id_client">
+                  <td>{{cliente.name_client}}</td>
+                  <td>{{cliente.sumacliente}}</td>
+
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+      </v-row>
+      
+    </v-container>
+            
+            
+
    <!--  <Footer></Footer> -->
   </div>
+  
 </template>
+
+
 
 <script>
 import NavBar from "../../components/NavBarProveedor";
 import Footer from "../../components/Footer";
+import Proveedor from "../../apis/Proveedor";
 import Pedidos from "../../apis/Pedidos";
+
+import { Bar } from 'vue-chartjs';
+import Chart from "chart.js";
+
+
+
 export default {
   name: "MisPedidos",
+    extends: Bar,
+
+  
+ 
   components: {
     NavBar,
     Footer,
   },
   data: () => ({
+    estadoToUpdate:[],
+    updating: false,
+    estado:{},
+
     value: [423, 446, 675, 510, 590, 610, 760],
     dialog: false,
     productos: [],
+    ventas:[],
+    clientesVentas:[],
     mostrarProductos: [],
     pedidos: [],
     search: "",
@@ -107,7 +181,11 @@ export default {
       { text: "Precio", value: "precio", sortable: true },
     ],
   }),
+
+
+
   created: async function () {
+    
     try {
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
@@ -115,9 +193,20 @@ export default {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
 
+                const Ventas = await Proveedor.get(`/getVentasPorMes/${id}`);
+        this.ventas = Ventas.data.data.productos;
+        
+        const Clientes = await Proveedor.get(`/getClientePotenciales/${id}`);
+        this.clientesVentas = Clientes.data.data.productos;
   
         const cos = await Pedidos.get(`/getpedido_proveedor/${id}`);
+  
         this.pedidos = cos.data.data.pedidos;
+        
+
+
+        
+        
 
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
@@ -128,9 +217,11 @@ export default {
     } catch (error) {
       console.log(error);
     }
+ 
   },
 
   methods: {
+   
     async VerProducto(id_pedido, id_proveedor) {
       const res = await Pedidos.get(
         `/getpedido_productos/${id_pedido}/${id_proveedor}`
@@ -139,6 +230,14 @@ export default {
       this.dialog = true;
       this.mostrarProductos = res.data.data.pedidos;
     },
+
+      async readEstadoToUpdate(id_estado,id_pedido) {
+      const est = await Pedidos.get(`/getestado/${id_estado}/${id_pedido}`);
+      this.updating = true;
+      this.estadoToUpdate = est.data.data.estado;
+    },
   },
 };
+
 </script>
+
