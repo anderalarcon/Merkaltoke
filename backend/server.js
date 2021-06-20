@@ -23,7 +23,8 @@ app.use("/carrito", require('./routes/carrito'));
 app.use("/pedidos", require('./routes/pedidos'));
 app.use("/cliente", require('./routes/cliente'));
 app.use("/metodos", require('./routes/metodopago'));
-
+//nuevo
+app.use("/estados", require('./routes/estados'));
 
 
 app.use(history())

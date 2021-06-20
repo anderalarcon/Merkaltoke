@@ -114,6 +114,31 @@
             
 
    <!--  <Footer></Footer> -->
+   <!--  Modal Actualizar Estado Pedido -->
+       <v-dialog v-model="updating" max-width="600px">
+      <v-card>
+        <v-form ref="" @submit.prevent="">
+          <v-card-title>Editar Estado</v-card-title>
+          <v-card-text>
+  
+            <v-select
+              :items="estado"
+              prepend-icon="mdi-pencil"
+              item-text="estado"
+              item-value="id_estado"
+              label="Estado"
+              v-model="estadoToUpdate.id_estado"
+              :rules="[(v) => !!v || 'Estado es requerido']"
+            >
+            </v-select>
+            <v-btn block class="success ma-2" type="submit"
+              >Actualizar datos</v-btn
+            >
+          </v-card-text>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
   </div>
   
 </template>
@@ -125,6 +150,7 @@ import NavBar from "../../components/NavBarProveedor";
 import Footer from "../../components/Footer";
 import Proveedor from "../../apis/Proveedor";
 import Pedidos from "../../apis/Pedidos";
+import Estados from "../../apis/Estados";
 
 import { Bar } from 'vue-chartjs';
 import Chart from "chart.js";
@@ -145,6 +171,7 @@ export default {
     estadoToUpdate:[],
     updating: false,
     estado:{},
+    estados: [],
 
     value: [423, 446, 675, 510, 590, 610, 760],
     dialog: false,
@@ -203,7 +230,8 @@ export default {
   
         this.pedidos = cos.data.data.pedidos;
         
-
+        const estados = await Estado.get("/get");
+        this.estados = estados.data.data.estados;        
 
         
         
