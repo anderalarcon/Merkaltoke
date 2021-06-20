@@ -142,6 +142,24 @@ router.route("/updateStock/:id_producto/:cantidad").put(async (req, res) => {
   }
 });
 
+//update visibilidad del prducto del proveedor
+router.route("/updateVisible/:id_producto/:visible").put(async (req, res) => {
+  try {
+    const { id_producto } = req.params;
+    const { visible } = req.params;
+
+    const producto = await pool.query(
+      "UPDATE tbl_producto SET visible=$1 where id_producto=$2 returning *",
+      [visible, id_producto]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { producto: producto.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 
 //Getcategoriabyid

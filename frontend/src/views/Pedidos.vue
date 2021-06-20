@@ -125,7 +125,11 @@ export default {
         const res = await Pedidos.delete(`/cancelar/${id}`);
         const index = this.pedidos.findIndex((c) => c.id_pedido == id);
         this.pedidos.splice(index, 1); //Desaparecer al instante  asyncrono  */
-        this.deletePedido(id);
+
+        setTimeout(() => {
+         this.deletePedido(id);           
+        }, 2000);
+     
 
         this.dialog = false;
         this.alert = {
