@@ -122,30 +122,103 @@
                 <v-col cols="6" md="4"
                   ><v-text-field id="TOTAL" disabled></v-text-field>
                 </v-col>
-                <v-col>
-                  <v-select
-                    class="col-6"
-                    id="te"
-                    :items="items"
-                    item-text="metodo"
-                    item-value="id_metodo_pago"
-                    label="Seleccione el Método de pago*"
-                    required
-                    v-model="metodo_pago.id"
-                    :rules="[(v) => !!v || 'Método requerido']"
-                  ></v-select
-                ></v-col>
               </v-row>
             </div>
 
             <div>
-              <v-btn
-                @click="insertar_tblpedido()"
-                class="mt-5"
-                color="warning"
-                dark
-              >
+              <v-btn @click="dialog2 = true" class="mt-5" color="warning" dark>
                 Realizar compra
+                <v-dialog v-model="dialog2" max-width="600px">
+                  <v-card>
+                    <v-form>
+                      <v-card-title>Informacion de Pago</v-card-title>
+                      <v-card-text>
+                        <v-row>
+                          <v-select
+                            class="col-12"
+                            id="te"
+                            :items="items"
+                            item-text="metodo"
+                            item-value="id_metodo_pago"
+                            label="Seleccione el Método de pago*"
+                            required
+                            v-model="metodo_pago.id"
+                            :rules="[(v) => !!v || 'Método requerido']"
+                          ></v-select>
+                          <v-text-field
+                            class="col-12"
+                            label="Numero de tarjeta"
+                            :rules="[
+                              (v) => !!v || 'Numero de tarjeta es requerido',
+                            ]"
+                          >
+                          </v-text-field>
+                          <div class="col-12">Fecha de caducidad</div>
+                          <v-select
+                            class="col-4"
+                            label="Mes"
+                            :items="meses"
+                            :rules="[(v) => !!v || 'Mes es requerido']"
+                          >
+                          </v-select>
+                          <v-select
+                            class="col-4"
+                            label="Año"
+                            :items="año"
+                            :rules="[(v) => !!v || 'Año es requerido']"
+                          >
+                          </v-select>
+                          <v-text-field
+                            class="col-4"
+                            type="number"
+                            label="Codigo de Seguridad"
+                            :counter="3"
+                            :rules="[(v) => !!v || 'codigo es requerido']"
+                          >
+                          </v-text-field>
+                          <v-text-field
+                            class="col-6"
+                            label="Nombre"
+                            v-model= "this.datos.nombre_cliente"
+                            :rules="[(v) => !!v || 'Nombre es requerido']"
+                          >
+                          </v-text-field>
+                          <v-text-field
+                            class="col-6"
+                             v-model= "this.datos.email_cliente"
+                            label="Correo Electronico"
+                            :rules="[(v) => !!v || 'Correo es requerido']"
+                          >
+                          </v-text-field>
+                          <v-text-field
+                            class="col-6"
+                            v-model= "this.datos.direccion_cliente"
+                            label="Direccion "
+                            :rules="[(v) => !!v || 'Direccion es requerido']"
+                          >
+                          </v-text-field>
+                          <v-text-field
+                            class="col-6"
+                            type="number"
+                            label="Telefono"
+                            :rules="[(v) => !!v || 'Telefono es requerido']"
+                          >
+                          </v-text-field>
+                        </v-row>
+                       
+                        <v-btn  
+                        
+                          @click="insertar_tblpedido(),(dialog2 = false)"
+                          class="center"
+                          color="warning"
+                          dark
+                        >
+                          Realizar compra
+                        </v-btn>
+                      </v-card-text>
+                    </v-form>
+                  </v-card>
+                </v-dialog>
               </v-btn>
             </div>
           </v-card>
@@ -163,6 +236,7 @@ import Carrito from "../apis/Carrito";
 import Productos from "../apis/Productos";
 import Pedido from "../apis/Pedidos";
 import Metodo from "../apis/Metodos";
+import Cliente from "../apis/Cliente";
 import Footer from "../components/Footer";
 
 export default {
@@ -174,11 +248,43 @@ export default {
 
   data: () => ({
     items: [],
+    dialog2: false,
+    meses: [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12",
+    ],
+    año: [
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026",
+      "2026",
+      "2027",
+      "2028",
+      "2029",
+      "2030",
+      "2031",
+    ],
     carrito: [],
     user: { role: "", nombre: "", email: "", id: "" },
     pedido: {},
     dialog: false,
+   
+    dialog2: false,
     metodo_pago: {},
+    datos: {}
   }),
 
   created: async function () {
@@ -197,6 +303,9 @@ export default {
 
       const metodosDePago = await Metodo.get("/get");
       this.items = metodosDePago.data.data.metodos;
+      //Datos del cliente
+      const datos_cliente = await Cliente.get(`/get/${this.user.id}`);
+      this.datos = datos_cliente.data.data.cliente;
 
       //redireccionar al inicio si no esta logueado
 
