@@ -230,7 +230,7 @@ export default {
   
         this.pedidos = cos.data.data.pedidos;
         
-        const estados = await Estado.get("/get");
+        const estados = await Estados.get("/get");
         this.estados = estados.data.data.estados;        
 
         
