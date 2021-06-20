@@ -16,7 +16,7 @@ app.use(fileUpload({useTempFiles:true}))
 
 
 app.use('/',require('./routes/auth' ))
-app.use("/productos", require('./routes/productos'));
+app.use("/productos", require('./routes/productos'));//end poin encargado de recibir las peticiones de usuarios . con esta peticion buscamos los datos  . el devolver seria el html pero en esta caso nuestra vista seria un jason  APLICACION MVC
 app.use("/proveedores", require('./routes/proveedor'));
 app.use("/categorias", require('./routes/categorias'));
 app.use("/carrito", require('./routes/carrito'));

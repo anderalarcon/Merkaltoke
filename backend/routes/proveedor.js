@@ -143,11 +143,27 @@ router.route("/get/:id_proveedor").get(async (req, res) => {
   }
 });
 
-router.route("/getProductos-Proveedor/:id_proveedor").get(async (req, res) => {
+router.route("/getProductos-Proveedor/:id_proveedor").get(async (req, res) => {//perspectiva cliente
   try {
     const { id_proveedor } = req.params;
     const proveedor = await pool.query(
-      "select p.visible, p.img_producto, pro.nombre_proveedor ,cat.categoria, p.id_producto,p.nombre,p.precio,p.stock,p.detalle,p.id_proveedor,p.id_categoria from tbl_producto p ,tbl_categoria cat,proveedor pro  where p.id_categoria=cat.id_categoria and pro.id_proveedor=p.id_proveedor and  p.id_proveedor=$1",
+      "select p.visible, p.img_producto, pro.nombre_proveedor ,cat.categoria, p.id_producto,p.nombre,p.precio,p.stock,p.detalle,p.id_proveedor,p.id_categoria from tbl_producto p ,tbl_categoria cat,proveedor pro  where p.id_categoria=cat.id_categoria and pro.id_proveedor=p.id_proveedor and  p.id_proveedor=$1 and p.visible='si' ",
+      [id_proveedor]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { productos: proveedor.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+router.route("/getProductos-Proveedor2/:id_proveedor").get(async (req, res) => {//perspectiva proveedor
+  try {
+    const { id_proveedor } = req.params;
+    const proveedor = await pool.query(
+      "select p.visible, p.img_producto, pro.nombre_proveedor ,cat.categoria, p.id_producto,p.nombre,p.precio,p.stock,p.detalle,p.id_proveedor,p.id_categoria from tbl_producto p ,tbl_categoria cat,proveedor pro  where p.id_categoria=cat.id_categoria and pro.id_proveedor=p.id_proveedor and  p.id_proveedor=$1 ",
       [id_proveedor]
     );
     res.status(200).json({

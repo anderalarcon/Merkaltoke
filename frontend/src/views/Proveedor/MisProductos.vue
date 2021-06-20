@@ -273,7 +273,7 @@ export default {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
 
-        const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+        const res = await Proveedor.get(`/getProductos-Proveedor2/${id}`);
 
         this.productos = res.data.data.productos;
 
@@ -399,9 +399,12 @@ export default {
       }
     },
     async HacerVisible(id_producto) {
+      var prod = id_producto;
       var visible = document.getElementById("visible" + id_producto);
       visible.innerHTML = visible.innerHTML == "si" ? "no" : "si";
-      //Hacer el update de visible  y ya ps
+      var aux = visible.innerHTML
+      await Productos.put(`/updateVisible/${prod}/${(aux.toString())}`);
+      //Hacer el update de visible  y ya ps 
     },
   },
 };
