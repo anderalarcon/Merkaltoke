@@ -1,3 +1,12 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script> 
+
+
+
 <template>
   <div>
     <NavBar></NavBar>
@@ -59,16 +68,129 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-container>
+      <h1>Indicadores</h1>
+      <v-row>
+        <v-col>
+          <h2>Ventas por mes</h2>
+          <v-simple-table>
+            <template>
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>Monto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="venta in ventas" :key="venta.mes">
+                  <td>{{venta.mes}}</td>
+                  <td>{{venta.totalmes}}</td>
+
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+        <v-col>
+          <h2>Compras de clientes potenciales</h2>
+          <v-simple-table>
+            <template>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Monto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="cliente in clientesVentas" :key="cliente.id_client">
+                  <td>{{cliente.name_client}}</td>
+                  <td>{{cliente.sumacliente}}</td>
+
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+      </v-row>
+      
+    </v-container>
+            
+
+            <div id="app">
+              <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+              <div class="chart">
+    <Chart 
+    :chartData="chartData" 
+    :chartOptions="chartOptions" 
+    :chartType="chartType" />
+  </div>
+            
+
    <!--  <Footer></Footer> -->
   </div>
+  
 </template>
+
+
 
 <script>
 import NavBar from "../../components/NavBarProveedor";
 import Footer from "../../components/Footer";
+import Proveedor from "../../apis/Proveedor";
 import Pedidos from "../../apis/Pedidos";
+
+import { Bar } from 'vue-chartjs';
+import Chart from "chart.js";
+
+
+
 export default {
   name: "MisPedidos",
+    extends: Bar,
+  mounted () {
+    //this.renderChart(data, options);
+    let {chartType,chartData,chartOptions} = this;
+    this.chartConstructor(chartType, chartData, chartOptions);
+  },
+
+  
+  chartConstructor(chartType, chartData, chartOptions) {
+    const chartElement = document.querySelector("canvas");
+    const chart = new Chart(chartElement, {
+    type: chartType,
+    data: chartData,
+    options: chartOptions,
+  });
+},
+data: {
+    labels: ["Jan1", "Jan2", "Jan3", "Jan4", "Jan5", "Jan6", "Jan7"],
+    datasets: [
+      {
+        label: "This week",
+        data:  [12, 19, 10, 17, 6, 3, 7],
+        backgroundColor: "rgba(224, 248, 255, 0.4)",
+        borderColor: "#5cddff",
+        lineTension: 0,
+        pointBackgroundColor: "#5cddff",
+      },
+      {
+        label: "Last week",
+        data:  [10, 25, 3, 25, 17, 4, 9],
+        backgroundColor: "rgba(241, 225, 197, 0.4)",
+        borderColor: "#ffc764",
+        lineTension: 0,
+        pointBackgroundColor: "#ffc764",
+      },
+    ],
+  },
+
+  props:{
+  chartType:String,
+  chartData:Object,
+  chartOptions:Object
+},
+
   components: {
     NavBar,
     Footer,
@@ -77,6 +199,8 @@ export default {
     value: [423, 446, 675, 510, 590, 610, 760],
     dialog: false,
     productos: [],
+    ventas:[],
+    clientesVentas:[],
     mostrarProductos: [],
     pedidos: [],
     search: "",
@@ -107,7 +231,11 @@ export default {
       { text: "Precio", value: "precio", sortable: true },
     ],
   }),
+
+
+
   created: async function () {
+    
     try {
       if (JSON.parse(sessionStorage.getItem("session")) == null) {
         this.$router.push("/");
@@ -115,9 +243,19 @@ export default {
         this.user = JSON.parse(sessionStorage.getItem("session"));
         const id = this.user.id;
 
+                const Ventas = await Proveedor.get(`/getVentasPorMes/${id}`);
+        this.ventas = Ventas.data.data.productos;
+        
+        const Clientes = await Proveedor.get(`/getClientePotenciales/${id}`);
+        this.clientesVentas = Clientes.data.data.productos;
   
         const cos = await Pedidos.get(`/getpedido_proveedor/${id}`);
         this.pedidos = cos.data.data.pedidos;
+        
+
+
+        
+        
 
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
@@ -128,9 +266,11 @@ export default {
     } catch (error) {
       console.log(error);
     }
+ 
   },
 
   methods: {
+   
     async VerProducto(id_pedido, id_proveedor) {
       const res = await Pedidos.get(
         `/getpedido_productos/${id_pedido}/${id_proveedor}`
@@ -141,4 +281,6 @@ export default {
     },
   },
 };
+
 </script>
+
