@@ -272,8 +272,39 @@ router.route("/getestado/:id_estado/:id_pedido").get(async (req, res)  =>{
 });
 
 
+//Getestadobyid
+router.route("/getest/:id_pedido").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const pedidoestado = await pool.query(
+      "select p.id_pedido, g.id_estado, g.estado from tbl_pedido p , tbl_estado g where p.id_estado=g.id_estado and  id_pedido=$1;",
+      [id_pedido]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { pedidoestado: pedidoestado.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
-
-
+//Updatestado
+router.route("/update/:id_pedido").put(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const { id_estado } = req.body;
+    const pedido = await pool.query(
+      "UPDATE tbl_pedido SET ID_ESTADO=$1 WHERE ID_PEDIDO=$2 returning *",
+      [id_estado, id_pedido]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { pedido: pedido.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 module.exports = router;

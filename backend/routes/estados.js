@@ -18,4 +18,4 @@ router.route("/get").get(async (req, res) => {
     }
   });
 
-
+  module.exports = router;
