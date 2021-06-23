@@ -48,7 +48,7 @@
           v-for="proveedor in filteredProveedores"
           :key="proveedor.id"
         >
-          <v-img height="250" v-bind:src="proveedor.img_proveedor"> </v-img>
+          <v-img height="250" v-bind:src="require('../../../backend/public/uploads/' + proveedor.img_proveedor)"> </v-img>
 
           <v-card-title> {{ proveedor.nombre_proveedor }} </v-card-title>
 
