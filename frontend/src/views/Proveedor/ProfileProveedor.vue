@@ -179,6 +179,19 @@
                 Direccion: {{ this.datos.direccion_proveedor }}
               </h4>
               <h4 class="mt-2">RUC: {{ this.datos.ruc }}</h4>
+               <h4 class="mt-2">Activo: {{ this.datos.activo }}</h4>
+                 <v-btn
+                  color="red"
+                  x-small
+                  small
+                  dark
+                  fab
+                  @click="readCuentaToDelete()"
+                >
+                  <v-icon small> mdi-cancel </v-icon>
+                </v-btn>
+              
+              
             </v-card-text>
           </v-card>
           <v-card> </v-card>
@@ -186,6 +199,25 @@
       </v-row>
     </v-container>
     <Footer></Footer>
+    <!-- Modal Eliminar -->
+   <v-dialog v-model="advertencia" persistent max-width="450">
+      <v-card>
+        <v-card-title class="headline"> Eliminar la cuenta </v-card-title>
+
+        <v-card-text> ¿Desea eliminar su suscripcion ? </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="green darken-1" text @click="advertencia = false">
+            NO
+          </v-btn>
+
+          <v-btn color="red" text @click="Cancel()"> SI </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
@@ -194,6 +226,7 @@
 import NavBar from "../../components/NavBarProveedor";
 import Footer from "../../components/Footer";
 import Proveedor from "../../apis/Proveedor";
+import Productos from "../../apis/Productos";
 export default {
   name: "Profile",
   components: {
@@ -201,11 +234,13 @@ export default {
     Footer,
   },
   data: () => ({
+    productos: [],
     datos: {},
     proveedorToUpdate: {},
 
     dialog1: false,
     dialog2: false,
+    advertencia: false,
 
     nameRules: [(value) => !!value || "Name is required"],
     emailRules: [
@@ -228,6 +263,13 @@ export default {
         this.$router.push("/");
       } else {
         this.user = JSON.parse(sessionStorage.getItem("session"));
+        const id = this.user.id;
+
+      // const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+
+      // this.productos = res.data.data.productos;
+       // console.log(this.user.id)
+
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
           const datos_proveedor = await Proveedor.get(`/get/${this.user.id}`);
@@ -264,6 +306,28 @@ export default {
         form
       );
       location.reload();
+    },
+
+    async Cancel() {
+          var id = this.user.id;
+          
+          var id2 =id.toString();
+          const nuevo_producto = await Productos.put(`/updatecancel/${id}`);
+          const c = await Proveedor.put(`/updatecancel/${id}`);
+
+          const a = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+
+        this.productos = a.data.data.productos;
+        
+          console.log(this.productos)
+
+        this.advertencia = false;
+          
+    },
+    async readCuentaToDelete() {
+     
+      this.advertencia = true;
+     
     },
   },
 };

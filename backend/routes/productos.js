@@ -62,6 +62,7 @@ router.route("/get/:id_producto").get(async (req, res) => {
   }
 });
 
+
 //Update
 router.route("/update/:id_producto").put(async (req, res) => {
   try {
@@ -76,6 +77,24 @@ router.route("/update/:id_producto").put(async (req, res) => {
     const producto = await pool.query(
       "UPDATE tbl_producto SET NOMBRE=$1, PRECIO=$2, STOCK=$3, DETALLE=$4, ID_PROVEEDOR=$5, ID_CATEGORIA=$6, IMG_PRODUCTO=$7 WHERE ID_PRODUCTO=$8 returning *",
       [nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto, id_producto]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { producto: producto.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+//Updatecancel
+router.route("/updatecancel/:id_proveedor").put(async (req, res) => {
+  try {
+    
+    const { id_proveedor } = req.params;
+    console.log(req.params)
+    const producto = await pool.query(
+      "UPDATE tbl_producto SET visible=$1 WHERE ID_PROVEEDOR=$2 returning *",
+      [ 'no', id_proveedor]
     );
     res.status(200).json({
       status: "success",
@@ -123,6 +142,24 @@ router.route("/updateStock/:id_producto/:cantidad").put(async (req, res) => {
   }
 });
 
+//update visibilidad del prducto del proveedor
+router.route("/updateVisible/:id_producto/:visible").put(async (req, res) => {
+  try {
+    const { id_producto } = req.params;
+    const { visible } = req.params;
+
+    const producto = await pool.query(
+      "UPDATE tbl_producto SET visible=$1 where id_producto=$2 returning *",
+      [visible, id_producto]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { producto: producto.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 
 //Getcategoriabyid
