@@ -265,6 +265,54 @@ router.route("/getClientePotenciales/:id_proveedor").get(async (req, res) => {
   }
 });
 
+router.route("/getStockProducto/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const proveedor = await pool.query(
+      "SELECT prod.nombre, prod.stock from tbl_producto prod, proveedor prov where  prod.id_proveedor = prov.id_proveedor AND prov.id_proveedor = $1 ORDER BY prod.stock ASC;",
+      [id_proveedor]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { productos: proveedor.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+router.route("/getCantidadProducto/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const proveedor = await pool.query(
+      "SELECT prod.nombre, sum(ped.cantidad) AS cantidad FROM tbl_producto prod, tbl_pedido_detalle ped, proveedor prov where prod.id_producto = ped.id_producto AND prod.id_proveedor = prov.id_proveedor AND prov.id_proveedor = $1 GROUP BY prod.nombre ORDER BY cantidad  DESC;",
+      [id_proveedor]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { productos: proveedor.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+router.route("/getVentasProducto/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const proveedor = await pool.query(
+      "SELECT prod.nombre, sum(ped.cantidad * ped.precio) AS totalProducto FROM tbl_producto prod, tbl_pedido_detalle ped, proveedor prov where prod.id_producto = ped.id_producto AND prod.id_proveedor = prov.id_proveedor AND prov.id_proveedor = $1 GROUP BY prod.nombre ORDER BY totalProducto DESC;",
+      [id_proveedor]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { productos: proveedor.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 
 
 
