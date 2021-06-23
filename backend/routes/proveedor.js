@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const pool = require("../database/keys");
 
+const path = require('path');
+const fs = require('fs');
+const mime = require('mime-types');
+
 //Create
 router.route("/create").post(async (req, res) => {
   try {
@@ -82,26 +86,16 @@ router.route("/getP/:id_proveedor").get(async (req, res) => {
 });
 
 //Update
-router.route("/update/:id_proveedor").put(async (req, res) => {
+router.route("/perfilUpdate/:id_proveedor").put(async (req, res) => {
   try {
     const { id_proveedor } = req.params;
     const { nombre_proveedor } = req.body;
+    const { email_proveedor } = req.body;
+    const { direccion_proveedor } = req.body;
     const { ruc } = req.body;
-    const { razon_social } = req.body;
-    const { utilidades } = req.body;
-    const { id_cuenta_cliente } = req.body;
-    const { id_local } = req.body;
     const proveedores = await pool.query(
-      "UPDATE tbl_proveedor SET NOMBRE_PROVEEDOR=$1, RUC=$2, RAZON_SOCIAL=$3, UTILIDADES=$4, ID_CUENTA_CLIENTE=$5,ID_LOCAL=$6 WHERE id_proveedor=$7 returning *",
-      [
-        nombre_proveedor,
-        ruc,
-        razon_social,
-        utilidades,
-        id_cuenta_cliente,
-        id_local,
-        id_proveedor,
-      ]
+      "UPDATE proveedor SET NOMBRE_PROVEEDOR=$1, EMAIL_PROVEEDOR=$2, DIRECCION_PROVEEDOR=$3, RUC=$4 WHERE ID_PROVEEDOR=$5 returning *",
+      [nombre_proveedxor, email_proveedor, direccion_proveedor, ruc, id_proveedor]
     );
     res.status(200).json({
       status: "success",
@@ -111,6 +105,50 @@ router.route("/update/:id_proveedor").put(async (req, res) => {
     console.error(err.message);
   }
 });
+
+function randomSN (length){
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+// Image
+router.route("/imageUpdate/:id_proveedor").put(async (req, res) => {
+  var file_extension = mime.extension(req.files.file.mimetype);
+  var name = randomSN(30) + '.' + file_extension;
+  
+  var oldPath = req.files.file.tempFilePath;
+  var newPath = path.join(path.resolve(__dirname, '..'), `/public/uploads/${name}`);
+  //console.log(path.resolve(__dirname))
+  //console.log(newPath)
+
+  fs.rename(oldPath, newPath, function (err) {
+    if (err) throw err
+    console.log('Successfully renamed - AKA moved!')
+  })
+  
+  try {
+    console.log(name);
+    console.log(req.body.id);
+    const { id_proveedor } = req.body.id;
+    const { img_proveedor } = name;
+    const proveedor = await pool.query(
+      "UPDATE PROVEEDOR SET IMG_PROVEEDOR=$1 WHERE ID_PROVEEDOR=$2 returning *",
+      [name,req.body.id]
+    );
+    res.status(200).json({
+      status:"success",
+      data:{proveedores:proveedores.rows[0]},
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 
 //Delete
 router.route("/delete/:id_proveedor").delete(async (req, res) => {
