@@ -95,7 +95,7 @@ router.route("/perfilUpdate/:id_proveedor").put(async (req, res) => {
     const { ruc } = req.body;
     const proveedores = await pool.query(
       "UPDATE proveedor SET NOMBRE_PROVEEDOR=$1, EMAIL_PROVEEDOR=$2, DIRECCION_PROVEEDOR=$3, RUC=$4 WHERE ID_PROVEEDOR=$5 returning *",
-      [nombre_proveedxor, email_proveedor, direccion_proveedor, ruc, id_proveedor]
+      [nombre_proveedor, email_proveedor, direccion_proveedor, ruc, id_proveedor]
     );
     res.status(200).json({
       status: "success",

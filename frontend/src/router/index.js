@@ -71,7 +71,14 @@ const routes = [
     name: 'MisProductos',
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/MisProductos')
-  }
+  },
+
+  {
+    path: '/PedidosProv/',
+    name: 'PedidosProv',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/PedidosProv')
+  } 
   ,
 
   {
