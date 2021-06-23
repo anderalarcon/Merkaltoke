@@ -40,7 +40,7 @@
               <tbody>
                 <tr v-for="cliente in clientesVentas" :key="cliente.id_client">
                   <td>{{ cliente.name_client }}</td>
-                  <td>{{ cliente.sumacliente }}</td>
+                  <td>{{ cliente.sumacliente }} S/.</td>
                 </tr>
               </tbody>
             </template>
@@ -64,7 +64,7 @@
               <tbody>
                 <tr v-for="cant in ProductosCantidad" :key="cant.nombre">
                   <td>{{ cant.nombre }}</td>
-                  <td>{{ cant.cantidad }}</td>
+                  <td>{{ cant.cantidad }} unidades</td>
                 </tr>
               </tbody>
             </template>
@@ -85,7 +85,7 @@
               <tbody>
                 <tr v-for="prod in ProductosVentas" :key="prod.nombre">
                   <td>{{ prod.nombre }} </td>
-                  <td>{{ prod.totalproducto }}S/.</td>
+                  <td>{{ prod.totalproducto }} S/.</td>
                 </tr>
               </tbody>
             </template>
@@ -109,7 +109,7 @@
               <tbody>
                 <tr v-for="stock in StockProductos" :key="stock.nombre">
                   <td>{{ stock.nombre }} </td>
-                  <td>{{ stock.stock }}S/.</td>
+                  <td>{{ stock.stock }} S/.</td>
                 </tr>
               </tbody>
             </template>
