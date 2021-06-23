@@ -126,96 +126,114 @@
             </div>
 
             <div>
-              <v-btn @click="carrito.length!=0?dialog2 = true:dialog2=false" class="mt-5" color="warning" dark>
+              <v-btn
+                @click="
+                  carrito.length != 0 ? (dialog2 = true) : (dialog2 = false)
+                "
+                class="mt-5"
+                color="warning"
+                dark
+              >
                 Realizar compra
                 <v-dialog v-model="dialog2" max-width="600px">
                   <v-card>
-                    <v-form>
-                      <v-card-title>Informacion de Pago</v-card-title>
-                      <v-card-text>
-                        <v-row>
-                          <v-select
-                            class="col-12"
-                            id="te"
-                            :items="items"
-                            item-text="metodo"
-                            item-value="id_metodo_pago"
-                            label="Seleccione el Método de pago*"
-                            required
-                            v-model="metodo_pago.id"
-                            :rules="[(v) => !!v || 'Método requerido']"
-                          ></v-select>
-                          <v-text-field
-                            class="col-12"
-                            label="Numero de tarjeta"
-                            :rules="[
-                              (v) => !!v || 'Numero de tarjeta es requerido',
-                            ]"
+                    <v-form @submit.prevent="insertar_tblpedido()" ref="insertar_tblpedido">
+                      <v-container>
+                        <v-card-title>Informacion de Pago</v-card-title>
+                        <v-card-text>
+                          <v-row>
+                            <v-select
+                              class="col-12"
+                              id="te"
+                              :items="items"
+                              item-text="metodo"
+                              item-value="id_metodo_pago"
+                              label="Seleccione el Método de pago*"
+                              required
+                              v-model="metodo_pago.id"
+                              :rules="[(v) => !!v || 'Método requerido']"
+                            ></v-select>
+                            <v-text-field
+                              class="col-12"
+                              label="Numero de tarjeta"
+                              :rules="[
+                                (v) => !!v || 'Numero de tarjeta es requerido',
+                              ]"
+                              required
+                            >
+                            </v-text-field>
+                            <div class="col-12">Fecha de caducidad</div>
+                            <v-select
+                              class="col-4"
+                              label="Mes"
+                              :items="meses"
+                              :rules="[(v) => !!v || 'Mes es requerido']"
+                              required
+                            >
+                            </v-select>
+                            <v-select
+                              class="col-4"
+                              label="Año"
+                              :items="año"
+                              :rules="[(v) => !!v || 'Año es requerido']"
+                              required
+                            >
+                            </v-select>
+                            <v-text-field
+                              class="col-4"
+                              type="number"
+                              label="Codigo de Seguridad"
+                              :counter="3"
+                              :rules="codigorules"
+                              required
+                            >
+                            </v-text-field>
+                            <v-text-field
+                              class="col-6"
+                              label="Nombre"
+                              v-model="this.datos.nombre_cliente"
+                              :rules="[(v) => !!v || 'Nombre es requerido']"
+                              required
+                            >
+                            </v-text-field>
+                            <v-text-field
+                              class="col-6"
+                              v-model="this.datos.email_cliente"
+                              label="Correo Electronico"
+                              :rules="[(v) => !!v || 'Correo es requerido']"
+                              required
+                            >
+                            </v-text-field>
+                            <v-text-field
+                              class="col-6"
+                              v-model="this.datos.direccion_cliente"
+                              label="Direccion "
+                              :rules="[(v) => !!v || 'Direccion es requerido']"
+                              required
+                            >
+                            </v-text-field>
+                            <v-text-field
+                              class="col-6"
+                              type="number"
+                              label="Telefono"
+                              :counter="9"
+                              :rules="telefonorules"
+                              required
+                            >
+                            </v-text-field>
+                          </v-row>
+
+                          <v-btn
+                            
+                            class="center"
+                            color="warning"
+                            dark
+                            type="submit"
                           >
-                          </v-text-field>
-                          <div class="col-12">Fecha de caducidad</div>
-                          <v-select
-                            class="col-4"
-                            label="Mes"
-                            :items="meses"
-                            :rules="[(v) => !!v || 'Mes es requerido']"
-                          >
-                          </v-select>
-                          <v-select
-                            class="col-4"
-                            label="Año"
-                            :items="año"
-                            :rules="[(v) => !!v || 'Año es requerido']"
-                          >
-                          </v-select>
-                          <v-text-field
-                            class="col-4"
-                            type="number"
-                            label="Codigo de Seguridad"
-                            :counter="3"
-                            :rules="[(v) => !!v || 'codigo es requerido']"
-                          >
-                          </v-text-field>
-                          <v-text-field
-                            class="col-6"
-                            label="Nombre"
-                            v-model= "this.datos.nombre_cliente"
-                            :rules="[(v) => !!v || 'Nombre es requerido']"
-                          >
-                          </v-text-field>
-                          <v-text-field
-                            class="col-6"
-                             v-model= "this.datos.email_cliente"
-                            label="Correo Electronico"
-                            :rules="[(v) => !!v || 'Correo es requerido']"
-                          >
-                          </v-text-field>
-                          <v-text-field
-                            class="col-6"
-                            v-model= "this.datos.direccion_cliente"
-                            label="Direccion "
-                            :rules="[(v) => !!v || 'Direccion es requerido']"
-                          >
-                          </v-text-field>
-                          <v-text-field
-                            class="col-6"
-                            type="number"
-                            label="Telefono"
-                            :rules="[(v) => !!v || 'Telefono es requerido']"
-                          >
-                          </v-text-field>
-                        </v-row>
-                       
-                        <v-btn  
-                        
-                          @click="insertar_tblpedido(),(dialog2 = false)"
-                          class="center"
-                          color="warning"
-                          dark
-                        >
-                          Realizar compra
-                        </v-btn>
-                      </v-card-text>
+                            Realizar compra
+                          </v-btn>
+                        </v-card-text>
+                      </v-container>
                     </v-form>
                   </v-card>
                 </v-dialog>
@@ -247,8 +265,16 @@ export default {
   },
 
   data: () => ({
+    codigorules: [
+      (v) => !!v || "Codigo es requerido",
+      (v) => (v && v.length <= 3) || "Codigo debe tener menos de 4 digitos",
+    ],
+    telefonorules: [
+      (v) => !!v || "Telefono es requerido",
+      (v) => (v && v.length <= 9) || "Telefono debe tener menos de 10 digitos",
+    ],
     items: [],
-    dialog2: false,
+
     meses: [
       "01",
       "02",
@@ -281,10 +307,10 @@ export default {
     user: { role: "", nombre: "", email: "", id: "" },
     pedido: {},
     dialog: false,
-   
+
     dialog2: false,
     metodo_pago: {},
-    datos: {}
+    datos: {},
   }),
 
   created: async function () {
@@ -292,7 +318,7 @@ export default {
     if (this.user == null) {
       this.$router.push("/");
     }
-  
+
     try {
       const id = this.user.id;
       const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
@@ -309,9 +335,8 @@ export default {
 
       //redireccionar al inicio si no esta logueado
 
-      if(this.carrito.length>0){
-      this.getTotalofCarShop();
-
+      if (this.carrito.length > 0) {
+        this.getTotalofCarShop();
       }
     } catch (error) {
       console.log(error);
@@ -368,29 +393,32 @@ export default {
       }
     },
     async insertar_tblpedido() {
-      if (this.carrito.length == 0) {
-        console.log("Carro vacio");
-      } else {
-        if (this.metodo_pago.id != undefined) {
-          this.pedido.id_cliente = this.user.id;
-          this.pedido.total = document.getElementById("TOTAL").value;
-          this.pedido.id_metodo = this.metodo_pago.id;
-          //1ro Hacemos update a la tabla intermedia de carrito
-          var productosencarrito = this.carrito;
-          this.update(productosencarrito);//ponerle un set time out para que no haya problemas 
-          //creamos nuevo pedido
-          const nuevo_pedido = await Pedido.post("/create/", this.pedido);
-          // disminuimos el stock de esos productos antes de eliminarlos xd
-
-          setTimeout(() => {
-               this.disminuirStock(productosencarrito);
-               this.insertIntoTbl_pedido_detalle();
-          }, 2000);
-      /*     this.disminuirStock(productosencarrito);
+      let valid = this.$refs.insertar_tblpedido.validate();
+      if (valid) {
+        if (this.carrito.length == 0) {
+          console.log("Carro vacio");
+        } else {
+          if (this.metodo_pago.id != undefined) {
+            this.pedido.id_cliente = this.user.id;
+            this.pedido.total = document.getElementById("TOTAL").value;
+            this.pedido.id_metodo = this.metodo_pago.id;
+            //1ro Hacemos update a la tabla intermedia de carrito
+            var productosencarrito = this.carrito;
+            this.update(productosencarrito); //ponerle un set time out para que no haya problemas
+            //creamos nuevo pedido
+            const nuevo_pedido = await Pedido.post("/create/", this.pedido);
+            // disminuimos el stock de esos productos antes de eliminarlos xd
+            this.dialog2 = false;
+            setTimeout(() => {
+              this.disminuirStock(productosencarrito);
+              this.insertIntoTbl_pedido_detalle();
+            }, 2000);
+            /*     this.disminuirStock(productosencarrito);
           //insertamos en nuestra tabla que sera nuestro historial
           this.insertIntoTbl_pedido_detalle(); */
-        } else {
-          console.log("falta escoger metodo de pago");
+          } else {
+            console.log("falta escoger metodo de pago");
+          }
         }
       }
     },
