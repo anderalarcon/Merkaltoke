@@ -36,7 +36,7 @@
             <v-btn
               @click="openModal(pedido.id_pedido)"
               color="red"
-              v-if="pedido.estado != `Entregado`"
+              v-if="pedido.estado ==`Por confirmar`"
             >
               Cancelar</v-btn
             >
@@ -121,14 +121,12 @@ export default {
     },
     async deleteProductsFromVoucher(id) {
       try {
-        this.ReponerStock(id);
+        this.ReponerStock(id); //3 seg 
         const res = await Pedidos.delete(`/cancelar/${id}`);
         const index = this.pedidos.findIndex((c) => c.id_pedido == id);
         this.pedidos.splice(index, 1); //Desaparecer al instante  asyncrono  */
 
-        setTimeout(() => {
-         this.deletePedido(id);           
-        }, 2000);
+     
      
 
         this.dialog = false;
@@ -165,6 +163,9 @@ export default {
             `/update/${productosEnPedido[i].id_producto}/${productosEnPedido[i].cantidad}`
           );
         }
+           setTimeout(() => {
+         this.deletePedido(id);           
+        }, 2000); //2.05seg
       } catch (error) {
         console.log(error);
       }

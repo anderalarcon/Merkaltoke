@@ -109,7 +109,7 @@
               <tbody>
                 <tr v-for="stock in StockProductos" :key="stock.nombre">
                   <td>{{ stock.nombre }} </td>
-                  <td>{{ stock.stock }} S/.</td>
+                  <td>{{ stock.stock }} </td>
                 </tr>
               </tbody>
             </template>
