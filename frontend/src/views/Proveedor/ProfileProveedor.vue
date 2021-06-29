@@ -198,7 +198,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <Footer></Footer>
+ <!--    <Footer></Footer> -->
     <!-- Modal Eliminar -->
    <v-dialog v-model="advertencia" persistent max-width="450">
       <v-card>
@@ -300,7 +300,7 @@ export default {
       form.append('id',this.proveedorToUpdate.id_proveedor);
 
       let valid = this.$refs.imageUpdate.validate();
-      console.log(this.proveedorToUpdate.imagen);
+    
       await Proveedor.put(
         `/imageUpdate/${this.proveedorToUpdate.id_proveedor}`,
         form

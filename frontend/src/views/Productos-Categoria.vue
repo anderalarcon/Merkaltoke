@@ -31,7 +31,7 @@
         </v-card>
       </v-row>
     </v-container>
-    <Footer></Footer>
+<!--     <Footer></Footer> -->
   </div>
 </template>
 

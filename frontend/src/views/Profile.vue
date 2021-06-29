@@ -182,7 +182,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <Footer></Footer>
+   <!--  <Footer></Footer> -->
   </div>
 </template>
 
