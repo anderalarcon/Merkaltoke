@@ -67,6 +67,13 @@ const routes = [
   } ,
 
   {
+    path: '/ProfileAdmin/',
+    name: 'ProfileAdmin',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/ProfileAdmin')
+  } ,
+
+  {
     path: '/MisProductos/',
     name: 'MisProductos',
   

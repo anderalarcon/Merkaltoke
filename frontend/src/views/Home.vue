@@ -107,6 +107,7 @@
                 >
                   <v-radio label="Cliente" value="cliente"></v-radio>
                   <v-radio label="Proveedor" value="proveedor"></v-radio>
+                   <v-radio label="Administrador" value="administrador"></v-radio>
                 </v-radio-group>
                 <v-btn block class="success mt-3" type="submit"
                   >Ingresar
@@ -218,6 +219,10 @@ export default {
             } else {
               if (this.user.role == "proveedor") {
                 this.$router.push("/ProfileProveedor");
+              } else {
+                if (this.user.role == "administrador"){
+                  this.$router.push("/ProfileAdmin");
+                }
               }
             }
           }
