@@ -94,6 +94,22 @@ const routes = [
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/Productos-Pedido')
   }
+  ,
+
+  {
+    path: '/AdminProveedores/',
+    name: 'AdminProveedores',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdminProveedores')
+  }
+  ,
+
+  {
+    path: '/AdminDetalles/',
+    name: 'AdminDetalles',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdminDetalles')
+  }
 ]
 
 const router = new VueRouter({
