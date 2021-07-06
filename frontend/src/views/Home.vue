@@ -222,7 +222,7 @@ export default {
                 this.$router.push("/ProfileProveedor");
               } else 
               if (this.user.role == "administrador"){
-                this.$router.push("/ProfileAdmin");
+                this.$router.push("/Admin-Proveedores");
               }
             }
           }

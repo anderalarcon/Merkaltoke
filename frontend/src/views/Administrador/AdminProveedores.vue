@@ -215,7 +215,7 @@ export default {
 
        
 
-        if (this.user.role == "proveedor") {
+        if (this.user.role == "administrador") {
         } else {
           this.$router.push("/");
         }
