@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar></NavBar>
 
     <v-container>
       <v-alert v-model="alert.show" :type="alert.type" dismissible>
@@ -74,7 +73,7 @@
         >
       </v-card>
     </v-container>
-    <Footer></Footer>
+
 
     <v-btn @click="add = true" color="red" large right fixed botoom fab dark
       ><v-icon>mdi-plus</v-icon></v-btn
@@ -181,7 +180,7 @@
 </template>
 
 <script>
-import NavBar from "../../components/NavBarProveedor";
+
 
 import Proveedor from "../../apis/Proveedor";
 import Productos from "../../apis/Productos";
@@ -191,7 +190,7 @@ import Categorias from "../../apis/Categorias";
 export default {
   name: "AdminProveedores",
   components: {
-    NavBar,
+
 
   },
   data: () => ({
