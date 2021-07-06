@@ -1,7 +1,7 @@
 <template>
   <div>
-    <NavBar></NavBar>
-
+   
+<NavBarAdmin></NavBarAdmin>
     <v-container>
       <v-alert v-model="alert.show" :type="alert.type" dismissible>
         {{ alert.message }}
@@ -56,7 +56,7 @@
         >
       </v-card>
     </v-container>
-    <Footer></Footer>
+  
 
     
     <v-dialog v-model="updating" msx-width="600px">
@@ -135,6 +135,7 @@ import NavBar from "../../components/NavBarProveedor";
 import Footer from "../../components/Footer";
 import Proveedor from "../../apis/Proveedor";
 import Cliente from "../../apis/Cliente";
+import NavBarAdmin from "../../components/NavBarAdmin.vue"
 
 
 export default {
@@ -142,6 +143,7 @@ export default {
   components: {
     NavBar,
     Footer,
+    NavBarAdmin
   },
   data: () => ({
     clientes: [],
@@ -187,7 +189,7 @@ export default {
         const categoria = await Categorias.get("/get");
         this.categorias = categoria.data.data.categorias;
 
-        if (this.user.role == "proveedor") {
+        if (this.user.role == "administrador") {
         } else {
           this.$router.push("/");
         }
