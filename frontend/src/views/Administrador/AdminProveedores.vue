@@ -1,6 +1,7 @@
 <template>
   <div>
 
+<NavBarAdmin></NavBarAdmin>
     <v-container>
       <v-alert v-model="alert.show" :type="alert.type" dismissible>
         {{ alert.message }}
@@ -75,9 +76,7 @@
     </v-container>
 
 
-    <v-btn @click="add = true" color="red" large right fixed botoom fab dark
-      ><v-icon>mdi-plus</v-icon></v-btn
-    >
+
 
     
     <!--  Modal Editar Producto
@@ -185,12 +184,13 @@
 import Proveedor from "../../apis/Proveedor";
 import Productos from "../../apis/Productos";
 import Categorias from "../../apis/Categorias";
+import NavBarAdmin from "../../components/NavBarAdmin.vue"
 
 
 export default {
   name: "AdminProveedores",
   components: {
-
+NavBarAdmin
 
   },
   data: () => ({
@@ -210,7 +210,7 @@ export default {
     alert: { show: false },
     headers: [
       {
-        text: "Producto",
+        text: "Proveedor",
         align: "start",
         sortable: false,
         value: "nombre",

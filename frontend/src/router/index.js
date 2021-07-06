@@ -97,8 +97,8 @@ const routes = [
   ,
 
   {
-    path: '/AdminProveedores/',
-    name: 'AdminProveedores',
+    path: '/Admin-Proveedores/',
+    name: 'Admin-Proveedores',
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdminProveedores')
   }
