@@ -25,6 +25,7 @@ app.use("/cliente", require('./routes/cliente'));
 app.use("/metodos", require('./routes/metodopago'));
 //nuevo
 app.use("/estados", require('./routes/estados'));
+app.use("/administrador", require('./routes/administrador'));
 
 
 app.use(history())
