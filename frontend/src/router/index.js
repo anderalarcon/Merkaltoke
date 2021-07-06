@@ -105,6 +105,12 @@ const routes = [
     name: 'Productos-Pedido',
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/Productos-Pedido')
+  },
+  {
+    path: '/AdmiClientes',
+    name: 'AdmiClientes',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdmiClientes')
   }
   ,
 

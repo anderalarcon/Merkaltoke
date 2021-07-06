@@ -37,9 +37,10 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="12" sm="6" md="6">
+                          <v-col cols="12" sm="6" md="7">
                             <v-text-field
                               label="Nombres y apellidos*"
+                              outlined
                               required
                               hint="Requerido"
                               :rules="nameRules"
@@ -48,9 +49,10 @@
                             ></v-text-field>
                           </v-col>
 
-                          <v-col cols="12" sm="6" md="6">
+                          <v-col cols="12" sm="6" md="5">
                             <v-text-field
                               label="DNI*"
+                              outlined
                               hint="Requerido"
                               required
                               :rules="dniRules"
@@ -59,19 +61,33 @@
                               prepend-icon="mdi-account-box-outline"
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12">
+                          <v-col cols="12" sm="6" md="7">
                             <v-text-field
-                              label="Correo*"
+                              label="Correo"
+                              outlined
                               required
                               hint="Requerido"
                               :rules="emailRules"
                               v-model="clientToUpdate.email_cliente"
                               prepend-icon="mdi-email"
+                              disabled
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="6" md="5">
+                            <v-text-field
+                              label="Celular*"
+                              outlined
+                              hint="Requerido"
+                              required
+                              v-model="clientToUpdate.dni"
+                              type="number"
+                              prepend-icon="mdi-phone"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="12">
                             <v-text-field
                               label="Dirección*"
+                              outlined
                               required
                               hint="Requerido"
                               :rules="direccionRules"

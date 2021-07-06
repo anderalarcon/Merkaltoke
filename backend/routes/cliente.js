@@ -5,6 +5,20 @@ const path = require('path');
 const fs = require('fs');
 const mime = require('mime-types');
 
+//GET
+router.route("/get").get(async (req, res) => {
+  try {
+    const clientes = await pool.query("SELECT * FROM cliente");
+    res.status(200).json({
+      status: "success",
+      results: clientes.rows.length,
+      data: { clientes: clientes.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //GetId
 router.route("/get/:id_cliente").get(async (req, res) => {
   try {
