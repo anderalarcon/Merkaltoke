@@ -23,7 +23,7 @@ const routes = [
     name: 'Landing',
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Landing')
-  },,
+  },
   {
     path: '/Carrito',
     name: 'Carrito',
@@ -94,12 +94,33 @@ const routes = [
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/Indicadores')
   }  ,
-
+  {
+    path: '/AdmProductos/:id',
+    name: 'AdmProductos',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/AdmProductos')
+  }  ,
   {
     path: '/Productos-Pedido/:id',
     name: 'Productos-Pedido',
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/Productos-Pedido')
+  }
+  ,
+
+  {
+    path: '/Admin-Proveedores/',
+    name: 'Admin-Proveedores',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdminProveedores')
+  }
+  ,
+
+  {
+    path: '/AdminDetalles/',
+    name: 'AdminDetalles',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdminDetalles')
   }
 ]
 
