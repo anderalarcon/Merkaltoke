@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar></NavBar>
+  <NavBarAdmin></NavBarAdmin>
 
     <v-container>
       <v-alert v-model="alert.show" :type="alert.type" dismissible>
@@ -76,11 +76,7 @@
         >
       </v-card>
     </v-container>
-    <Footer></Footer>
-
-    <v-btn @click="add = true" color="red" large right fixed botoom fab dark
-      ><v-icon>mdi-plus</v-icon></v-btn
-    >
+   
 
     
 
@@ -157,16 +153,17 @@
 
 <script>
 
-import NavBar from "../components/NavBarProveedor";
-import Footer from "../components/Footer";
-import Proveedor from "../apis/Proveedor";
-import Productos from "../apis/Productos";
 
+import Footer from "../../components/Footer";
+import Proveedor from "../../apis/Proveedor";
+import Productos from "../../apis/Productos";
+import NavBarAdmin from "../../components/NavBarAdmin.vue"
 
 export default {
   name: "AdminProveedores",
   components: {
-    NavBar,
+    
+    NavBarAdmin,
     Footer,
   },
   data: () => ({
@@ -188,7 +185,7 @@ export default {
     alert: { show: false },
     headers: [
       {
-        text: "nombre",
+        text: "Proveedor",
         align: "start",
         sortable: false,
         value: "nombre",
@@ -216,8 +213,7 @@ export default {
         this.productos = res.data.data.productos;
         console.log(this.productos)
 
-        const categoria = await Categorias.get("/get");
-        this.categorias = categoria.data.data.categorias;
+       
 
         if (this.user.role == "proveedor") {
         } else {

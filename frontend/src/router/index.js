@@ -93,14 +93,6 @@ const routes = [
   
     component: () => import(/* webpackChunkName: "about" */ '../views/AdmProductos')
   }  ,
-
-  {
-    path: '/AdmProveedor/',
-    name: 'AdmProveedor',
-  
-    component: () => import(/* webpackChunkName: "about" */ '../views/AdmProveedor')
-  }
-  ,
   {
     path: '/Productos-Pedido/:id',
     name: 'Productos-Pedido',
@@ -108,10 +100,21 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/Productos-Pedido')
   }
   ,
- 
-  
- 
 
+  {
+    path: '/Admin-Proveedores/',
+    name: 'Admin-Proveedores',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdminProveedores')
+  }
+  ,
+
+  {
+    path: '/AdminDetalles/',
+    name: 'AdminDetalles',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdminDetalles')
+  }
 ]
 
 const router = new VueRouter({
