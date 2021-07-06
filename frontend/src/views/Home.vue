@@ -73,6 +73,7 @@
                 >
                   <v-radio label="Cliente" value="cliente"></v-radio>
                   <v-radio label="Proveedor" value="proveedor"></v-radio>
+                  
                 </v-radio-group>
                 <v-btn block class="primary mt-3" type="submit"
                   >Registrarse
@@ -219,10 +220,9 @@ export default {
             } else {
               if (this.user.role == "proveedor") {
                 this.$router.push("/ProfileProveedor");
-              } else {
-                if (this.user.role == "administrador"){
-                  this.$router.push("/ProfileAdmin");
-                }
+              } else 
+              if (this.user.role == "administrador"){
+                this.$router.push("/ProfileAdmin");
               }
             }
           }

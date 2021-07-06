@@ -4,6 +4,7 @@ const pool = require("../database/keys");
 const path = require('path');
 const fs = require('fs');
 const mime = require('mime-types');
+
 //GetId
 router.route("/get/:id").get(async (req, res) => {
   try {
@@ -20,3 +21,4 @@ router.route("/get/:id").get(async (req, res) => {
     console.error(err.message);
   }
 });
+module.exports = router;
