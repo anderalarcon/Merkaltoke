@@ -2,13 +2,13 @@ import pool from "../database/keys";
 
 const aunthentication = {};
 aunthentication.signUp = async (req, res) => {
-  const { nombre, email, password, role,direccion,dni, last_id_ } = req.body;
+  const { nombre, email, password, role, direccion, dni, last_id_ } = req.body;
 
   if (role == "cliente") {
     try {
       await pool.query(
         "INSERT INTO cliente (nombre_cliente,email_cliente,password_cliente,direccion_cliente,DNI,img_cliente)values($1,$2,$3,$4,$5,'usuario.jpg')",
-        [nombre, email, password,direccion,dni]
+        [nombre, email, password, direccion, dni]
       );
       await pool.query(
         "INSERT INTO tbl_carrito(id_cliente) ((SELECT MAX(ID_CLIENTE)FROM CLIENTE))"
@@ -39,7 +39,7 @@ aunthentication.signUp = async (req, res) => {
     try {
       await pool.query(
         "INSERT INTO proveedor (nombre_proveedor,email_proveedor,password_proveedor,direccion_proveedor,ruc,img_proveedor,activo)values($1,$2,$3,$4,$5,'usuario.jpg','Activo')",
-        [nombre, email, password,direccion,dni]
+        [nombre, email, password, direccion, dni]
       );
       res.status(200).json({
         message: "succesfull registred proveedor",
@@ -94,7 +94,7 @@ aunthentication.signIn = async (req, res) => {
         error,
       });
     }
-  } else {
+  } else if (role == "proveedor") {
     try {
       const proveedor = await (
         await pool.query(
@@ -102,8 +102,8 @@ aunthentication.signIn = async (req, res) => {
           [email, password]
         )
       ).rows;
-    
-      if (proveedor.length > 0 && proveedor[0].activo!="Inactivo") {
+
+      if (proveedor.length > 0 && proveedor[0].activo != "Inactivo") {
         res.status(200).json({
           id: proveedor[0].id_proveedor,
           nombre: proveedor[0].nombre_proveedor,
@@ -122,6 +122,34 @@ aunthentication.signIn = async (req, res) => {
         error,
       });
     }
+  } else {
+    try {
+      const administrador = await (
+        await pool.query(
+          "select * from admin where admin_nickname=$1 and password_admin=$2",
+          [email, password]
+        )
+      ).rows;
+      if (administrador.length > 0) {
+        res.status(200).json({
+          id: administrador[0].id,
+          nombre: administrador[0].admin_nickname,
+          email: administrador[0].password_admin,
+          role: "administrador",
+        });
+      } else {
+        res.status(200).json({
+          message: " Admin no existe",
+          NotFound: true,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        message: " An error has acurred",
+        error,
+      });
+    }
+
   }
 };
 module.exports = aunthentication;

@@ -73,6 +73,7 @@ export default {
     try {
       const id = this.$route.params.id;
       const res = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+       console.log(id);
       this.productos = res.data.data.productos;
     } catch (error) {
       console.log(error);

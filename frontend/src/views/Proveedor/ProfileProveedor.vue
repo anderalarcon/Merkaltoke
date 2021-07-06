@@ -210,10 +210,10 @@
           <v-spacer></v-spacer>
 
           <v-btn color="green darken-1" text @click="advertencia = false">
-            NO
+           No
           </v-btn>
 
-          <v-btn color="red" text @click="Cancel()"> SI </v-btn>
+          <v-btn color="red" text @click="Cancel()"> Si </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -237,7 +237,8 @@ export default {
     productos: [],
     datos: {},
     proveedorToUpdate: {},
-
+    activo:"",
+    visible:"",
     dialog1: false,
     dialog2: false,
     advertencia: false,
@@ -312,12 +313,19 @@ export default {
           var id = this.user.id;
           
           var id2 =id.toString();
-          const nuevo_producto = await Productos.put(`/updatecancel/${id}`);
-          const c = await Proveedor.put(`/updatecancel/${id}`);
+           const activo='Inactivo'
+             const visible='no'
+          const nuevo_producto = await Productos.put(`/updatecancel/${id}/${visible}`);
+          const c = await Proveedor.put(`/updatecancel/${id}/${'Inactivo'}`);
 
-          const a = await Proveedor.get(`/getProductos-Proveedor/${id}`);
+         // const a = await Proveedor.get(`/getProductos-Proveedor/${id}`);
 
-        this.productos = a.data.data.productos;
+        //this.productos = a.data.data.productos;
+        setTimeout(()=>{
+      	sessionStorage.removeItem("session");
+         window.location.reload(); 
+        },1000)
+
         
           console.log(this.productos)
 
