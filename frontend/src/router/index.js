@@ -23,7 +23,7 @@ const routes = [
     name: 'Landing',
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Landing')
-  },,
+  },
   {
     path: '/Carrito',
     name: 'Carrito',
@@ -87,13 +87,31 @@ const routes = [
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/Indicadores')
   }  ,
+  {
+    path: '/AdmProductos/:id',
+    name: 'AdmProductos',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/AdmProductos')
+  }  ,
 
+  {
+    path: '/AdmProveedor/',
+    name: 'AdmProveedor',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/AdmProveedor')
+  }
+  ,
   {
     path: '/Productos-Pedido/:id',
     name: 'Productos-Pedido',
   
     component: () => import(/* webpackChunkName: "about" */ '../views/Proveedor/Productos-Pedido')
   }
+  ,
+ 
+  
+ 
+
 ]
 
 const router = new VueRouter({
