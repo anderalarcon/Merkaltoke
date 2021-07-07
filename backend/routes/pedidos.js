@@ -27,6 +27,30 @@ router.route("/create").post(async (req, res) => {
   }
 });
 
+//Crear devolver pedido
+router.route("/create_Devolucion").post(async (req, res) => {
+  try {
+/*     const { fecha } = req.body;
+    const { estado } = req.body; */
+    const { motivo } = req.body;
+    const { detalle_motivo } = req.body;
+    const { id_pedido } = req.body;
+
+    const newPedido = await pool.query(
+      "INSERT INTO tbl_devolucion_pedido(motivo,detalle_motivo,fecha,procede,id_pedido) VALUES($1,$2,CURRENT_TIMESTAMP,'?',$3) RETURNING *",
+      [motivo,detalle_motivo,id_pedido]
+    );
+    res.status(200).json({
+      status: "succes",
+      data: {
+        pedido: newPedido.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //GET
 router.route("/get").get(async (req, res) => {
   try {
@@ -57,11 +81,40 @@ router.route("/get/:id_pedido").get(async (req, res) => {
   }
 });
 
+//GetId
+router.route("/getDev/:id_pedido").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const pedido = await pool.query("SELECT * FROM tbl_devolucion_pedido WHERE id_pedido=$1", [id_pedido]);
+    res.status(200).json({
+      status: "success",
+      data: { pedido: pedido.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
 //GetId_cliente
 router.route("/get_pedidos_cliente/:id_cliente").get(async (req, res) => {
   try {
     const { id_cliente } = req.params;
-    const pedido = await pool.query("select p.id_pedido, p.fecha,p.id_estado,est.estado, p.total,p.id_cliente,p.id_metodo,m.metodo from tbl_pedido p , tbl_metodo_pago m,tbl_estado est where p.id_metodo=m.id_metodo_pago and p.id_estado=est.id_estado and id_cliente=$1; ", [id_cliente]);
+    const pedido = await pool.query("select p.id_pedido, p.fecha,p.id_estado,est.estado, p.total,p.id_cliente,p.id_metodo,m.metodo from tbl_pedido p , tbl_metodo_pago m,tbl_estado est where p.id_metodo=m.id_metodo_pago and p.id_estado=est.id_estado and id_cliente=$1 and p.id_pedido not in (select p.id_pedido from tbl_pedido p,tbl_devolucion_pedido dev where dev.id_pedido=p.id_pedido and id_cliente=$1); ", [id_cliente]);
+    res.status(200).json({
+      status: "success",
+      data: { pedido: pedido.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//GetId_cliente pedidos devueltos
+router.route("/get_pedidos_devueltos_cliente/:id_cliente").get(async (req, res) => {
+  try {
+    const { id_cliente } = req.params;
+    const pedido = await pool.query("select dev.motivo, dev.detalle_motivo, dev.fecha as fechaDev, dev.procede, p.id_pedido, p.fecha as fechapedido,p.id_estado,est.estado, p.total,p.id_cliente,p.id_metodo,m.metodo from tbl_devolucion_pedido dev, tbl_pedido p , tbl_metodo_pago m,tbl_estado est where p.id_metodo=m.id_metodo_pago and dev.id_pedido = p.id_pedido and p.id_estado=est.id_estado  and id_cliente=$1; ", [id_cliente]);
     res.status(200).json({
       status: "success",
       data: { pedido: pedido.rows },
@@ -152,6 +205,68 @@ router.route("/getpedido_proveedor/:id_proveedor").get(async (req, res) => {
     res.status(200).json({
       status: "success",
       data: { pedidos: pedidosnuevos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//get pedidos para devolucion
+router.route("/getpedido_prov_devolucion/:id_proveedor").get(async (req, res) => {
+  try {
+    const { id_proveedor } = req.params;
+    const pedidosnuevos = await pool.query("SELECT distinct(dev.id_pedido), dev.motivo, dev.detalle_motivo,dev.fecha, dev.procede FROM tbl_devolucion_pedido dev, proveedor prov, tbl_producto prod, tbl_pedido pedi, tbl_pedido_detalle pedd WHERE dev.id_pedido=pedi.id_pedido AND pedi.id_pedido= pedd.id_pedido AND pedd.id_producto=prod.id_producto AND prod.id_proveedor = prov.id_proveedor AND prov.id_proveedor =$1 ORDER BY dev.fecha ASC; ", [id_proveedor]);
+    res.status(200).json({
+      status: "success",
+      data: { pedidos: pedidosnuevos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//get devolucion datos del pedido
+router.route("/getpedido_dev/:id_pedido").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const Devol = await pool.query("SELECT distinct(id_pedido), motivo, detalle_motivo,fecha, procede FROM tbl_devolucion_pedido WHERE id_pedido = $1; ", [id_pedido]);
+    res.status(200).json({
+      status: "success",
+      data: { pedidos: Devol.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//get count devolucion datos del pedido
+router.route("/getpedido_dev_count/:id_pedido").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const Devol = await pool.query("SELECT count(id_pedido)FROM tbl_devolucion_pedido WHERE id_pedido = $1; ", [id_pedido]);
+    res.status(200).json({
+      status: "success",
+      data: { pedidos: Devol.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//actualizar procede de devolucion
+router.route("/updateDev/:id_pedido/:procede").put(async (req, res) => {
+  try {
+    const {id_pedido } = req.params;
+    const { procede } = req.params;
+
+    const carrito = await pool.query(
+      "UPDATE tbl_devolucion_pedido SET procede=$1 where id_pedido=$2 returning *",
+      [procede,id_pedido]
+    );
+    res.status(200).json({
+      status:"success",
+      data:{carrito:carrito.rows[0]},
+
     });
   } catch (err) {
     console.error(err.message);
@@ -271,6 +386,22 @@ router.route("/getestado/:id_estado/:id_pedido").get(async (req, res)  =>{
 
 });
 
+//GetestadobyidDevolucion
+router.route("/getestDev/:id_pedido").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const pedidoestado = await pool.query(
+      "select p.id_pedido, dev.procede from tbl_pedido p , tbl_devolucion_pedido dev where dev.id_pedido=p.id_pedido and  p.id_pedido=$1;",
+      [id_pedido]
+    );
+    res.status(200).json({
+      status: "success",
+      data: { pedidoestado: pedidoestado.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 //Getestadobyid
 router.route("/getest/:id_pedido").get(async (req, res) => {

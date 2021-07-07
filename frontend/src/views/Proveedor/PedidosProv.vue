@@ -15,7 +15,7 @@
           <v-card
             elevation="15"
             shaped
-            loading
+            
             class="mt-5 mb-5"
             style="margin: auto"
           >
@@ -58,6 +58,50 @@
                       fab
                       class=""
                       @click="readEstadoToUpdate(row.item.id_pedido)"
+                    >
+                      <v-icon small> mdi-check </v-icon>
+                    </v-btn>
+                  </td>
+                </tr>
+              </template></v-data-table
+            >
+          </v-card>
+          <v-card
+            elevation="15"
+            shaped
+            
+            class="mt-5 mb-5"
+            style="margin: auto"
+          >
+            <v-card-title>
+              Gestión de Devolucion de Pedidos
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search2"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+              ></v-text-field>
+            </v-card-title>
+            <v-data-table :headers="headers3" :items="Devoluciones" :search="search2">
+              <template v-slot:item="row">
+                <tr>
+                  <td>{{ row.item.id_pedido }}</td>
+                  <td>{{ row.item.motivo }}</td>
+                  <td>{{ row.item.detalle_motivo }}</td>
+                  <td>{{ row.item.fecha }}</td>
+                  <td>{{ row.item.procede }}</td>
+                  
+
+                  <td>
+                    <v-btn
+                      color="orange"
+                      x-small
+                      small
+                      dark
+                      fab
+                      class=""
+                      @click="readDevToUpdate(row.item.id_pedido)"
                     >
                       <v-icon small> mdi-check </v-icon>
                     </v-btn>
@@ -131,6 +175,29 @@
             >
             </v-select>
             <v-btn block class="success ma-2" type="submit"
+              >Actualizar estado</v-btn
+            >
+          </v-card-text>
+        </v-form>
+      </v-card>
+    </v-dialog>
+      <!--  Modal Actualizar Devolucion-->
+    <v-dialog v-model="updatingDev" max-width="600px">
+      <v-card>
+        <v-form ref="updateDevolucion" @submit.prevent="updateDevolucion()">
+          <v-card-title>Editar Estado de Procede</v-card-title>
+          <v-card-text>
+            <v-select
+              :items="procede"
+              prepend-icon="mdi-pencil"
+              item-text="procede"
+              item-value="procede"
+              label="¿Procede?"
+              v-model="DevolucionToUpdate.procede"
+              :rules="[(v) => !!v || 'Estado de procede es requerido']"
+            >
+            </v-select>
+            <v-btn block class="success ma-2" type="submit"
               >Actualizar datos</v-btn
             >
           </v-card-text>
@@ -162,10 +229,14 @@ export default {
   },
   data: () => ({
     estadoToUpdate: [],
+    DevolucionToUpdate:[],
     updating: false,
+    updatingDev:false,
     pedidoestado: {},
+    auxId:0,
     estados: [],
-    
+    procede:["?","Si","No"],
+    Devoluciones:[],
     alert: { show: false },
 
     value: [423, 446, 675, 510, 590, 610, 760],
@@ -177,6 +248,7 @@ export default {
     pedidos: [],
     search: "",
     search1: "",
+    search2:"",
     headers: [
       {
         text: "Pedido",
@@ -202,6 +274,20 @@ export default {
       { text: "Cantidad", value: "cantidad", sortable: true },
       { text: "Precio", value: "precio", sortable: true },
     ],
+    headers3:[
+      {
+        text: "id_pedido",
+        align: "start",
+        sortable: true,
+        value: "id_pedido",
+      },
+      { text: "Motivo", value: "motivo", sortable: true },
+      { text: "Detalle motivo", value: "detalle_motivo", sortable: true },
+      { text: "Fecha", value: "fecha", sortable: true },
+      { text: "Procede", value: "procede", sortable: true },
+      { text: "Operacion", value: "Operacion", sortable: false },
+      
+    ]
   }),
 
   created: async function () {
@@ -225,6 +311,10 @@ export default {
         const estados = await Estados.get("/get");
         this.estados = estados.data.data.estados;
 
+        //devolucion
+        const dev = await Pedidos.get(`/getpedido_prov_devolucion/${id}`);
+        this.Devoluciones = dev.data.data.pedidos;
+
         if (this.user.role == "proveedor") {
           console.log("es proveedor");
         } else {
@@ -246,6 +336,44 @@ export default {
       this.mostrarProductos = res.data.data.pedidos;
     },
 
+    async readDevToUpdate(id_pedido){
+     const est = await Pedidos.get(`/getDev/${id_pedido}`);
+      this.updatingDev = true;
+      this.auxId = id_pedido;
+      this.DevolucionToUpdate=est.data.data.pedido;
+    },
+
+    async updateDevolucion(){
+      let valid = this.$refs.updateDevolucion.validate();
+      if(valid){
+        try{
+            const res = await Pedidos.put(
+            `/updateDev/${this.auxId}/${this.DevolucionToUpdate.procede}`,this.DevolucionToUpdate
+          );
+         const index = this.Devoluciones.findIndex(
+            (c) => c.id_pedido == this.DevolucionToUpdate.id_pedido
+          );
+          const aux2 = await Pedidos.get(
+            `/getestDev/${this.DevolucionToUpdate.id_pedido}`
+          );
+          this.Devoluciones[index].procede = aux2.data.data.pedidoestado.procede;
+          this.updatingDev = false;
+          this.alert = {
+            show: true,
+            type: "success",
+            message: "Procede de la devolución modificado con éxito",
+          };
+        }catch (error) {
+          this.updatingDev = false;
+          this.alert = {
+            show: true,
+            type: "error",
+            message: error,
+          };
+        }
+      }
+    },
+    
     async readEstadoToUpdate(id_pedido) {
       const est = await Pedidos.get(`/get/${id_pedido}`);
       this.updating = true;
