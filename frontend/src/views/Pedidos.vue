@@ -40,6 +40,15 @@
             >
               Cancelar</v-btn
             >
+            <v-btn
+                @click="devolverModal(pedido.id_pedido)"
+                v-if="pedido.estado==='Entregado'"
+                color="red"
+                class="pa-2"
+              >
+                Devolver Pedido
+            </v-btn>
+
           </v-card-actions>
 
           <v-expand-transition>
@@ -50,12 +59,106 @@
 
                 <p>Metodo de Pago: {{ pedido.metodo }}</p>
                 <p>Monto total: {{ pedido.total }}</p>
-              </v-card-text>
+                </v-card-text>             
+
+              
             </div>
+            
           </v-expand-transition>
         </v-card></v-row
       >
+    <h1>Devoluciones</h1>
+      <v-row justify="center">
+        
+        <v-card
+          class="mx-3 mt-5 mb-5"
+          max-width="344"
+          v-for="pedido in pedidos1"
+          :key="pedido.id_pedido"
+        >
+   
+
+          <v-card-title> Pedido: {{ pedido.id_pedido }} </v-card-title>
+
+          <v-card-subtitle> Fecha: {{ pedido.fechapedido }} </v-card-subtitle>
+        
+          <v-card-actions>
+            <v-btn
+              color="success"
+              class="btn btn"
+              v-bind:href="'/Comprobante/' + pedido.id_pedido"
+              >Comprobante</v-btn
+            >
+            <v-spacer> </v-spacer>
+
+          </v-card-actions>
+
+          <v-expand-transition>
+            <div>
+              <v-divider></v-divider>
+              <v-card-text>
+                <p>Estado: {{ pedido.estado }}</p>
+                <p>Fecha Recepcion: {{pedido.fechadev}}</p>
+                <p>Metodo de Pago: {{ pedido.metodo }}</p>
+                <p>Monto total: {{ pedido.total }}</p>
+                <p>Motivo devolucion: {{pedido.motivo}}</p>
+                <p>Detalle: {{pedido.detalle_motivo}}</p>
+                <p>¿Procede?: <b>{{pedido.procede}}</b></p>
+                <p v-if="pedido.procede=='Si'">Observación: <b>El pedido ha sido devuelto y se ha procedido a la devolucion de {{ pedido.total }} soles </b> </p>
+                <p v-if="pedido.procede=='No'">Observación: <b>Se comunicará con usted para informarle del porqué no procedió la devolución </b> </p>
+              </v-card-text>             
+              
+            </div>
+            
+          </v-expand-transition>
+        </v-card></v-row
+      >
+
     </v-container>
+    <!--modal devolucion pedido-->
+    <v-dialog v-model="modalDevo"  max-width="700" >
+      <v-card>
+        <v-card-title>Devolución de Pedidos</v-card-title>
+          <v-form ref="CrearDevolucion" @submit.prevent="CrearDevolucion(aux_dev)">
+            <v-container>
+
+              <v-card-text >
+                <v-select
+                  :items="motivos"
+                  label="motivo"
+                  v-model="Devolucion.motivo"
+                >
+                </v-select>
+                <v-textarea
+                  name="input-7-1"
+                  
+                  label="Introduzca detalles (opcional)"
+                  v-model="Devolucion.detalle_motivo"
+                  auto-grow
+                  :counter=500
+                  value=""               
+                >
+                </v-textarea>
+
+                <v-card-actions>
+                    <v-btn class="mt-5" @click="modalDevo=false">
+                    Salir
+                    </v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="red"
+                    class="mt-5"
+                    type="submit"
+                  >
+                      Confirmar Devolución
+                  </v-btn>
+                </v-card-actions>
+              </v-card-text>
+            </v-container>
+          </v-form>
+
+      </v-card>
+    </v-dialog>
     <!-- modal cancelar pedido -->
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
@@ -93,11 +196,16 @@ export default {
   },
   data: () => ({
     alert: { show: false, message: "" },
-
+    DevolucionLista:[],
     pedidos: [],
+    pedidos1:[],
+    Devolucion:{},
+    DevolucionLista1:{},
     show: false,
     dialog: false,
+    modalDevo: false,
     aux: {},
+    motivos:["Mal estado","Productos abiertos","Productos vencidos"]
   }),
 
   created: async function () {
@@ -109,6 +217,14 @@ export default {
 
       const res = await Pedidos.get(`/get_pedidos_cliente/${this.user.id}`);
       this.pedidos = res.data.data.pedido;
+
+      const res1 = await Pedidos.get(`/get_pedidos_devueltos_cliente/${this.user.id}`);
+      this.pedidos1 = res1.data.data.pedido;
+
+      const ListaDev = await Pedidos.get(`/getpedido_dev/${this.pedidos.id_pedido}`);
+      this.DevolucionLista = ListaDev.data.data.pedidos;
+      
+
       console.log(this.pedidos);
     } catch (error) {
       console.log(error);
@@ -118,6 +234,43 @@ export default {
     openModal(id) {
       this.dialog = true;
       this.aux = id;
+    },
+    devolverModal(id_ped){
+      this.aux_dev = id_ped;
+      this.modalDevo = true;
+    },
+
+   /* async ProcedeoNo(idpedido){
+      try{
+      const ListaDev1 =await Pedidos.get(`/getpedido_dev_count/${idpedido}`);
+      this.DevolucionLista1 = ListaDev1.data.data.pedidos;
+      console.log(1);
+      console.log(this.DevolucionLista1);
+      return this.DevolucionLista1.count;
+      }catch(error){
+          console.log(error);
+      }
+    },*/
+
+    async CrearDevolucion(id_ped){
+      let valid = this.$refs.CrearDevolucion.validate();
+      if (valid) {
+        try{
+        this.Devolucion.id_pedido = id_ped;
+        const devPedido = await Pedidos.post("/create_Devolucion", this.Devolucion);
+        this.$refs.CrearDevolucion.reset(); //borrar todo en modal
+        this.modalDevo = false; //cerrar modal
+        this.alert = {
+            show: true,
+            type: "success",
+            message: "Petición de devolución creada",
+        };
+        location.reload();
+        }catch(error){
+          console.log(error);
+        }
+      }
+
     },
     async deleteProductsFromVoucher(id) {
       try {
