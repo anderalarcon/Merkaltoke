@@ -1,0 +1,1 @@
+.carrito{max-width:1000px;-webkit-animation:animate 10s linear infinite;animation:animate 10s linear infinite}@-webkit-keyframes animate{0%{transform:translateX(-1100px)}to{transform:translateX(1100px)}}@keyframes animate{0%{transform:translateX(-1100px)}to{transform:translateX(1100px)}}
