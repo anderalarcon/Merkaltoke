@@ -108,7 +108,7 @@
                 >
                   <v-radio label="Cliente" value="cliente"></v-radio>
                   <v-radio label="Proveedor" value="proveedor"></v-radio>
-                   <v-radio label="Administrador" value="administrador"></v-radio>
+            
                 </v-radio-group>
                 <v-btn block class="success mt-3" type="submit"
                   >Ingresar

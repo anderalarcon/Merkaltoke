@@ -10,7 +10,8 @@
       <v-toolbar-title>Merkaltoke</v-toolbar-title>
       <v-btn text to="/Usuarios"> Usuarios</v-btn>
       <v-btn text to="/Admin-Proveedores"> Proveedores </v-btn>
-      <v-btn text to="/Pedidos"> Pedidos </v-btn>
+      
+    
     </v-toolbar>
   </div>
 </template>
