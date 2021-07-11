@@ -21,9 +21,9 @@
               <td>{{ row.item.email_cliente }}</td>
               <td>{{ row.item.direccion_cliente }}</td>
               <td>{{ row.item.dni }}</td>
-              <td :id="`visible${row.item.id_cliente}`">
+            <!--   <td :id="`visible${row.item.id_cliente}`">
                 {{ row.item.visible }}
-              </td>
+              </td> -->
 
               <td>
                 <v-btn
@@ -38,7 +38,7 @@
                   <v-icon small> mdi-pencil </v-icon></v-btn>
 
 
-                <v-btn
+           <!--      <v-btn
                   color="red"
                   x-small
                   small
@@ -46,7 +46,7 @@
                   fab
                   @click="readProductoToDelete(row.item.id_cliente)"
                 >
-                  <v-icon small> mdi-delete </v-icon></v-btn>
+                  <v-icon small> mdi-delete </v-icon></v-btn> -->
                 
                
                  
@@ -167,6 +167,8 @@ export default {
       { text: "Correo", value: "Correo", sortable: true },
       { text: "Direccion", value: "Direccion" },
       { text: "DNI", value: "activo", sortable: false },
+            { text: "Operaciones", sortable: false },
+
     ],
     add: false,
   }),
@@ -186,8 +188,8 @@ export default {
         this.productos = res.data.data.productos;
         console.log(this.productos)
 
-        const categoria = await Categorias.get("/get");
-        this.categorias = categoria.data.data.categorias;
+    /*     const categoria = await Categorias.get("/get");
+        this.categorias = categoria.data.data.categorias; */
 
         if (this.user.role == "administrador") {
         } else {
