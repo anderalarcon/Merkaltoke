@@ -8,7 +8,7 @@
       </v-alert></v-container
     >
     <v-container class="mt-5">
-      <v-card elevation="15" shaped loading class="pb-3">
+      <v-card elevation="15" shaped  class="pb-3">
         <v-card-title>
           Gestión de Proveedores
           <v-spacer></v-spacer>
