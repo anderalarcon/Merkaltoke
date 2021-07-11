@@ -28,6 +28,7 @@
               <td>{{ row.item.total }}</td>
               <td>{{ row.item.nombre_cliente }}</td>
               <td>{{ row.item.metodo }}</td>
+              <td>
               <v-btn
                 color="green"
                 x-small
@@ -37,7 +38,9 @@
                 
               >
                 <v-icon small> mdi-eye </v-icon>
-              </v-btn>
+              </v-btn>                
+              </td>
+
             </tr>
           </template></v-data-table
         >
@@ -69,14 +72,15 @@ export default {
       {
         text: "Pedido",
         align: "start",
-        sortable: false,
-        value: "nombre",
+        sortable: true,
+        value: "id_pedido",
       },
       { text: "Fecha", value: "fecha", sortable: true },
       { text: "Estado", value: "estado" },
       { text: "Total", value: "total", sortable: true },
-      { text: "Cliente", value: "cliente", sortable: true },
+      { text: "Cliente", value: "nombre_cliente", sortable: true },
       { text: "Metodo", value: "metodo", sortable: true },
+       { text: "Operacion", value: "operacion", sortable: false },
     ],
 
     add: false,

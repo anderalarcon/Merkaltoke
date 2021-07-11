@@ -12,9 +12,14 @@
         <v-card-title>
           Gestión de Proveedores
           <v-spacer></v-spacer>
-      
+           <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+          ></v-text-field>     
         </v-card-title>
-        <v-data-table :headers="headers" :items="proveedores">
+        <v-data-table :headers="headers" :items="proveedores" :search="search">
           <template v-slot:item="row">
             <tr>
               <td>{{ row.item.nombre_proveedor }}</td>
@@ -188,10 +193,10 @@ export default {
         text: "Proveedor",
         align: "start",
         sortable: false,
-        value: "nombre",
+        value: "nombre_proveedor",
       },
-      { text: "Correo", value: "Correo", sortable: true },
-      { text: "Direccion", value: "Direccion" },
+      { text: "Correo", value: "email_proveedor", sortable: true },
+      { text: "Direccion", value: "direccion_proveedor" },
       { text: "Activo", value: "activo", sortable: false },
     ],
 
