@@ -19,14 +19,50 @@ router.route("/get").get(async (req, res) => {
   }
 });
 
-//GetId
+//GetId-Admi
+router.route("/getAdmi/:id_cliente").get(async (req, res) => {
+  try {
+    console.log("hola")
+    const { id_cliente } = req.params;
+    const clientes = await pool.query(
+      "SELECT * FROM cliente WHERE ID_CLIENTE=$1", 
+      [id_cliente]);
+    res.status(200).json({
+      status: "success",
+      data: { clientes: clientes.rows[0] },
+    });
+    //console.log(cliente)
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//GetID-Cliente
 router.route("/get/:id_cliente").get(async (req, res) => {
   try {
     const { id_cliente } = req.params;
-    const producto = await pool.query("SELECT * FROM cliente WHERE ID_cliente=$1", [id_cliente]);
+    const producto = await pool.query(
+      "SELECT * FROM cliente WHERE ID_cliente=$1", 
+      [id_cliente]);
     res.status(200).json({
       status: "success",
       data: { cliente: producto.rows[0] },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//DELETE
+router.route("/delete/:id_cliente").delete(async (req, res) => {
+  try {
+    const { id_cliente } = req.params;
+    const clienteDelete = await pool.query(
+      "DElETE FROM cliente WHERE ID_CLIENTE=$1",
+      [id_cliente]
+    );
+    res.status(200).json({
+      message:'Cliente eliminado'
     });
   } catch (err) {
     console.error(err.message);

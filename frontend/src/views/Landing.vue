@@ -61,6 +61,66 @@
           </v-card-actions>
         </v-card>
       </v-row>
+
+      <!--
+      <v-row justify="center">
+        <v-card
+          elevation="24"
+          max-width="444"
+          class="mx-auto"
+        >
+          <v-system-bar lights-out></v-system-bar>
+          <v-carousel
+            :continuous="false"
+            :cycle="cycle"
+            :show-arrows="false"
+            hide-delimiter-background
+            delimiter-icon="mdi-minus"
+            height="300"
+          >
+            <v-carousel-item
+              v-for="(slide, i) in slides"
+              :key="i"
+            >
+              <v-sheet
+                :color="colors[i]"
+                height="100%"
+                tile
+              >
+                <v-row
+                  class="fill-height"
+                  align="center"
+                  justify="center"
+                >
+                  <div class="text-h2">
+                    <v-img max-width="100%" height="100%" v-bind:src="require('../../../backend/public/uploads/' + slide.img_proveedor)"> </v-img>
+                  </div>
+                </v-row>
+              </v-sheet>
+            </v-carousel-item>
+          </v-carousel>
+          <v-list two-line>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-img max-width="100%" height="100%" v-bind:src="require('../../../backend/public/uploads/' + slides[0].img_proveedor)"> </v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>John Leider</v-list-item-title>
+                <v-list-item-subtitle>Author</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-switch
+                  v-model="cycle"
+                  label="Cycle Slides"
+                  inset
+                ></v-switch>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-row>
+      -->
+
       <h3
         style="height: 300px; padding-top: 150px"
         class="text-center"
@@ -89,6 +149,16 @@ export default {
     search: "",
     categorias: [],
     proveedores: [],
+
+    colors: [
+      'green',
+      'secondary',
+      'yellow darken-4',
+      'red lighten-2',
+      'orange darken-1',
+    ],
+    cycle: false,
+    slides: [],
   }),
 
   computed: {
@@ -107,6 +177,8 @@ export default {
       this.categorias = res.data.data.categorias;
       const proveedores = await Proveedor.get("/get");
       this.proveedores = proveedores.data.data.proveedores;
+      this.slides = proveedores.data.data.proveedores;
+      console.log(this.proveedores.in)
       this.user = JSON.parse(sessionStorage.getItem("session"));
       if (this.user == null) {
         this.$router.push("/");

@@ -245,7 +245,7 @@ export default {
         if (this.user.role == "cliente") {
           const datos_cliente = await Cliente.get(`/get/${this.user.id}`);
           this.datos = datos_cliente.data.data.cliente;
-          console.log(this.datos.img_cliente);
+          console.log(this.datos);
           this.clientToUpdate = datos_cliente.data.data.cliente;
         } else {
           this.$router.push("/ProfileProveedor");

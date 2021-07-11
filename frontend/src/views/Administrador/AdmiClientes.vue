@@ -26,9 +26,9 @@
               <td>{{ row.item.email_cliente }}</td>
               <td>{{ row.item.direccion_cliente }}</td>
               <td>{{ row.item.dni }}</td>
-              <td :id="`visible${row.item.id_cliente}`">
+            <!--   <td :id="`visible${row.item.id_cliente}`">
                 {{ row.item.visible }}
-              </td>
+              </td> -->
 
               <td>
                 <v-btn
@@ -40,21 +40,7 @@
                   class=""
                   @click="ClienteToUpdate(row.item.id_cliente)"
                 >
-                  <v-icon small> mdi-pencil </v-icon></v-btn>
-
-
-                <v-btn
-                  color="red"
-                  x-small
-                  small
-                  dark
-                  fab
-                  @click="readProductoToDelete(row.item.id_cliente)"
-                >
-                  <v-icon small> mdi-delete </v-icon></v-btn>
-                
-               
-                 
+                  <v-icon small> mdi-pencil </v-icon></v-btn>                 
               </td>
             </tr>
           </template></v-data-table
@@ -66,7 +52,7 @@
     
     <v-dialog v-model="updating" msx-width="600px">
       <v-card>
-        <v-form ref="updateProveedor" @submit.prevent="updateProveedor()">
+        <v-form ref="updateCliente" @submit.prevent="updateCliente()">
           <v-card-title>Editar Cliente</v-card-title>
           <v-card-text>
             <v-text-field
@@ -100,35 +86,11 @@
               :rules="[(v) => !!v || 'Direccion es requerido']"
             >
             </v-text-field>
-           
-            
-           
             <v-btn block class="success ma-2" type="submit"
               >Actualizar datos</v-btn
             >
           </v-card-text>
         </v-form>
-      </v-card>
-    </v-dialog>
-
-    
-     <v-dialog v-model="advertencia2"  max-width="450">
-      <v-card>
-        <v-card-title class="headline"> CUENTA PROVEEDOR </v-card-title>
-
-        <v-card-text> ¿Desea ACTIVAR O DESACTIVAR CUENTA ? </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn color="green darken-1" text @click="Activar(prueba)">
-            ACTIVAR
-          </v-btn>
-           
-
-          <v-btn color="red" text @click="Cancel(prueba)"> DESACTIVAR </v-btn>
-          
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -160,9 +122,8 @@ export default {
     
     productos: [],
     clientToUpdate: [],
-    productoToUpdate: [],
-    advertencia2: false,
     updating: false,
+    deleting: false,
     advertencia: false,
     dialogDelete: false,
     productoToDelete: {},
@@ -171,7 +132,9 @@ export default {
       { text: "Nombre", value: "nombre_cliente", sortable: false, align: "start"},
       { text: "Correo", value: "email_cliente ", sortable: true },
       { text: "Direccion", value: "direccion_cliente" },
-      { text: "DNI", value: "activo", sortable: false },
+      { text: "DNI", value: "dni", sortable: false },
+            { text: "Operaciones", sortable: false },
+
     ],
     add: false,
   }),
@@ -191,8 +154,8 @@ export default {
         this.productos = res.data.data.productos;
         console.log(this.productos)
 
-        const categoria = await Categorias.get("/get");
-        this.categorias = categoria.data.data.categorias;
+    /*     const categoria = await Categorias.get("/get");
+        this.categorias = categoria.data.data.categorias; */
 
         if (this.user.role == "administrador") {
         } else {
@@ -209,18 +172,19 @@ export default {
     async ClienteToUpdate(id_cliente) {
         
      // const res = await Proveedor.get(`/get/${id_proveedor}`);
-      const res = await Cliente.get(`/get/${id_cliente}`)
+     console.log(id_cliente)
+      const res = await Cliente.get(`/getAdmi/${id_cliente}`)
       this.updating = true;
+      console.log(res.data.data.clientes)
       this.clientToUpdate = res.data.data.clientes;
       console.log(this.clientToUpdate)
     },
     
-    async updateProveedor() {
-
+    async updateCliente() {
          
       console.log(this.clientToUpdate);
-      await Proveedor.put(
-        `/perfilUpdate/${this.clientToUpdate.id_proveedor}`,
+      await Cliente.put(
+        `/perfilUpdate/${this.clientToUpdate.id_cliente}`,
         this.clientToUpdate
       );
       
@@ -229,61 +193,14 @@ export default {
          window.location.reload(); 
        
         },1000)
-
     },
 
-    async Cancel(id_proveedor) {
-         
-          var id =id_proveedor.toString();
-             const activo='Inactivo'
-             const visible='no'
-          
-          const nuz = await Productos.put(`/updatecancel/${id}/${visible}`);
-          const c = await Proveedor.put(`/updatecancel/${id}/${activo}`);
-          console.log('camcel')
-
-       //   const a = await Proveedor.get(`/getProductos-Proveedor/${id}`);
-
-
-       // this.productos = a.data.data.productos;
-        
-       //   console.log(this.productos)
-
-        this.advertencia2 = false;
-        setTimeout(()=>{
-      	
-         window.location.reload(); 
-        },1000)
-          
+    //deleteCliente
+    async deleteCliente(id_cliente) {
+      //console.log(this.prueba)
+      const res = await Cliente.delete(`/delete/${id_cliente}`)
+      this.deleting = false;
     },
-     async Activar(id_proveedor) {
-        const activo='Activo';
-        const visible='si'
-          var id =id_proveedor.toString();
-          const d = await Productos.put(`/updatecancel/${id}/${visible}`);
-         
-          const f = await Proveedor.put(`/updatecancel/${id}/${activo}`);
-
-        //  const a = await Proveedor.get(`/getProductos-Proveedor/${id}`);
-
-
-       // this.productos = a.data.data.productos;
-        
-        //  console.log(this.productos)
-
-        this.advertencia2 = false;
-        setTimeout(()=>{
-      	
-         window.location.reload(); 
-        },1000)
-          
-    },
-    async readCuentaToDelete(id_proveedor) {
-     
-      this.advertencia2 = true;
-      this.prueba = id_proveedor;  
-    },
-  
   },
 };
 </script>
