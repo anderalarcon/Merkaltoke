@@ -23,9 +23,7 @@
               <td>{{ row.item.activo }}</td>
               <td :id="`visible${row.item.id_proveedor}`">
                 {{ row.item.visible }}
-              </td>
-
-              <td>
+            
                 <v-btn
                   color="orange"
                   x-small
@@ -38,7 +36,7 @@
                   <v-icon small> mdi-pencil </v-icon></v-btn>
 
 
-                <v-btn
+            <!--     <v-btn
                   color="red"
                   x-small
                   small
@@ -46,7 +44,7 @@
                   fab
                   @click="readProductoToDelete(row.item.id_proveedor)"
                 >
-                  <v-icon small> mdi-delete </v-icon></v-btn>
+                  <v-icon small> mdi-delete </v-icon></v-btn> -->
                 
                <v-btn
                   color="red"
@@ -193,6 +191,7 @@ export default {
       { text: "Correo", value: "Correo", sortable: true },
       { text: "Direccion", value: "Direccion" },
       { text: "Activo", value: "activo", sortable: false },
+      { text: "Operaciones",  sortable: false },
     ],
 
     add: false,

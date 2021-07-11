@@ -28,16 +28,11 @@
               <td>{{ row.item.total }}</td>
               <td>{{ row.item.nombre_cliente }}</td>
               <td>{{ row.item.metodo }}</td>
-              <v-btn
-                color="green"
-                x-small
-                small
-                dark
-                fab
-                
-              >
-                <v-icon small> mdi-eye </v-icon>
-              </v-btn>
+              <td>
+                <v-btn color="green" x-small small dark fab>
+                  <v-icon small> mdi-eye </v-icon>
+                </v-btn>
+              </td>
             </tr>
           </template></v-data-table
         >
@@ -70,13 +65,14 @@ export default {
         text: "Pedido",
         align: "start",
         sortable: false,
-        value: "nombre",
+        value: "id_pedido",
       },
       { text: "Fecha", value: "fecha", sortable: true },
       { text: "Estado", value: "estado" },
       { text: "Total", value: "total", sortable: true },
       { text: "Cliente", value: "cliente", sortable: true },
       { text: "Metodo", value: "metodo", sortable: true },
+      { text: "Operaciones", sortable: true },
     ],
 
     add: false,
@@ -91,9 +87,9 @@ export default {
 
         const pedidos = await Pedidos.get("/get2");
         this.pedidos = pedidos.data.data.pedidos;
-
+/* 
         console.log(this.productos);
-
+ */
         if (this.user.role == "administrador") {
         } else {
           this.$router.push("/");
