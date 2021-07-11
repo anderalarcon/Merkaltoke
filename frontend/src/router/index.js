@@ -67,6 +67,13 @@ const routes = [
   } ,
 
   {
+    path: '/Admin/',
+    name: 'Admin',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/HomeAdmin')
+  }
+,
+  {
     path: '/ProfileAdmin/',
     name: 'ProfileAdmin',
   
@@ -100,6 +107,14 @@ const routes = [
   
     component: () => import(/* webpackChunkName: "about" */ '../views/AdmProductos')
   }  ,
+
+  {
+    path: '/Pedidos_Admin',
+    name: 'Pedidos_Admin',
+  
+    component: () => import(/* webpackChunkName: "about" */ '../views/Administrador/AdminPedidos')
+  }  ,
+
   {
     path: '/Productos-Pedido/:id',
     name: 'Productos-Pedido',

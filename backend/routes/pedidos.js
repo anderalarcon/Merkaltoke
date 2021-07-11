@@ -67,6 +67,24 @@ router.route("/get").get(async (req, res) => {
   }
 });
 
+
+//GET2
+router.route("/get2").get(async (req, res) => {
+  try {
+  
+    const pedidos = await pool.query("SELECT p.id_pedido,p.fecha,c.nombre_cliente, p.total,e.estado,pa.metodo FROM tbl_pedido p, cliente c,tbl_estado e,tbl_metodo_pago pa WHERE p.id_cliente=c.id_cliente and e.id_estado=p.id_estado and p.id_metodo = pa.id_metodo_pago ");
+
+    res.status(200).json({
+      status: "success",
+      results: pedidos.rows.length,
+      data: { pedidos: pedidos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
 //GetId
 router.route("/get/:id_pedido").get(async (req, res) => {
   try {
