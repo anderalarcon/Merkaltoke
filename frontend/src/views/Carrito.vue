@@ -137,7 +137,10 @@
                 Realizar compra
                 <v-dialog v-model="dialog2" max-width="600px">
                   <v-card>
-                    <v-form @submit.prevent="insertar_tblpedido()" ref="insertar_tblpedido">
+                    <v-form
+                      @submit.prevent="insertar_tblpedido()"
+                      ref="insertar_tblpedido"
+                    >
                       <v-container>
                         <v-card-title>Informacion de Pago</v-card-title>
                         <v-card-text>
@@ -155,10 +158,10 @@
                             ></v-select>
                             <v-text-field
                               class="col-12"
+                              type="number"
                               label="Numero de tarjeta"
-                              :rules="[
-                                (v) => !!v || 'Numero de tarjeta es requerido',
-                              ]"
+                              :counter="16"
+                              :rules="tarjetarules"
                               required
                             >
                             </v-text-field>
@@ -224,7 +227,6 @@
                           </v-row>
 
                           <v-btn
-                            
                             class="center"
                             color="warning"
                             dark
@@ -265,6 +267,10 @@ export default {
   },
 
   data: () => ({
+    tarjetarules:[
+      (v) => !!v || "Tarjeta es requerido",
+      (v) => (v && v.length <= 16) || "Codigo debe tener menos de 17 digitos",     
+    ],
     codigorules: [
       (v) => !!v || "Codigo es requerido",
       (v) => (v && v.length <= 3) || "Codigo debe tener menos de 4 digitos",

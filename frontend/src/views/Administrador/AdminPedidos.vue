@@ -70,9 +70,9 @@ export default {
       { text: "Fecha", value: "fecha", sortable: true },
       { text: "Estado", value: "estado" },
       { text: "Total", value: "total", sortable: true },
-      { text: "Cliente", value: "cliente", sortable: true },
+      { text: "Cliente", value: "nombre_cliente", sortable: true },
       { text: "Metodo", value: "metodo", sortable: true },
-      { text: "Operaciones", sortable: true },
+       { text: "Operacion", value: "operacion", sortable: false },
     ],
 
     add: false,
