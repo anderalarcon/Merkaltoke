@@ -14,15 +14,13 @@
               <v-dialog v-model="dialog1" persistent max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    class="mx-2"
-                    fab
-                    small
+                    class="ma-2 white--text"
                     color="#FF9800"
-                    dark
                     v-bind="attrs"
                     v-on="on"
                   >
                     <v-icon dark> mdi-pencil </v-icon>
+                     editar perfil
                   </v-btn>
                 </template>
                 <v-form
@@ -115,23 +113,21 @@
                   </v-card>
                 </v-form>
               </v-dialog>
-            </v-row>
+            
 
             <!---------------->
 
-            <v-row justify="center">
+            
               <v-dialog v-model="dialog2" persistent max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    class="mx-2"
-                    fab
-                    small
+                    class="ma-2 white--text"
                     color="#FF9800"
-                    dark
                     v-bind="attrs"
                     v-on="on"
                   >
                     <v-icon dark> mdi-account-circle </v-icon>
+                    editar imagen
                   </v-btn>
                 </template>
                 <v-form

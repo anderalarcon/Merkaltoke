@@ -112,6 +112,23 @@ router.route("/imageUpdate/:id_cliente").put(async (req, res) => {
   }
 });
 
+router.route("/imageUpdateAdmi/:id_cliente").put(async (req, res) => {
+  try {
+    console.log(req.body.id_cliente)
+    //const { id_cliente } = req.body.id;
+    const cliente = await pool.query(
+      "UPDATE CLIENTE SET IMG_CLIENTE='usuario.jpg' WHERE ID_CLIENTE=$1 returning *",
+      [req.body.id_cliente]
+    );
+    res.status(200).json({
+      status:"success",
+      data:{cliente:cliente.rows[0]},
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 router.route("/perfilUpdate/:id_cliente").put(async (req, res) => {
   try {
     const { id_cliente } = req.params;

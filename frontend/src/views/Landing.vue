@@ -40,6 +40,7 @@
         </div>
       </div>
 
+      <!--
       <v-spacer></v-spacer>
       <v-row justify="center">
         <v-card
@@ -60,66 +61,39 @@
             >
           </v-card-actions>
         </v-card>
-      </v-row>
+      </v-row>-->
 
-      <!--
-      <v-row justify="center">
-        <v-card
-          elevation="24"
-          max-width="444"
-          class="mx-auto"
+      
+      <v-carousel v-model="model">
+        <v-carousel-item
+          v-for="(slide, i) in filteredProveedores"
+          :key="i"
         >
-          <v-system-bar lights-out></v-system-bar>
-          <v-carousel
-            :continuous="false"
-            :cycle="cycle"
-            :show-arrows="false"
-            hide-delimiter-background
-            delimiter-icon="mdi-minus"
-            height="300"
+          <v-sheet
+            
+            color="#FFD6AF"
+            height="100%"
+            tile
           >
-            <v-carousel-item
-              v-for="(slide, i) in slides"
-              :key="i"
+            <v-row
+              class="fill-height"
+              align="bottom"
+              justify="center"
             >
-              <v-sheet
-                :color="colors[i]"
-                height="100%"
-                tile
-              >
-                <v-row
-                  class="fill-height"
-                  align="center"
-                  justify="center"
-                >
-                  <div class="text-h2">
-                    <v-img max-width="100%" height="100%" v-bind:src="require('../../../backend/public/uploads/' + slide.img_proveedor)"> </v-img>
-                  </div>
-                </v-row>
-              </v-sheet>
-            </v-carousel-item>
-          </v-carousel>
-          <v-list two-line>
-            <v-list-item>
-              <v-list-item-avatar>
-                <v-img max-width="100%" height="100%" v-bind:src="require('../../../backend/public/uploads/' + slides[0].img_proveedor)"> </v-img>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>John Leider</v-list-item-title>
-                <v-list-item-subtitle>Author</v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-switch
-                  v-model="cycle"
-                  label="Cycle Slides"
-                  inset
-                ></v-switch>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </v-row>
-      -->
+              <div class="text-h2">
+                <v-img height="100%" v-bind:src="require('../../../backend/public/uploads/' + slide.img_proveedor)">
+                  <v-btn
+                  color="warning"
+                   class="success ma-12"
+                  v-bind:href="'/Productos-Proveedor/' + slide.id_proveedor"
+                  >Ver: {{ slide.nombre_proveedor }}</v-btn>
+                </v-img>
+              </div>
+            </v-row>
+          </v-sheet>
+        </v-carousel-item>
+      </v-carousel>
+      
 
       <h3
         style="height: 300px; padding-top: 150px"
@@ -150,15 +124,18 @@ export default {
     categorias: [],
     proveedores: [],
 
+    model: 0,
     colors: [
-      'green',
+      'primary',
       'secondary',
-      'yellow darken-4',
-      'red lighten-2',
-      'orange darken-1',
+      'yellow darken-2',
+      'red',
+      'orange',
     ],
-    cycle: false,
-    slides: [],
+    slides: [
+      '1',
+      '2'
+    ],
   }),
 
   computed: {
