@@ -12,9 +12,14 @@
         <v-card-title>
           Gestión de Clientes
           <v-spacer></v-spacer>
-      
+           <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+          ></v-text-field>     
         </v-card-title>
-        <v-data-table :headers="headers" :items="clientes">
+        <v-data-table :headers="headers" :items="clientes" :search="search">
           <template v-slot:item="row">
             <tr>
               <td>{{ row.item.nombre_cliente }}</td>
@@ -169,10 +174,10 @@ export default {
     productoToDelete: {},
     alert: { show: false },
     headers: [
-      { text: "Nombre", value: "nombre", sortable: false, align: "start"},
-      { text: "Correo", value: "Correo", sortable: true },
-      { text: "Direccion", value: "Direccion" },
-      { text: "DNI", value: "activo", sortable: false },
+      { text: "Nombre", value: "nombre_cliente", sortable: false, align: "start"},
+      { text: "Correo", value: "email_cliente ", sortable: true },
+      { text: "Direccion", value: "direccion_cliente" },
+      { text: "DNI", value: "dni", sortable: false },
             { text: "Operaciones", sortable: false },
 
     ],
