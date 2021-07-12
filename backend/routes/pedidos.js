@@ -310,6 +310,18 @@ router.route("/getpedido_productos/:id_pedido/:id_proveedor").get(async (req, re
     console.error(err.message);
   }
 });
+router.route("/getpedido_productos2v2/:id_pedido").get(async (req, res) => {
+  try {
+    const { id_pedido } = req.params;
+    const pedidosproductos = await pool.query("select  pe.precio,pro.nombre,pe.cantidad from tbl_pedido p  , tbl_pedido_detalle pe,tbl_producto pro where p.id_pedido=pe.id_pedido and pe.id_producto=pro.id_producto and p.id_pedido=$1; ", [id_pedido]);
+    res.status(200).json({
+      status: "success",
+      data: { pedidos: pedidosproductos.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 
 //Eliminar productos de la factura al cancelar pedfido 
