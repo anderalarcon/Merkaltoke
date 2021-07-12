@@ -29,7 +29,13 @@
               <td>{{ row.item.nombre_cliente }}</td>
               <td>{{ row.item.metodo }}</td>
               <td>
-                <v-btn color="green" x-small small dark fab>
+                <v-btn 
+                  color="green"
+                 x-small
+                 small
+                 dark
+                 fab
+                 v-bind:href="'/AdminDetalles/' + row.item.id_pedido ">
                   <v-icon small> mdi-eye </v-icon>
                 </v-btn>
               </td>

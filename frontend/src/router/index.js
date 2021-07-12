@@ -144,7 +144,7 @@ const routes = [
       ),
   },
   {
-    path: "/AdminDetalles/",
+    path: "/AdminDetalles/:id",
     name: "AdminDetalles",
 
     component: () =>
