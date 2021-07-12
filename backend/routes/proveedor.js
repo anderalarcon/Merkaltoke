@@ -313,6 +313,20 @@ router.route("/getVentasProducto/:id_proveedor").get(async (req, res) => {
   }
 });
 
+//Utilidad acumulada
+router.route("/getUtilidad").get(async (req, res) => {
+  try {
+    const proveedores = await pool.query("select count(*) as cantidadProveedor, count(*) * 60 as ganancia from proveedor;");
+    res.status(200).json({
+      status: "success",
+      results: proveedores.rows.length,
+      data: { proveedores: proveedores.rows },
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 
 
 
