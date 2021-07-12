@@ -40,7 +40,17 @@
                   class=""
                   @click="ClienteToUpdate(row.item.id_cliente)"
                 >
-                  <v-icon small> mdi-pencil </v-icon></v-btn>                 
+                  <v-icon small> mdi-pencil </v-icon></v-btn>
+                <v-btn
+                  color="orange"
+                  x-small
+                  small
+                  dark
+                  fab
+                  class=""
+                  @click="ClienteToUpdateImage(row.item.id_cliente)"
+                >
+                  <v-icon small> mdi-account-circle </v-icon></v-btn>                 
               </td>
             </tr>
           </template></v-data-table
@@ -93,6 +103,39 @@
         </v-form>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="updatingImage">
+      <div class="text-center">
+        <v-sheet
+          class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block"
+          color="white"
+          dark
+        >
+          <div class="black--text text--lighten-1 text-body-2 mb-4">
+            ¿Desea cambiar la imagen a la predeterminada?
+          </div>
+
+          <v-btn
+            class="ma-1"
+            color="grey"
+            plain
+            @click="updatingImage = false"
+          >
+            Cancelar
+          </v-btn>
+
+          <v-btn
+            class="ma-1"
+            color="error"
+            plain
+            @click="imageUpdateAdmi(clientToUpdate.id_cliente)"
+          >
+            Cambiar
+          </v-btn>
+        </v-sheet>
+      </div>
+    </v-dialog>
+
   </div>
 </template>
 
@@ -123,7 +166,9 @@ export default {
     productos: [],
     clientToUpdate: [],
     updating: false,
+    updatingImage: false,
     deleting: false,
+    loading: false,
     advertencia: false,
     dialogDelete: false,
     productoToDelete: {},
@@ -179,6 +224,12 @@ export default {
       this.clientToUpdate = res.data.data.clientes;
       console.log(this.clientToUpdate)
     },
+
+    async ClienteToUpdateImage(id_cliente) {
+      const res = await Cliente.get(`/getAdmi/${id_cliente}`)
+      this.updatingImage = true;
+      this.clientToUpdate = res.data.data.clientes;
+    },
     
     async updateCliente() {
          
@@ -193,6 +244,17 @@ export default {
          window.location.reload(); 
        
         },1000)
+    },
+
+    async imageUpdateAdmi(id_cliente) {
+      console.log(id_cliente);
+      this.updatingImage = false;
+      await Cliente.put(
+        `/imageUpdateAdmi/${id_cliente}`,
+        this.clientToUpdate
+      );
+      
+      location.reload();
     },
 
     //deleteCliente
