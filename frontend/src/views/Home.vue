@@ -238,7 +238,7 @@
                   color="warning"
                   dark
                   
-                  @click="zxc()"
+                  @click="zxc() , dialogSubs=false"
                 >
                   Realizar subscripción
                 </v-btn>
@@ -356,7 +356,7 @@ export default {
         try {
           if (this.user.role == "proveedor") {
             this.dialogSubs = "true";
-            this.zxc();
+            //this.zxc();
           } else {
             //Cliente
             const res = await this.axios.post("/signup", this.user);

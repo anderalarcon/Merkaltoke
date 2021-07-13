@@ -8,6 +8,24 @@
       </v-alert></v-container
     >
     <v-container class="mt-5">
+      <v-container>
+        <v-card>
+          <v-simple-table>
+              <thead>
+                <td>Cantidad de proveedores</td>
+                <td>Utilidad</td>
+                <td>Pago Por proveedor</td>
+              </thead>
+              <tbody>
+                <tr v-for="util in utilidad" :key="util.cantidadproveedor">
+                  <td>{{util.cantidadproveedor}}</td>
+                  <td>{{util.ganancia}} S/.</td>
+                  <td>60 S/.</td>
+                </tr> 
+              </tbody>
+          </v-simple-table>   
+        </v-card>
+      </v-container>
       <v-card elevation="15" shaped  class="pb-3">
         <v-card-title>
           Gestión de Proveedores
@@ -17,7 +35,10 @@
             append-icon="mdi-magnify"
             label="Search"
             single-line
-          ></v-text-field>     
+          ></v-text-field>  
+
+
+
         </v-card-title>
         <v-data-table :headers="headers" :items="proveedores" :search="search">
           <template v-slot:item="row">
@@ -180,6 +201,7 @@ export default {
     productos: [],
     proveedorToUpdate: [],
     productoToUpdate: [],
+    utilidad:[],
     advertencia2: false,
     updating: false,
     advertencia: false,
@@ -211,6 +233,9 @@ export default {
         
         const proveedores = await Proveedor.get("/get");
         this.proveedores = proveedores.data.data.proveedores;
+        
+        const UtilidadProvs = await Proveedor.get("/getUtilidad");
+        this.utilidad = UtilidadProvs.data.data.proveedores;
 
         const res = await Proveedor.get(`/getProductos-Proveedor2/${id}`);
 
