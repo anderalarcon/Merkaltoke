@@ -269,15 +269,18 @@ export default {
   data: () => ({
     tarjetarules:[
       (v) => !!v || "Tarjeta es requerido",
-      (v) => (v && v.length <= 16) || "Codigo debe tener menos de 17 digitos",     
+      (v) => (v && v.length <= 16) || "Codigo debe tener menos de 17 digitos",  
+      (v) => (v && v.length == 16) || "Codigo debe tener 16 digitos",
     ],
     codigorules: [
       (v) => !!v || "Codigo es requerido",
-      (v) => (v && v.length <= 3) || "Codigo debe tener menos de 4 digitos",
+      (v) => (v && v.length <= 3 ) || "Codigo debe tener menos de 4 digitos",
+      (v) => (v && v.length == 3) || "Codigo debe tener 4 digitos",
     ],
     telefonorules: [
       (v) => !!v || "Telefono es requerido",
       (v) => (v && v.length <= 9) || "Telefono debe tener menos de 10 digitos",
+      (v) => (v && v.length == 9) || "Telefono debe tener 9 digitos",
     ],
     items: [],
 
