@@ -77,7 +77,6 @@
           >
             <v-row
               class="fill-height"
-              align="bottom"
               justify="center"
             >
               <div class="text-h2">
@@ -150,15 +149,21 @@ export default {
 
   created: async function () {
     try {
-      const res = await Categorias.get("/get");
+  
+     
+     if (JSON.parse(sessionStorage.getItem("session")) == null) {
+        this.$router.push("/");
+      } else {
+        this.user = JSON.parse(sessionStorage.getItem("session"));
+        if (this.user.role == "cliente") {
+              const res = await Categorias.get("/get");
       this.categorias = res.data.data.categorias;
       const proveedores = await Proveedor.get("/get");
       this.proveedores = proveedores.data.data.proveedores;
       this.slides = proveedores.data.data.proveedores;
-      console.log(this.proveedores.in)
-      this.user = JSON.parse(sessionStorage.getItem("session"));
-      if (this.user == null) {
-        this.$router.push("/");
+        } else {
+          this.$router.push("/ProfileProveedor");
+        }
       }
     } catch (error) {
       console.log(error);

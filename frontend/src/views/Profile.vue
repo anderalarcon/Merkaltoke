@@ -59,7 +59,7 @@
                               prepend-icon="mdi-account-box-outline"
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="7">
+                          <v-col cols="12" sm="6" md="12">
                             <v-text-field
                               label="Correo"
                               outlined
@@ -71,17 +71,7 @@
                               disabled
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="5">
-                            <v-text-field
-                              label="Celular*"
-                              outlined
-                              hint="Requerido"
-                              required
-                              v-model="clientToUpdate.dni"
-                              type="number"
-                              prepend-icon="mdi-phone"
-                            ></v-text-field>
-                          </v-col>
+                    
                           <v-col cols="12">
                             <v-text-field
                               label="Dirección*"

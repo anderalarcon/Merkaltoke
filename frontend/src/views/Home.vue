@@ -152,7 +152,7 @@
       <!--Modal de suscripcion de Proveedor-->
       <v-dialog v-model="dialogSubs" max-width="600px">
         <v-card>
-          <v-form  @submit.prevent ref="validatePago">
+          <v-form ref="validatePago">
             <v-container>
               <v-card-title>Informacion de Pago</v-card-title>
               <v-card-text>
@@ -171,7 +171,7 @@
                   <v-text-field
                     class="col-12"
                     label="Numero de tarjeta"
-                    :rules="[(v) => !!v || 'Numero de tarjeta es requerido']"
+                    :rules="tarjetarules"
                     required
                   >
                   </v-text-field>
@@ -233,13 +233,7 @@
                   </v-text-field>
                 </v-row>
 
-                <v-btn
-                  class="center"
-                  color="warning"
-                  dark
-                  
-                  @click="zxc() , dialogSubs=false"
-                >
+                <v-btn class="center" color="warning" dark @click="zxc()">
                   Realizar subscripción
                 </v-btn>
               </v-card-text>
@@ -275,10 +269,17 @@ export default {
     codigorules: [
       (v) => !!v || "Codigo es requerido",
       (v) => (v && v.length <= 3) || "Codigo debe tener menos de 4 digitos",
+      (v) => (v && v.length == 3) || "Codigo debe tener 4 digitos",
     ],
     telefonorules: [
       (v) => !!v || "Telefono es requerido",
       (v) => (v && v.length <= 9) || "Telefono debe tener menos de 10 digitos",
+      (v) => (v && v.length == 9) || "Telefono debe tener 9 digitos",
+    ],
+    tarjetarules: [
+      (v) => !!v || "Tarjeta es requerido",
+      (v) => (v && v.length <= 16) || "Tarjeta debe tener menos de 17 digitos",
+      (v) => (v && v.length == 16) || "Tarjeta debe tener 16 digitos",
     ],
 
     metodo_pago: {},
@@ -337,8 +338,12 @@ export default {
     async Auth() {
       try {
         this.user_test = JSON.parse(sessionStorage.getItem("session"));
-        if (this.user_test != null) {
+        if (this.user_test != null && this.user_test.role == "cliente") {
           this.$router.push("/Profile");
+        } else {
+          if (this.user_test.role == "proveedor") {
+            this.$router.push("/ProfileProveedor");
+          }
         }
       } catch (error) {
         console.log(error);
@@ -409,18 +414,32 @@ export default {
       }
     },
     async zxc() {
-   
       try {
-     
+        if (this.$refs.validatePago.validate()) {
           const res = await this.axios.post("/signup", this.user);
           this.$refs.signupForm.reset();
+          this.$refs.validatePago.reset();
+          this.dialogSubs = false;
+
           this.alert = {
             show: true,
             type: "success",
             message: res.data.message,
           };
-        
-      } catch (error) {}
+
+         
+        } 
+      } catch (error) {
+       /*       this.dialogSubs = false;
+          this.$refs.signupForm.reset();
+          this.$refs.validatePago.reset();
+
+              this.alert = {
+            show: true,
+            type: "error",
+            message: "Llene todos los campos "
+          }; */
+      }
     },
   },
 };

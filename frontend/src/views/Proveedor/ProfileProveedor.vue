@@ -270,8 +270,10 @@ export default {
           const datos_proveedor = await Proveedor.get(`/get/${this.user.id}`);
           this.datos = datos_proveedor.data.data.proveedores;
           this.proveedorToUpdate = datos_proveedor.data.data.proveedores;
+
         } else {
-          this.$router.push("/");
+                  this.$router.push("/");
+
         }
       }
     } catch (error) {

@@ -267,18 +267,23 @@ export default {
   },
 
   data: () => ({
-    tarjetarules:[
+    
+ tarjetarules:[
       (v) => !!v || "Tarjeta es requerido",
-      (v) => (v && v.length <= 16) || "Codigo debe tener menos de 17 digitos",     
+      (v) => (v && v.length <= 16) || "Codigo debe tener menos de 17 digitos",  
+      (v) => (v && v.length == 16) || "Codigo debe tener 16 digitos",
     ],
     codigorules: [
       (v) => !!v || "Codigo es requerido",
-      (v) => (v && v.length <= 3) || "Codigo debe tener menos de 4 digitos",
+      (v) => (v && v.length <= 3 ) || "Codigo debe tener menos de 4 digitos",
+      (v) => (v && v.length == 3) || "Codigo debe tener 4 digitos",
     ],
     telefonorules: [
       (v) => !!v || "Telefono es requerido",
       (v) => (v && v.length <= 9) || "Telefono debe tener menos de 10 digitos",
+      (v) => (v && v.length == 9) || "Telefono debe tener 9 digitos",
     ],
+
     items: [],
 
     meses: [
@@ -320,12 +325,12 @@ export default {
   }),
 
   created: async function () {
-    this.user = JSON.parse(sessionStorage.getItem("session"));
-    if (this.user == null) {
-      this.$router.push("/");
-    }
-
-    try {
+     if (JSON.parse(sessionStorage.getItem("session")) == null) {
+        this.$router.push("/");
+      } else {
+        this.user = JSON.parse(sessionStorage.getItem("session"));
+        if (this.user.role == "cliente") {
+                try {
       const id = this.user.id;
       const idCarrito = await Carrito.get(`/getCarritoId/${id}`);
       const aux = idCarrito.data.data.cliente.id_carrito;
@@ -347,6 +352,12 @@ export default {
     } catch (error) {
       console.log(error);
     }
+        } else {
+          this.$router.push("/ProfileProveedor");
+        }
+      }
+
+
   },
 
   methods: {
