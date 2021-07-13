@@ -75,6 +75,16 @@ CREATE TABLE tbl_pedido_detalle(
 	id_producto BIGINT REFERENCES tbl_producto(id_producto) NOT NULL
 );
 
+CREATE TABLE tbl_devolucion_pedido(
+	id_devolucion serial primary key NOT NULL,
+	motivo VARCHAR (30),
+	detalle_motivo VARCHAR(500),
+	fecha DATE,
+	procede VARCHAR,
+	id_pedido BIGINT REFERENCES tbl_pedido(id_pedido) NOT NULL
+);
+
+
 
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
@@ -137,8 +147,7 @@ VALUES('Limpieza','https://www.redaccionmedica.com/images/destacados/-engordan-l
 
 
 
-
-
+insert into admin(admin_nickname,password_admin)values('admin@gmail.com','admin');
 
 
 INSERT INTO cliente( nombre_cliente, email_cliente, password_cliente, direccion_cliente, DNI, img_cliente)VALUES('ander','ander@gmail.com','123', 'Direccion 1', 12345678,'usuario.jpg');
@@ -358,6 +367,9 @@ VALUES('Limpiatodo Sapolio',13.80, 200, 'Limpiador con aroma a lavanda 5L', 15 ,
 
 INSERT INTO tbl_producto(nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto,visible)
 VALUES('Insecticida Sapolio',13.50, 200, 'Insecticida de ácaros 360ml', 15 , 6 , 'https://plazavea.vteximg.com.br/arquivos/ids/236214-1000-1000/image-41b1cc1da783478f8caadda33349bb91.jpg','no');
+
+
+
 
 
 -----------------------------------------------------------------------------------------------------------------------

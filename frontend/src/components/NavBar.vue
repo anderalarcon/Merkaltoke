@@ -3,7 +3,6 @@
     <v-toolbar dense dark>
       <v-toolbar-title>Welcome </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text> Ayuda </v-btn>
       <v-btn text to="/"> Salir </v-btn>
     </v-toolbar>
 
