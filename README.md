@@ -7,3 +7,5 @@
 #Incluye carrito de compras, pedidos, y galería de productos
 
 #Integrantes: Anderson Achata, Boris Valdez, Cesar Murga, Roger Vega, Dante Cordova, Edgar Rodriguez
+
+#Tecnologías: Vue js, PostgreSQL, Vuetify, Heroku
