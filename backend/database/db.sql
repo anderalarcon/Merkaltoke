@@ -90,29 +90,6 @@ DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- here
-
 INSERT INTO tbl_metodo_pago(metodo)VALUES('Tarjeta de Credito');
 INSERT INTO tbl_metodo_pago(metodo)VALUES('Tarjeta de Debito');
 
@@ -254,7 +231,6 @@ VALUES('Leche Gloria Light',13.20, 200, 'Paquete de 3 und 1L', 3 , 1 , 'https://
 INSERT INTO tbl_producto(nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto,visible)
 VALUES('Leche Gloria Niños',14.10, 200, 'Paquete de 3 und 1L', 3 , 1 , 'https://plazavea.vteximg.com.br/arquivos/ids/553480-450-450/20083790.jpg?v=637426553211700000','no');
 
-----
 
 INSERT INTO tbl_producto(nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto,visible)
 VALUES('Salchicha de Pollo San Fernando',3.90, 200, 'Paquete de 5 und 250g', 4 , 2 , 'https://plazavea.vteximg.com.br/arquivos/ids/429619-450-450/5617.jpg?v=637382877526500000','no');
@@ -367,33 +343,6 @@ VALUES('Limpiatodo Sapolio',13.80, 200, 'Limpiador con aroma a lavanda 5L', 15 ,
 
 INSERT INTO tbl_producto(nombre, precio, stock, detalle, id_proveedor, id_categoria, img_producto,visible)
 VALUES('Insecticida Sapolio',13.50, 200, 'Insecticida de ácaros 360ml', 15 , 6 , 'https://plazavea.vteximg.com.br/arquivos/ids/236214-1000-1000/image-41b1cc1da783478f8caadda33349bb91.jpg','no');
-
-
-
-
-
------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 INSERT INTO proveedor( nombre_proveedor, email_proveedor, password_proveedor, direccion_proveedor, RUC, img_proveedor)

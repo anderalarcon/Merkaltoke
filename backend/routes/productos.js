@@ -1,7 +1,5 @@
 const router = require("express").Router();
 const pool = require("../database/keys");
-
-//Create
 router.route("/create").post(async (req, res) => {
   try {
     const { nombre } = req.body;
